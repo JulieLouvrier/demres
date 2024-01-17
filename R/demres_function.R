@@ -1,15 +1,14 @@
-#' Provides resilience metrics from the package popdemo
+#' Provides time-varying and time-constant resilience metrics for animal
+#' populations
 #'
 #' \code{demres} calculates resilience metrics of a population based
 #' on a list of matrix population models
 #'
-#' This function first checks that the input is a list of matrices,
-#' if not, it gives back an error message a
-#' if yes it applies the function "wrapper_res_met" to a list of matrices
+#' This function applies the function "calc_resilience" to a list of matrices
+#' and returns either time-varying metrics or time-constant metrics
 #'
-#'
-#' @param listA a square, primitive, irreducible, non-negative numeric matrix of any
-#' dimension
+#' @param listA a list of square, primitive, irreducible, non-negative numeric
+#' matrices of any dimension
 #' @param metrics: "reac": Calculates reactivity: first-timestep amplification
 #'                 and first-timestep attenuation for a population matrix
 #'                 projection model.
@@ -22,28 +21,58 @@
 #'                 "maxatt": Calculate maximal attenuation for a population
 #'                 matrix projection model.
 #'                 "all": all of the above metrics are provided
-#' @param bounds (optional) if TRUE, specifies whether the upper and  lower bound
-#' should be calculated
-#' if vec is not specified, the function provides metrics in their upper and
-#' lower bound, calculated based on the stage-biased vec
-#' if vec is specified, the function provides also the metrics calculated based
-#' on the inital vec
-#' @param initvec a numeric vec or one-column matrix describing the age/stage
+#' @param bounds (optional) if TRUE, specifies whether the upper and  lower
+#' bound should be calculated
+#' if initvec is not specified, the function provides metrics in their upper and
+#' lower bound, calculated based on the stage-biased vector
+#' if initvec is specified, the function provides also the metrics calculated
+#' based on the inital vector
+#' @param initvec a numeric vector or one-column matrix describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific'
-#'  maximal amplification
+#' maximal amplification
 #' @param popname a character string describing the name of the population
-#' @param time a character string: "constant" or "varying"
-#'            "constant" : if the metrics are to be calculated over the whole study period
+#' @param time a character string: "constant", "varying" or "both"
+#'            "constant" : if the metrics are to be calculated over the whole
+#'            study period
 #'            "varying": if the metrics are to be calculated for each time step
-#' @return A tibble containing all the resilience metrics
+#' @examples
+#' \dontrun{
+#'
+#' #load packages
+#' library(Rcompadre)
+#' library(dplyr)
+#' library(popdemo)
+#'
+#' # load data
+#' comadre <- cdb_fetch("comadre")
+#'
+#' #selecting the blue crane
+#' blue_crane <- comadre %>% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
+#'
+#' #extracting matrices
+#' blue_crane_matA <- Rcompadre::matA(blue_crane)
+#'
+#' # simulate an initial vector
+#' Cranevec1 <- runif(5)
+#' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 #'
 #'
+#' BC_TVTC_demres <-
+#'   demres(
+#'     blue_crane_matA,
+#'     metrics = "all",
+#'     bounds = TRUE,
+#'     initvec = Cranevec1,
+#'     popname = "blue crane",
+#'     time = "both"
+#'   )
 #'
-#'@name demres
+#' }
+#' @return A dataframe containing all the resilience metrics
+#' @export
+#' @name demres
 
-
-source("R/wrapper_function.r")
-
+source("R/calc_resilience_function.r")
 
 demres <- function(listA,
                    metrics,
@@ -52,24 +81,54 @@ demres <- function(listA,
                    popname = NULL,
                    time) {
 
-  if(is.list(listA) == T) {
-    dem_output <- wrapper_res_met(listA = listA,
-                                  metrics = metrics,
-                                  bounds = bounds,
-                                  initvec = initvec,
-                                  popname = popname,
-                                  time = time)
+  if(!is.list(listA)) {
+    stop("Warning: a list of matrices should be provided")
   }
   else{
-    print("Warning: a list of matrices should be provided")
-    listA <- list(listA)
-    dem_output <- wrapper_res_met(listA = listA,
-                                  metrics = metrics,
-                                  bounds = bounds,
-                                  initvec = initvec,
-                                  popname = popname,
-                                  time = time)
+    if(time == "both") {
+      temp_list <-
+        lapply(
+          listA,
+          calc_resilience,
+          metrics = metrics,
+          bounds = bounds,
+          initvec = initvec,
+          popname = popname
+        )
+      met <- do.call(rbind.data.frame, temp_list)
+      names(met)[-1] <- paste0(names(met[-1]), "_TV")
+      met <- cbind(timestep = c(1:nrow(met)), met)
 
+      meanA <- apply(simplify2array(listA), 1:2, mean)
+      res <- calc_resilience(meanA, metrics, bounds, initvec, popname)
+      res <- res[,-1]
+      names(res) <- paste0(names(res), "_TC")
+      met <- cbind(met, res)
+    }
+    else {
+      if (time == "varying"){
+        temp_list <-
+          lapply(
+            listA,
+            calc_resilience,
+            metrics = metrics,
+            bounds = bounds,
+            initvec = initvec,
+            popname = popname
+          )
+        met <- do.call(rbind.data.frame, temp_list)
+        names(met)[-1] <- paste0(names(met[-1]), "_TV")
+        met <- cbind( timestep = c(1:nrow(met)), met)
+
+
+      }
+      if(time == "constant") {
+        meanA <- apply(simplify2array(listA), 1:2, mean)
+        res <- calc_resilience(meanA, metrics, bounds, initvec, popname)
+        names(res)[-1] <- paste0(names(res)[-1], "_TC")
+        met <- res
+      }
+    }
+    return(met)
   }
-  return(dem_output)
 }

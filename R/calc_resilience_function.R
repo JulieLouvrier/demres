@@ -29,31 +29,23 @@
 #' on the inital vec
 #' @param initvec a numeric vec or one-column matrix describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific'
-#'  maximal amplification
+#' maximal amplification
 #' @param popname a character string describing the name of the population
-#'
+#' @export
 #' @examples
 #' \dontrun{
 #' library(popdemo)
 #' data(Tort)
 #'
-#'
 #' Tortvec1 <- runif(8) # create initial vec
 #' Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
 #'
-#' all_Tort_lowUp_Reac_inertia <- calc_resilience(Tort, metrics = c("all"),
+#' all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
 #' initvec = Tortvec1, bounds = TRUE, popname = "Tortoise")
 #'
 #' }
-#'
-#'
-#' @return A tibble containing all the resilience metrics
-#'
-#'
-#'
-#'@name calc_resilience
-#'
-
+#' @return A vector containing all the resilience metrics
+#' @name calc_resilience
 
 calc_resilience <-
   function(A,
@@ -64,6 +56,9 @@ calc_resilience <-
 
     if (is.null(A)) {
       stop("No Matrix was found")
+    }
+    if (!is.matrix(A)){
+      stop("Please provide a matrix")
     }
     if (is.null(metrics)) {
       stop("Please specify metrics")
@@ -84,7 +79,7 @@ calc_resilience <-
     }
 
     else{
-    popname = popname
+      popname = popname
     }
 
     dat <- data.frame(popname = popname,
@@ -143,8 +138,8 @@ calc_resilience <-
         if (bounds == TRUE) {
           dat$inertia_lwr <- popdemo::inertia(A, bound = "lower")
           dat$inertia_upr <- popdemo::inertia(A, bound = "upper")
+        }
       }
-    }
     }
 
 
@@ -301,7 +296,7 @@ calc_resilience <-
       }
     }
     if ("TRUE" %in% is.na(dat)){
-    dat <- dat[,-which(is.na(dat))] #taking out columns with NAs in them
+      dat <- dat[,-which(is.na(dat))] #taking out columns with NAs in them
     }
     dat[,which(dat == 999)] <- NA
 

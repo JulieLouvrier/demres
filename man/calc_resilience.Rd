@@ -37,7 +37,7 @@ matrix projection model.
 "all": all of the above metrics are provided}
 }
 \value{
-A tibble containing all the resilience metrics
+A vector containing all the resilience metrics
 }
 \description{
 \code{calc_resilience} calculates resilience metrics of a population based
@@ -52,14 +52,11 @@ package based on a population matrix projection model.
 library(popdemo)
 data(Tort)
 
-
 Tortvec1 <- runif(8) # create initial vec
 Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
 
-all_Tort_lowUp_Reac_inertia <- calc_resilience(Tort, metrics = c("all"),
+all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
 initvec = Tortvec1, bounds = TRUE, popname = "Tortoise")
 
 }
-
-
 }
