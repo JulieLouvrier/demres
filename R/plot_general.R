@@ -3,28 +3,28 @@ plot_general <- function(metric, table, plotname,
                          RMSE = FALSE,
                          MAPE = FALSE){
   if(metric == "reac"){
-    name_metric = "Reactivity"} 
+    name_metric = "Reactivity"}
   else if(metric == "maxamp") {
     name_metric = "Maximum amplification"
   } else if(metric == "maxatt"){
-    name_metric = "Maximum attenuation"  
+    name_metric = "Maximum attenuation"
   } else if(metric == "inertia"){
-    name_metric = "Inertia"  
+    name_metric = "Inertia"
   }
-  
+
   popname = table$popname
   speciesName <- unique(table$popname)
   tableStartYear <- table$timestep
-  
+
   #time varying
-  
+
   table_metric_upr_TV <-
     table[, grep(paste0(metric, "_upr_TV"), colnames(table))]
   table_metric_lwr_TV <-
     table[, grep(paste0(metric, "_lwr_TV"), colnames(table))]
   table_metric_initvect_TV <-
     table[, grep(paste0(metric, "_TV"), colnames(table))]
-  
+
   #time constant
   table_metric_upr_TC <-
     table[, grep(paste0(metric, "_upr_TC"), colnames(table))]
@@ -32,25 +32,25 @@ plot_general <- function(metric, table, plotname,
     table[, grep(paste0(metric, "_lwr_TC"), colnames(table))]
   table_metric_initvect_TC <-
     table[, grep(paste0(metric, "_TC"), colnames(table))]
-  
+
   all <- data.frame(table_metric_upr_TV, table_metric_lwr_TV, table_metric_initvect_TV,
                     table_metric_upr_TC, table_metric_lwr_TC, table_metric_initvect_TC)
-  
-  
+
+
   miny = (min(all, na.rm = T) - 0.4 * min(all, na.rm = T))
   maxy = max(all, na.rm = T)
-  
+
   ltydefault = c(1, 1, 1)
   titleTCdefault = "Time-Constant"
   titleTVdefault = "Time-Varying"
   legenddefault = c("Upper bound", "With initial vector", "Lower bound")
   coldefault = c("red", "purple", "blue")
   pchdefault = c(19, 19, 19)
-  
+
   if(length(table_metric_upr_TV) == 0){
     table_metric_upr_TV <- rep(NA, nrow(table))
     maxy <- (max(all, na.rm = T) + 0.4 * max(all, na.rm = T))
-    
+
     if(length(table_metric_lwr_TV) == 0){
       table_metric_lwr_TV <- rep(NA, nrow(table))
       ltydefault = 1
@@ -71,11 +71,11 @@ plot_general <- function(metric, table, plotname,
         legenddefault = c("With initial vector", "Lower bound")
         coldefault = c("purple", "blue")
         pchdefault = c(19, 19)
-        
+
       }
     }
   }
-  
+
   else{
     if(length(table_metric_lwr_TV) == 0) {
       table_metric_lwr_TV <- rep(NA, nrow(table))
@@ -93,7 +93,7 @@ plot_general <- function(metric, table, plotname,
         pchdefault = c(19, 19)
       }
     }
-    
+
     else{
       if(length(table_metric_initvect_TV) == 0) {
         table_metric_initvec_TV <- rep(NA, nrow(table))
@@ -108,10 +108,10 @@ plot_general <- function(metric, table, plotname,
         coldefault = c("red","purple", "blue")
         pchdefault = c(19, 19, 19)
       }
-      
+
     }
   }
-  
+
   if(length(table_metric_upr_TC) == 0){
     table_metric_upr_TC <- rep(NA, nrow(table))
   }
@@ -121,8 +121,8 @@ plot_general <- function(metric, table, plotname,
   if(length(table_metric_initvect_TC) == 0){
     table_metric_initvect_TC <- rep(NA, nrow(table))
   }
-  
-  
+
+
   # Define the vertices of the polygon
   xup <-
     c(
@@ -150,12 +150,12 @@ plot_general <- function(metric, table, plotname,
       max(tableStartYear, na.rm = T),
       min(tableStartYear, na.rm = T)
     )
-  
+
   if(length(which(is.na(table_metric_lwr_TV))) == nrow(table)) {
     ylow = c(NA, NA, NA, NA)
   }
   else{
-    ylow <- 
+    ylow <-
       c(
         min(table_metric_lwr_TV, na.rm = T),
         min(table_metric_lwr_TV, na.rm = T),
@@ -170,12 +170,12 @@ plot_general <- function(metric, table, plotname,
       max(tableStartYear, na.rm = T),
       min(tableStartYear, na.rm = T)
     )
-  
+
   if(length(which(is.na(table_metric_initvect_TV))) == nrow(table)) {
     yinit = c(NA, NA, NA, NA)
   }
   else{
-    yinit <- 
+    yinit <-
       c(
         min(table_metric_initvect_TV, na.rm = T),
         min(table_metric_initvect_TV, na.rm = T),
@@ -248,7 +248,7 @@ plot_general <- function(metric, table, plotname,
   polygon(xlow, ylow, col = rgb(0, 0, 1, 0.3), border = FALSE)
   polygon(xinit, yinit, col = rgb(1, 0, 1, 0.3), border = FALSE)
   #legend
-  
+
   if(!length(grep("_TC", names(table))) == 0){
     legend(
       "topright",
@@ -260,9 +260,9 @@ plot_general <- function(metric, table, plotname,
       title = titleTCdefault,
       box.lty = 0
     )
-    
-  } 
-  
+
+  }
+
   #legend
   legend(
     "topright",
@@ -275,11 +275,10 @@ plot_general <- function(metric, table, plotname,
     box.lty = 0,
     title.adj = 0.15
   )
-  
+
   if(RMSE == TRUE){
-    source("R/demres_dist_function.R")
     RMSE <- demres_dist(table = table, metric = metric, measure = "RMSE")
-    
+
     legend(
       "topright",
       inset = c(-0.4, 0.4),
@@ -293,11 +292,10 @@ plot_general <- function(metric, table, plotname,
       box.lty = 0,
       title.adj = 0.15
     )
-    
+
   }
-  
+
   if(rRMSE == TRUE){
-    source("R/demres_dist_function.R")
     rRMSE <- demres_dist(table = table, metric = metric, measure = "rRMSE")
     legend(
       "topright",
@@ -312,11 +310,10 @@ plot_general <- function(metric, table, plotname,
       box.lty = 0,
       title.adj = 0.15
     )
-    
+
       }
-  
+
   if(MAPE == TRUE){
-    source("R/demres_dist_function.R")
     MAPE <- demres_dist(table = table, metric = metric, measure = "MAPE")
     legend(
       "topright",
@@ -331,9 +328,9 @@ plot_general <- function(metric, table, plotname,
       box.lty = 0,
       title.adj = 0.15
     )
-    
+
       }
-  
-  
+
+
   dev.off()
 }
