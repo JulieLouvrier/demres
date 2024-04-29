@@ -55,7 +55,7 @@ data(Tort)
 Tortvec1 <- runif(8) # create initial vec
 Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
 
-all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
+all_tort_demres <- calc_resilience(Tort, metrics = c("all"), 
 initvec = Tortvec1, bounds = TRUE, popname = "Tortoise")
 
 }

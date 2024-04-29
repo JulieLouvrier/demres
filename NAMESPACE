@@ -2,3 +2,5 @@
 
 export(calc_resilience)
 export(demres)
+export(demres_dist)
+export(demres_plot)

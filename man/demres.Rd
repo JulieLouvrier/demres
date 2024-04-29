@@ -4,9 +4,41 @@
 \alias{demres}
 \title{Provides time-varying and time-constant resilience metrics for animal
 populations}
+\usage{
+demres(
+  listA,
+  metrics,
+  bounds = FALSE,
+  initvec = "n",
+  ssd = FALSE,
+  popname = NULL,
+  time
+)
+}
 \arguments{
 \item{listA}{a list of square, primitive, irreducible, non-negative numeric
 matrices of any dimension}
+
+\item{bounds}{(optional) if TRUE, specifies whether the upper and  lower
+bound should be calculated
+if initvec is not specified, the function provides metrics in their upper and
+lower bound, calculated based on the stage-biased vector
+if initvec is specified, the function provides also the metrics calculated
+based on the inital vector}
+
+\item{initvec}{a list of numeric vectors or one-column matrices describing the age/stage
+distribution ('demographic structure') used to calculate a 'case-specific', stage age structure
+metric}
+
+\item{ssd}{default as FALSE, if TRUE will calculate the demographic resilience
+metrics based on the stable stage distribution vectors extracted from each matrix}
+
+\item{popname}{a character string describing the name of the population}
+
+\item{time}{a character string: "constant", "varying" or "both"
+"constant" : if the metrics are to be calculated over the whole
+study period
+"varying": if the metrics are to be calculated for each time step}
 
 \item{metrics:}{"reac": Calculates reactivity: first-timestep amplification
 and first-timestep attenuation for a population matrix
@@ -20,24 +52,6 @@ matrix projection model.
 "maxatt": Calculate maximal attenuation for a population
 matrix projection model.
 "all": all of the above metrics are provided}
-
-\item{bounds}{(optional) if TRUE, specifies whether the upper and  lower
-bound should be calculated
-if initvec is not specified, the function provides metrics in their upper and
-lower bound, calculated based on the stage-biased vector
-if initvec is specified, the function provides also the metrics calculated
-based on the inital vector}
-
-\item{initvec}{a numeric vector or one-column matrix describing the age/stage
-distribution ('demographic structure') used to calculate a 'case-specific'
-maximal amplification}
-
-\item{popname}{a character string describing the name of the population}
-
-\item{time}{a character string: "constant", "varying" or "both"
-"constant" : if the metrics are to be calculated over the whole
-study period
-"varying": if the metrics are to be calculated for each time step}
 }
 \value{
 A dataframe containing all the resilience metrics
@@ -53,15 +67,15 @@ and returns either time-varying metrics or time-constant metrics
 \examples{
 \dontrun{
 
-#load packages
+#load packages 
 library(Rcompadre)
 library(dplyr)
 library(popdemo)
 
-# load data
+# load data 
 comadre <- cdb_fetch("comadre")
 
-#selecting the blue crane
+#selecting the blue crane 
 blue_crane <- comadre \%>\% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
 
 #extracting matrices
