@@ -3,9 +3,15 @@
 \name{helper_functions}
 \alias{helper_functions}
 \alias{RMSE}
+\alias{rRMSE}
+\alias{MAPE}
 \title{Helper functions for demres_dist function from the package "demres"}
 \usage{
 RMSE(TV, TC)
+
+rRMSE(TV, TC)
+
+MAPE(TV, TC)
 }
 \arguments{
 \item{TV}{A vector containing values of time-varying demographic resilience
@@ -16,16 +22,19 @@ resilience for the same one specific  metric as for TV, calculated with demres}
 }
 \value{
 Values of the distance measure
+
+Values of the distance measure
+
+Values of the distance measure
 }
 \description{
 \code{RMSE} Calculates RMSE between the time-varying resilience
 metric and the time-constant one
-}
-\details{
-#' \code{rRMSE} Calculates rRMSE between the time-varying resilience
+
+\code{rRMSE} Calculates rRMSE between the time-varying resilience
 metric and the time-constant one
 
-#' \code{MAPE} Calculates MAPE between the time-varying resilience
+\code{MAPE} Calculates MAPE between the time-varying resilience
 metric and the time-constant one
 }
 \keyword{internal}
