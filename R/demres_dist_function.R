@@ -61,7 +61,7 @@
 #' measure = "all")
 #'
 #' }
-#' @return A dataframe containing all the resilience metrics
+#' @return A dataframe displaying the mdistance measures for the selected metric
 #' @export
 #' @name demres_dist
 
