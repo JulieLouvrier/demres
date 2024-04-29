@@ -1,3 +1,34 @@
+#' Helper function for the demres_plot function
+#'
+#' \code{plot_general} provides a plot to visually inspect the resilience metric
+#' along a time axis
+#'
+#' @param table A dataframe containing all the resilience metrics calculated
+#' with the demres function
+#' @param metric: "reac": Reactivity: first-timestep amplification
+#'                 and first-timestep attenuation for a population matrix
+#'                 projection model.
+#'                 "inertia": Population inertia for a population
+#'                 matrix projection model.
+#'                 "dr": Damping ratio of a given population
+#'                 matrix projection model.
+#'                 "maxamp": Maximal amplification for a population
+#'                 matrix projection model.
+#'                 "maxatt": Maximal attenuation for a population
+#'                 matrix projection model.
+#' @param RMSE: (optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
+#' with TV: the time-Varying resilience metric and TC the time constant one)
+#' and adds it on the plot.
+#' @param rRMSE: (optional) if TRUE: calculates the relative RMSE
+#' (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
+#' and TC the time constant ) and adds it on the plot
+#' @param MAPE: (optional) if TRUE: calculates the MAPE (mean(abs(TV - TC))
+#' with TV: the time-Varying resilience metric and TC the time constant )
+#' and adds it on the plot
+#' @param plotname: name of the plot with directory. By default:
+#' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
+
+
 plot_general <- function(metric, table, plotname,
                          rRMSE = FALSE,
                          RMSE = FALSE,

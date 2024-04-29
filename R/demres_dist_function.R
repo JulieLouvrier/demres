@@ -1,13 +1,10 @@
-#' Provides time-varying and time-constant resilience metrics for animal
-#' populations
+#' Calculates distance between the time-varying resilience metric and the time-
+#' constant one
 #'
-#' \code{demres_dist} calculates resilience metrics of a population based
-#' on a list of matrix population models
+#' \code{demres_dist} Calculates distance between the time-varying resilience
+#' metric and the time-constant one
 #'
-#' This function applies the function "calc_resilience" to a list of matrices
-#' and returns either time-varying metrics or time-constant metrics
-#'
-#' @param table A dataframe containing all the resilience metrics calculated####CHANGE ALL OF IT HERE
+#' @param table A dataframe containing all the resilience metrics calculated
 #' with the demres function
 #' @param metric: "reac": Reactivity: first-timestep amplification
 #'                 and first-timestep attenuation for a population matrix
@@ -20,9 +17,14 @@
 #'                 matrix projection model.
 #'                 "maxatt": Maximal attenuation for a population
 #'                 matrix projection model.
-#' @param measure: "RMSE"
-#'                 "rRMSE"
-#'                 "MAPE"
+#' @param measure: "RMSE": calculates the RMSE (sqrt(mean((TV-TC)^2))
+#' with TV: the time-Varying resilience metric and TC the time constant one)
+#'                 "rRMSE":calculates the relative RMSE
+#' (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
+#' and TC the time constant )
+#'                 "MAPE": calculates the MAPE (mean(abs(TV - TC)) with TV:
+#'                 the time-Varying resilience metric and TC the time constant)
+#'                 "all": calculates all of the above measures
 #' @examples
 #' \dontrun{
 #'
@@ -55,7 +57,8 @@
 #'     time = "both"
 #'   )
 #'
-#' dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia", measure = "all")
+#' dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia",
+#' measure = "all")
 #'
 #' }
 #' @return A dataframe containing all the resilience metrics

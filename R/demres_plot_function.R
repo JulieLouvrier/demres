@@ -1,11 +1,7 @@
-#' Provides time-varying and time-constant resilience metrics for animal
-#' populations
+#' Plot the resulting demographic resilience metrics
 #'
-#' \code{demres_plot} calculates resilience metrics of a population based ####CHANGE ALL OF IT HERE
-#' on a list of matrix population models
-#'
-#' This function applies the function "calc_resilience" to a list of matrices
-#' and returns either time-varying metrics or time-constant metrics
+#' \code{demres_plot} provides a plot to visually inspect the resilience metric
+#' along a time axis
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the demres function
@@ -20,45 +16,54 @@
 #'                 matrix projection model.
 #'                 "maxatt": Maximal attenuation for a population
 #'                 matrix projection model.
-#' @param measure: "RMSE"
-#'                 "rRMSE"
-#'                 "MAPE"
+#' @param RMSE: (optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
+#' with TV: the time-Varying resilience metric and TC the time constant one)
+#' and adds it on the plot.
+#' @param rRMSE: (optional) if TRUE: calculates the relative RMSE
+#' (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
+#' and TC the time constant ) and adds it on the plot
+#' @param MAPE: (optional) if TRUE: calculates the MAPE (mean(abs(TV - TC)))
+#' and adds it on the plot
+#' @param plotname: name of the plot with directory. By default:
+#' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
 #' @examples
 #' \dontrun{
-#'
-#' #load packages
-#' library(Rcompadre)
-#' library(dplyr)
-#' library(popdemo)
-#'
-#' # load data
-#' comadre <- cdb_fetch("comadre")
-#'
-#' #selecting the blue crane
-#' blue_crane <- comadre %>% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
-#'
-#' #extracting matrices
-#' blue_crane_matA <- Rcompadre::matA(blue_crane)
-#'
-#' # simulate an initial vector
-#' Cranevec1 <- runif(5)
-#' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
-#'
-#'
-#' BC_TVTC_demres <-
-#'   demres(
-#'     blue_crane_matA,
-#'     metrics = "all",
-#'     bounds = TRUE,
-#'     initvec = Cranevec1,
-#'     popname = "blue crane",
-#'     time = "both"
-#'   )
-#'
-#' dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia", measure = "all")
-#'
-#' }
-#' @return A dataframe containing all the resilience metrics
+  #'
+  #' #load packages
+  #' library(Rcompadre)
+  #' library(dplyr)
+  #' library(popdemo)
+  #'
+  #' # load data
+  #' comadre <- cdb_fetch("comadre")
+  #'
+  #' #selecting the blue crane
+  #' blue_crane <- comadre %>% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
+  #'
+  #' #extracting matrices
+  #' blue_crane_matA <- Rcompadre::matA(blue_crane)
+  #'
+  #' # simulate an initial vector
+  #' Cranevec1 <- runif(5)
+  #' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
+  #'
+  #'
+  #' BC_TVTC_demres <-
+  #'   demres(
+  #'     blue_crane_matA,
+  #'     metrics = "all",
+  #'     bounds = TRUE,
+  #'     initvec = Cranevec1,
+  #'     popname = "blue crane",
+  #'     time = "both"
+  #'   )
+  #'   ##plotting with RMSE
+  #'
+  #'metric = "inertia"
+  #'demres_plot(table = BC_TVTC_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE, MAPE =TRUE)
+  #'
+  #' }
+#' @return A plot displaying the chosen metric along a time axis
 #' @export
 #' @name demres_plot
 
