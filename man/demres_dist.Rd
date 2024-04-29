@@ -33,7 +33,7 @@ the time-Varying resilience metric and TC the time constant)
 "all": calculates all of the above measures}
 }
 \value{
-A dataframe containing all the resilience metrics
+A dataframe displaying the mdistance measures for the selected metric
 }
 \description{
 \code{demres_dist} Calculates distance between the time-varying resilience

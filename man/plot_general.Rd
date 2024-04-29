@@ -44,6 +44,9 @@ and adds it on the plot}
 \item{plotname:}{name of the plot with directory. By default:
 plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")}
 }
+\value{
+A plot displaying the chosen metric along a time axis
+}
 \description{
 \code{plot_general} provides a plot to visually inspect the resilience metric
 along a time axis
