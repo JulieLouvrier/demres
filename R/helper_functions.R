@@ -7,7 +7,9 @@
 #' for one specific  metric, calculated with demres
 #' @param TC A vector containing the value of the time-constant demographic
 #'  resilience for the same one specific  metric as for TV, calculated with demres
-
+#' @return Values of the distance measure
+#' @export
+#' @name helper_functions
 
 
 

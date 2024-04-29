@@ -27,7 +27,9 @@
 #' and adds it on the plot
 #' @param plotname: name of the plot with directory. By default:
 #' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
-
+#' @return A plot displaying the chosen metric along a time axis
+#' @export
+#' @name plot_general
 
 plot_general <- function(metric, table, plotname,
                          rRMSE = FALSE,
