@@ -2,13 +2,13 @@
 % Please edit documentation in R/demres_dist_function.R
 \name{demres_dist}
 \alias{demres_dist}
-\title{Provides time-varying and time-constant resilience metrics for animal
-populations}
+\title{Calculates distance between the time-varying resilience metric and the time-
+constant one}
 \usage{
 demres_dist(table, metric, measure)
 }
 \arguments{
-\item{table}{A dataframe containing all the resilience metrics calculated####CHANGE ALL OF IT HERE
+\item{table}{A dataframe containing all the resilience metrics calculated
 with the demres function}
 
 \item{metric:}{"reac": Reactivity: first-timestep amplification
@@ -23,33 +23,34 @@ matrix projection model.
 "maxatt": Maximal attenuation for a population
 matrix projection model.}
 
-\item{measure:}{"RMSE"
-"rRMSE"
-"MAPE"}
+\item{measure:}{"RMSE": calculates the RMSE (sqrt(mean((TV-TC)^2))
+with TV: the time-Varying resilience metric and TC the time constant one)
+"rRMSE":calculates the relative RMSE
+(sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
+and TC the time constant )
+"MAPE": calculates the MAPE (mean(abs(TV - TC)) with TV:
+the time-Varying resilience metric and TC the time constant)
+"all": calculates all of the above measures}
 }
 \value{
 A dataframe containing all the resilience metrics
 }
 \description{
-\code{demres_dist} calculates resilience metrics of a population based
-on a list of matrix population models
-}
-\details{
-This function applies the function "calc_resilience" to a list of matrices
-and returns either time-varying metrics or time-constant metrics
+\code{demres_dist} Calculates distance between the time-varying resilience
+metric and the time-constant one
 }
 \examples{
 \dontrun{
 
-#load packages 
+#load packages
 library(Rcompadre)
 library(dplyr)
 library(popdemo)
 
-# load data 
+# load data
 comadre <- cdb_fetch("comadre")
 
-#selecting the blue crane 
+#selecting the blue crane
 blue_crane <- comadre \%>\% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
 
 #extracting matrices
@@ -69,8 +70,9 @@ BC_TVTC_demres <-
     popname = "blue crane",
     time = "both"
   )
-  
-dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia", measure = "all")
+
+dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia",
+measure = "all")
 
 }
 }

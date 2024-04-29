@@ -2,8 +2,7 @@
 % Please edit documentation in R/demres_plot_function.R
 \name{demres_plot}
 \alias{demres_plot}
-\title{Provides time-varying and time-constant resilience metrics for animal
-populations}
+\title{Plot the resulting demographic resilience metrics}
 \usage{
 demres_plot(
   metric,
@@ -30,33 +29,39 @@ matrix projection model.
 "maxatt": Maximal attenuation for a population
 matrix projection model.}
 
-\item{measure:}{"RMSE"
-"rRMSE"
-"MAPE"}
+\item{RMSE:}{(optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
+with TV: the time-Varying resilience metric and TC the time constant one)
+and adds it on the plot.}
+
+\item{rRMSE:}{(optional) if TRUE: calculates the relative RMSE
+(sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
+and TC the time constant ) and adds it on the plot}
+
+\item{MAPE:}{(optional) if TRUE: calculates the MAPE (mean(abs(TV - TC)))
+and adds it on the plot}
+
+\item{plotname:}{name of the plot with directory. By default:
+plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")}
 }
 \value{
-A dataframe containing all the resilience metrics
+A plot displaying the chosen metric along a time axis
 }
 \description{
-\code{demres_plot} calculates resilience metrics of a population based ####CHANGE ALL OF IT HERE
-on a list of matrix population models
-}
-\details{
-This function applies the function "calc_resilience" to a list of matrices
-and returns either time-varying metrics or time-constant metrics
+\code{demres_plot} provides a plot to visually inspect the resilience metric
+along a time axis
 }
 \examples{
 \dontrun{
 
-#load packages 
+#load packages
 library(Rcompadre)
 library(dplyr)
 library(popdemo)
 
-# load data 
+# load data
 comadre <- cdb_fetch("comadre")
 
-#selecting the blue crane 
+#selecting the blue crane
 blue_crane <- comadre \%>\% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
 
 #extracting matrices
@@ -76,8 +81,10 @@ BC_TVTC_demres <-
     popname = "blue crane",
     time = "both"
   )
-  
-dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia", measure = "all")
+  ##plotting with RMSE
+
+metric = "inertia"
+demres_plot(table = BC_TVTC_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE, MAPE =TRUE)
 
 }
 }

@@ -3,7 +3,7 @@
 \name{demres}
 \alias{demres}
 \title{Provides time-varying and time-constant resilience metrics for animal
-populations}
+populations based on a list of matrix population models}
 \usage{
 demres(
   listA,
@@ -67,15 +67,15 @@ and returns either time-varying metrics or time-constant metrics
 \examples{
 \dontrun{
 
-#load packages 
+#load packages
 library(Rcompadre)
 library(dplyr)
 library(popdemo)
 
-# load data 
+# load data
 comadre <- cdb_fetch("comadre")
 
-#selecting the blue crane 
+#selecting the blue crane
 blue_crane <- comadre \%>\% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
 
 #extracting matrices
