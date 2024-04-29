@@ -1,6 +1,12 @@
 #' Helper functions for demres_dist function from the package "demres"
 #'
-#' \code{helper_functions} Calculates distance between the time-varying resilience
+#' \code{RMSE} Calculates RMSE between the time-varying resilience
+#' metric and the time-constant one
+#'
+#'#' \code{rRMSE} Calculates rRMSE between the time-varying resilience
+#' metric and the time-constant one
+#'
+#' #' \code{MAPE} Calculates MAPE between the time-varying resilience
 #' metric and the time-constant one
 #'
 #' @param TV A vector containing values of time-varying demographic resilience
@@ -10,7 +16,7 @@
 #' @return Values of the distance measure
 #' @export
 #' @name helper_functions
-
+#' @keywords internal
 
 
 RMSE <- function(TV, TC) {

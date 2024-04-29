@@ -30,6 +30,7 @@
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
 #' @name plot_general
+#' @keywords internal
 
 plot_general <- function(metric, table, plotname,
                          rRMSE = FALSE,

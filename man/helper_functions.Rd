@@ -18,6 +18,14 @@ resilience for the same one specific  metric as for TV, calculated with demres}
 Values of the distance measure
 }
 \description{
-\code{helper_functions} Calculates distance between the time-varying resilience
+\code{RMSE} Calculates RMSE between the time-varying resilience
 metric and the time-constant one
 }
+\details{
+#' \code{rRMSE} Calculates rRMSE between the time-varying resilience
+metric and the time-constant one
+
+#' \code{MAPE} Calculates MAPE between the time-varying resilience
+metric and the time-constant one
+}
+\keyword{internal}

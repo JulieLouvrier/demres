@@ -51,3 +51,4 @@ A plot displaying the chosen metric along a time axis
 \code{plot_general} provides a plot to visually inspect the resilience metric
 along a time axis
 }
+\keyword{internal}
