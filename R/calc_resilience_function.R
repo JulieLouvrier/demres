@@ -33,9 +33,7 @@
 #' @param popname a character string describing the name of the population
 #' @export
 #' @examples
-#' \dontrun{
-#' library(popdemo)
-#' data(Tort)
+#' data(Tort, package = "popdemo")
 #'
 #' Tortvec1 <- runif(8) # create initial vec
 #' Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
@@ -43,7 +41,6 @@
 #' all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
 #' initvec = Tortvec1, bounds = TRUE, popname = "Tortoise")
 #'
-#' }
 #' @return A vector containing all the resilience metrics
 #' @name calc_resilience
 
@@ -66,10 +63,10 @@ calc_resilience <-
     if (any(length(dim(A)) != 2, dim(A)[1] != dim(A)[2])) {
       stop("A must be a square matrix")
     }
-    if (!isIrreducible(A)) {
+    if (!popdemo::isIrreducible(A)) {
       stop("Matrix is reducible")
     }
-    if (!isPrimitive(A)) {
+    if (!popdemo::isPrimitive(A)) {
       print("Warning: Matrix is imprimitive")
     }
 
@@ -81,6 +78,8 @@ calc_resilience <-
     else{
     popname = popname
     }
+
+    msg <- character(0)
 
     dat <- data.frame(popname = popname,
                       dr = NA,
@@ -151,8 +150,8 @@ calc_resilience <-
         }
 
         if (bounds == TRUE) {
-          print(
-            "Warning: The lower bound of maximum amplification cannot be computed \n Therefore, the lower maximum attenuation is calculated using the default stage biased vector"
+          message(
+            "The lower bound of maximum amplification cannot be computed \n Therefore, the lower maximum attenuation is calculated using the default stage biased vector"
           )
           dat$maxatt_lwr <- popdemo::maxatt(A)
           dat$maxamp_upr <- popdemo::maxamp(A)
@@ -167,7 +166,7 @@ calc_resilience <-
               e
           )
         if (is(tt.error.maxamp, "error")) {
-          print(paste0("Warning: ", tt.error.maxamp[1]$message, " with the stated initial vector, Na is displayed"))
+          message(paste0(tt.error.maxamp[1]$message, " with the stated initial vector, Na is displayed"))
 
           dat$maxamp <- 999
         }
@@ -210,7 +209,7 @@ calc_resilience <-
               e
           )
         if (is(tt.error.maxatt, "error")) {
-          print(paste0("Warning: ", tt.error.maxatt[1]$message, ", with the stated initial vector, Na is displayed"))
+          msg <- c(msg, paste0(tt.error.maxatt[1]$message, ", with the stated initial vector, Na is displayed"))
           dat$maxatt <- 999
         }
         else{
@@ -218,8 +217,8 @@ calc_resilience <-
         }
 
         if (bounds == TRUE) {
-          print(
-            "Warning: The upper bound was requested with maximum attenuation \n Therefore, the upper maximum amplification is calculated using the default stage biased vector"
+          message(
+            "The upper bound was requested with maximum attenuation \n Therefore, the upper maximum amplification is calculated using the default stage biased vector"
           )
           dat$maxatt_lwr <- popdemo::maxatt(A)
           dat$maxamp_upr <- popdemo::maxamp(A)
@@ -265,7 +264,7 @@ calc_resilience <-
               e
           )
         if (is(tt.error.maxamp, "error")) {
-          print(paste0("Warning: ", tt.error.maxamp[1]$message, ", with the stated initial vector, Na is displayed"))
+          message(paste0(tt.error.maxamp[1]$message, ", with the stated initial vector, Na is displayed"))
           dat$maxamp <- 999
         }
         else{
@@ -278,7 +277,7 @@ calc_resilience <-
               e
           )
         if (is(tt.error.maxatt, "error")) {
-          print(paste0("Warning: ", tt.error.maxatt[1]$message, ", with the stated initial vector, Na is displayed"))
+          msg <- c(msg, paste0(tt.error.maxatt[1]$message, ", with the stated initial vector, Na is displayed"))
           dat$maxatt <- 999
         }
         else{
@@ -299,6 +298,8 @@ calc_resilience <-
     dat <- dat[,-which(is.na(dat))] #taking out columns with NAs in them
     }
     dat[,which(dat == 999)] <- NA
+
+    attr(dat, "msg") <- msg
 
     return(dat)
   }

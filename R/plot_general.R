@@ -3,6 +3,7 @@
 #' \code{plot_general} provides a plot to visually inspect the resilience metric
 #' along a time axis
 #'
+#' @inheritParams demres_plot
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the demres function
 #' @param metric: "reac": Reactivity: first-timestep amplification
@@ -16,15 +17,6 @@
 #'                 matrix projection model.
 #'                 "maxatt": Maximal attenuation for a population
 #'                 matrix projection model.
-#' @param RMSE: (optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
-#' with TV: the time-Varying resilience metric and TC the time constant one)
-#' and adds it on the plot.
-#' @param rRMSE: (optional) if TRUE: calculates the relative RMSE
-#' (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
-#' and TC the time constant ) and adds it on the plot
-#' @param MAPE: (optional) if TRUE: calculates the MAPE (mean(abs(TV - TC))
-#' with TV: the time-Varying resilience metric and TC the time constant )
-#' and adds it on the plot
 #' @param plotname: name of the plot with directory. By default:
 #' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
 #' @return A plot displaying the chosen metric along a time axis

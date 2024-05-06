@@ -48,9 +48,7 @@ This function compiles different metrics of resilience, given by the popdemo
 package based on a population matrix projection model.
 }
 \examples{
-\dontrun{
-library(popdemo)
-data(Tort)
+data(Tort, package = "popdemo")
 
 Tortvec1 <- runif(8) # create initial vec
 Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
@@ -58,5 +56,4 @@ Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
 all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
 initvec = Tortvec1, bounds = TRUE, popname = "Tortoise")
 
-}
 }

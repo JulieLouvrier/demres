@@ -38,21 +38,15 @@
 #'            study period
 #'            "varying": if the metrics are to be calculated for each time step
 #' @examples
-#' \dontrun{
-#'
-#' #load packages
-#' library(Rcompadre)
-#' library(dplyr)
-#' library(popdemo)
 #'
 #' # load data
 #' comadre <- cdb_fetch("comadre")
 #'
 #' #selecting the blue crane
-#' blue_crane <- comadre %>% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
+#' blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
 #'
 #' #extracting matrices
-#' blue_crane_matA <- Rcompadre::matA(blue_crane)
+#' blue_crane_matA <- matA(blue_crane)
 #'
 #' # simulate an initial vector
 #' Cranevec1 <- runif(5)
@@ -69,7 +63,6 @@
 #'     time = "both"
 #'   )
 #'
-#' }
 #' @return A dataframe containing all the resilience metrics
 #' @export
 #' @name demres
@@ -101,7 +94,6 @@ demres <- function(listA,
                             initvec = X,
                             popname = popname)
           }, A = listA, X = initvec)
-
 
         metres <- t(temp_list)
         colnames(metres)[-1] <- paste0(colnames(metres)[-1], "_TV")
@@ -160,6 +152,10 @@ demres <- function(listA,
               initvec = initvec,
               popname = popname
             )
+
+          msg <- character(0)
+          msg <- unique(sapply(temp_list, function(e) attr(e, "msg")))
+
           metres <- do.call(rbind.data.frame, temp_list)
           names(metres)[-1] <- paste0(names(metres)[-1], "_TV")
           metres <- cbind(timestep = c(1:nrow(metres)), metres)
@@ -199,6 +195,11 @@ demres <- function(listA,
           }
         }
       }
+  }
+
+    if (length(msg) > 0) {
+      message(msg)
     }
+
     return(met)
 }

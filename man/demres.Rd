@@ -65,21 +65,15 @@ This function applies the function "calc_resilience" to a list of matrices
 and returns either time-varying metrics or time-constant metrics
 }
 \examples{
-\dontrun{
-
-#load packages
-library(Rcompadre)
-library(dplyr)
-library(popdemo)
 
 # load data
 comadre <- cdb_fetch("comadre")
 
 #selecting the blue crane
-blue_crane <- comadre \%>\% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
+blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
 
 #extracting matrices
-blue_crane_matA <- Rcompadre::matA(blue_crane)
+blue_crane_matA <- matA(blue_crane)
 
 # simulate an initial vector
 Cranevec1 <- runif(5)
@@ -96,5 +90,4 @@ BC_TVTC_demres <-
     time = "both"
   )
 
-}
 }
