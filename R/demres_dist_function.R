@@ -26,7 +26,6 @@
 #'                 the time-Varying resilience metric and TC the time constant)
 #'                 "all": calculates all of the above measures
 #' @examples
-#'
 #' # load data
 #' comadre <- cdb_fetch("comadre")
 #'
@@ -55,7 +54,6 @@
 #' dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia",
 #' measure = "all")
 #'
-#' }
 #' @return A dataframe displaying the mdistance measures for the selected metric
 #' @export
 #' @name demres_dist

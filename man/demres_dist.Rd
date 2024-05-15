@@ -39,3 +39,33 @@ A dataframe displaying the mdistance measures for the selected metric
 \code{demres_dist} Calculates distance between the time-varying resilience
 metric and the time-constant one
 }
+\examples{
+# load data
+comadre <- cdb_fetch("comadre")
+
+#selecting the blue crane
+blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
+
+#extracting matrices
+blue_crane_matA <- matA(blue_crane)
+
+# simulate an initial vector
+Cranevec1 <- runif(5)
+Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
+
+
+BC_TVTC_demres <-
+  demres(
+    blue_crane_matA,
+    metrics = "all",
+    bounds = TRUE,
+    initvec = Cranevec1,
+    popname = "blue crane",
+    time = "both"
+  )
+
+
+dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia",
+measure = "all")
+
+}

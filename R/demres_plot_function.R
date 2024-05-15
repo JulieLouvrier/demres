@@ -27,7 +27,6 @@
 #' @param plotname: name of the plot with directory. By default:
 #' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
 #' @examples
-#'
 #' # load data
 #' comadre <- cdb_fetch("comadre")
 #'
@@ -58,7 +57,6 @@
 #'metric = "inertia"
 #'demres_plot(table = BC_TVTC_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE, MAPE =TRUE)
 #'
-#' }
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
 #' @name demres_plot

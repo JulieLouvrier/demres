@@ -58,30 +58,31 @@ library(demres)
 comadre <- cdb_fetch("comadre")
 
 #selecting the blue crane
-blue_crane <-
-  comadre %>% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
+blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
 
 #extracting matrices
 blue_crane_matA <- Rcompadre::matA(blue_crane)
-
-# Create initial vector
-Cranevec1 <- runif(5)
-Cranevec1 <- Cranevec1 / sum(Cranevec1) #scales the vec to sum to 1
 
 ```
 
 ### Calculate demographic resilience metrics based on one Matrix
 
-For daily plots, you may want to remove manually lump report of deaths from nursing homes:
+The function `calc_resilience` is made to calculate demographic resilience metrics based on one Matrix Population Model. It returns a `dataframe`
 
-```{r, resilience mtrics}
-CraneMat1 <- blue_crane_matA[[1]]
+```{r, resilience metrics}
+#select the first matrix 
+Crane_mat1 <- blue_crane_matA[[1]]
 
-Tortvec1 <- runif(8) # create initial vec
-Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
+# Create initial vector
+Crane_vec1 <- runif(5)
+Crane_vec1 <- Crane_vec1 / sum(Crane_vec1) #scales the vec to sum to 1
 
-all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
-initvec = Tortvec1, bounds = TRUE, popname = "Tortoise")
+#let's calculate all metrics of demgraphic resilience for that one matrix with one initial vector
+all_BlueCrane_demres <- calc_resilience(Crane_mat1, metrics = c("all"),
+initvec = Cranevec1, bounds = TRUE, popname = "Blue Crane")
+
+#let's take a look at what we got
+all_BlueCrane_demres
 
 ```
 
