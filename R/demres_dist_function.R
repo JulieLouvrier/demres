@@ -26,21 +26,15 @@
 #'                 the time-Varying resilience metric and TC the time constant)
 #'                 "all": calculates all of the above measures
 #' @examples
-#' \dontrun{
-#'
-#' #load packages
-#' library(Rcompadre)
-#' library(dplyr)
-#' library(popdemo)
 #'
 #' # load data
 #' comadre <- cdb_fetch("comadre")
 #'
 #' #selecting the blue crane
-#' blue_crane <- comadre %>% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
+#' blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
 #'
 #' #extracting matrices
-#' blue_crane_matA <- Rcompadre::matA(blue_crane)
+#' blue_crane_matA <- matA(blue_crane)
 #'
 #' # simulate an initial vector
 #' Cranevec1 <- runif(5)
@@ -56,6 +50,7 @@
 #'     popname = "blue crane",
 #'     time = "both"
 #'   )
+#'
 #'
 #' dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia",
 #' measure = "all")

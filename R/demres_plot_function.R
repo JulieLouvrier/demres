@@ -27,42 +27,38 @@
 #' @param plotname: name of the plot with directory. By default:
 #' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
 #' @examples
-#' \dontrun{
-  #'
-  #' #load packages
-  #' library(Rcompadre)
-  #' library(dplyr)
-  #' library(popdemo)
-  #'
-  #' # load data
-  #' comadre <- cdb_fetch("comadre")
-  #'
-  #' #selecting the blue crane
-  #' blue_crane <- comadre %>% dplyr::filter(SpeciesAccepted  == "Anthropoides paradiseus")
-  #'
-  #' #extracting matrices
-  #' blue_crane_matA <- Rcompadre::matA(blue_crane)
-  #'
-  #' # simulate an initial vector
-  #' Cranevec1 <- runif(5)
-  #' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
-  #'
-  #'
-  #' BC_TVTC_demres <-
-  #'   demres(
-  #'     blue_crane_matA,
-  #'     metrics = "all",
-  #'     bounds = TRUE,
-  #'     initvec = Cranevec1,
-  #'     popname = "blue crane",
-  #'     time = "both"
-  #'   )
-  #'   ##plotting with RMSE
-  #'
-  #'metric = "inertia"
-  #'demres_plot(table = BC_TVTC_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE, MAPE =TRUE)
-  #'
-  #' }
+#'
+#' # load data
+#' comadre <- cdb_fetch("comadre")
+#'
+#' #selecting the blue crane
+#' blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
+#'
+#' #extracting matrices
+#' blue_crane_matA <- matA(blue_crane)
+#'
+#' # simulate an initial vector
+#' Cranevec1 <- runif(5)
+#' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
+#'
+#'
+#' BC_TVTC_demres <-
+#'   demres(
+#'     blue_crane_matA,
+#'     metrics = "all",
+#'     bounds = TRUE,
+#'     initvec = Cranevec1,
+#'     popname = "blue crane",
+#'     time = "both"
+#'   )
+#'
+#'
+#'   ##plotting with RMSE
+#'
+#'metric = "inertia"
+#'demres_plot(table = BC_TVTC_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE, MAPE =TRUE)
+#'
+#' }
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
 #' @name demres_plot
