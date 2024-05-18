@@ -1,6 +1,6 @@
 #' Helper function for the demres_plot function
 #'
-#' \code{plot_general} provides a plot to visually inspect the resilience metric
+#' `plot_general` provides a plot to visually inspect the resilience metric
 #' along a time axis
 #'
 #' @inheritParams demres_plot
@@ -63,8 +63,8 @@ plot_general <- function(metric, table, plotname,
                     table_metric_upr_TC, table_metric_lwr_TC, table_metric_initvect_TC)
 
 
-  miny = (min(all, na.rm = T) - 0.4 * min(all, na.rm = T))
-  maxy = max(all, na.rm = T)
+  miny = (min(all, na.rm = TRUE) - 0.4 * min(all, na.rm = TRUE))
+  maxy = max(all, na.rm = TRUE)
 
   ltydefault = c(1, 1, 1)
   titleTCdefault = "Time-Constant"
@@ -75,7 +75,7 @@ plot_general <- function(metric, table, plotname,
 
   if(length(table_metric_upr_TV) == 0){
     table_metric_upr_TV <- rep(NA, nrow(table))
-    maxy <- (max(all, na.rm = T) + 0.4 * max(all, na.rm = T))
+    maxy <- (max(all, na.rm = TRUE) + 0.4 * max(all, na.rm = TRUE))
 
     if(length(table_metric_lwr_TV) == 0){
       table_metric_lwr_TV <- rep(NA, nrow(table))
@@ -152,10 +152,10 @@ plot_general <- function(metric, table, plotname,
   # Define the vertices of the polygon
   xup <-
     c(
-      min(tableStartYear,na.rm = T),
-      max(tableStartYear, na.rm = T),
-      max(tableStartYear,na.rm = T),
-      min(tableStartYear, na.rm = T)
+      min(tableStartYear,na.rm = TRUE),
+      max(tableStartYear, na.rm = TRUE),
+      max(tableStartYear,na.rm = TRUE),
+      min(tableStartYear, na.rm = TRUE)
     )
   if(length(which(is.na(table_metric_upr_TV))) == nrow(table)) {
     yup = c(NA, NA, NA, NA)
@@ -163,18 +163,18 @@ plot_general <- function(metric, table, plotname,
   else{
     yup <- #here
       c(
-        min(table_metric_upr_TV, na.rm = T),
-        min(table_metric_upr_TV, na.rm = T),
-        max(table_metric_upr_TV, na.rm = T),
-        max(table_metric_upr_TV, na.rm = T)
+        min(table_metric_upr_TV, na.rm = TRUE),
+        min(table_metric_upr_TV, na.rm = TRUE),
+        max(table_metric_upr_TV, na.rm = TRUE),
+        max(table_metric_upr_TV, na.rm = TRUE)
       )
   }
   xlow <-
     c(
-      min(tableStartYear, na.rm = T),
-      max(tableStartYear, na.rm = T),
-      max(tableStartYear, na.rm = T),
-      min(tableStartYear, na.rm = T)
+      min(tableStartYear, na.rm = TRUE),
+      max(tableStartYear, na.rm = TRUE),
+      max(tableStartYear, na.rm = TRUE),
+      min(tableStartYear, na.rm = TRUE)
     )
 
   if(length(which(is.na(table_metric_lwr_TV))) == nrow(table)) {
@@ -183,18 +183,18 @@ plot_general <- function(metric, table, plotname,
   else{
     ylow <-
       c(
-        min(table_metric_lwr_TV, na.rm = T),
-        min(table_metric_lwr_TV, na.rm = T),
-        max(table_metric_lwr_TV, na.rm = T),
-        max(table_metric_lwr_TV, na.rm = T)
+        min(table_metric_lwr_TV, na.rm = TRUE),
+        min(table_metric_lwr_TV, na.rm = TRUE),
+        max(table_metric_lwr_TV, na.rm = TRUE),
+        max(table_metric_lwr_TV, na.rm = TRUE)
       )
   }
   xinit <-
     c(
-      min(tableStartYear, na.rm = T),
-      max(tableStartYear, na.rm = T),
-      max(tableStartYear, na.rm = T),
-      min(tableStartYear, na.rm = T)
+      min(tableStartYear, na.rm = TRUE),
+      max(tableStartYear, na.rm = TRUE),
+      max(tableStartYear, na.rm = TRUE),
+      min(tableStartYear, na.rm = TRUE)
     )
 
   if(length(which(is.na(table_metric_initvect_TV))) == nrow(table)) {
@@ -203,10 +203,10 @@ plot_general <- function(metric, table, plotname,
   else{
     yinit <-
       c(
-        min(table_metric_initvect_TV, na.rm = T),
-        min(table_metric_initvect_TV, na.rm = T),
-        max(table_metric_initvect_TV, na.rm = T),
-        max(table_metric_initvect_TV, na.rm = T)
+        min(table_metric_initvect_TV, na.rm = TRUE),
+        min(table_metric_initvect_TV, na.rm = TRUE),
+        max(table_metric_initvect_TV, na.rm = TRUE),
+        max(table_metric_initvect_TV, na.rm = TRUE)
       )
   }
   # Create a plot

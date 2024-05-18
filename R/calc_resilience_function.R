@@ -1,6 +1,6 @@
 #' Provides resilience metrics from the package popdemo for one matrix
 #'
-#' \code{calc_resilience} calculates resilience metrics of a population based
+#' `calc_resilience` calculates resilience metrics of a population based
 #' on a matrix population model
 #'
 #' This function compiles different metrics of resilience, given by the popdemo

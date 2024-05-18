@@ -1,7 +1,7 @@
 #' Calculates distance between the time-varying resilience metric and the time-
 #' constant one
 #'
-#' \code{demres_dist} Calculates distance between the time-varying resilience
+#' `demres_dist` Calculates distance between the time-varying resilience
 #' metric and the time-constant one
 #'
 #' @param table A dataframe containing all the resilience metrics calculated

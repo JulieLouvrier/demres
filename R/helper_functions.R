@@ -14,19 +14,19 @@ NULL
 #' metric and the time-constant one
 #' @export
 RMSE <- function(TV, TC) {
-  sqrt(mean((TV - TC) ^ 2, na.rm = T))
+  sqrt(mean((TV - TC) ^ 2, na.rm = TRUE))
 }
 
 #' @describeIn helper_functions
 #' `rRMSE` Calculates rRMSE between the time-varying resilience
 #' @export
 rRMSE <- function(TV, TC) {
-  sqrt(mean((TV - TC) ^ 2, na.rm = T)) / sd(TV, na.rm = T)
+  sqrt(mean((TV - TC) ^ 2, na.rm = TRUE)) / sd(TV, na.rm = TRUE)
 }
 
 #' @describeIn helper_functions
 #' `MAPE` Calculates MAPE between the time-varying resilience
 #' metric and the time-constant one
 MAPE <- function(TV, TC) {
-  mean(abs(TV - TC), na.rm = T)
+  mean(abs(TV - TC), na.rm = TRUE)
 }

@@ -1,7 +1,7 @@
 #' Provides time-varying and time-constant resilience metrics for animal
 #' populations based on a list of matrix population models
 #'
-#' \code{demres} calculates resilience metrics of a population based
+#' `demres` calculates resilience metrics of a population based
 #' on a list of matrix population models
 #'
 #' This function applies the function "calc_resilience" to a list of matrices

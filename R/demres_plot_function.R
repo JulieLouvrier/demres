@@ -1,6 +1,6 @@
 #' Plot the resulting demographic resilience metrics
 #'
-#' \code{demres_plot} provides a plot to visually inspect the resilience metric
+#' `demres_plot` provides a plot to visually inspect the resilience metric
 #' along a time axis
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
@@ -95,23 +95,23 @@ demres_plot <- function(metric,
     table_metric_initvect_TC <-
       table[, grep(paste0(metric, "_TC"), colnames(table))]
 
-    miny = min(table_metric_initvect_TV, na.rm = T) - 0.4 * min(table_metric_initvect_TV, na.rm = T)
-    maxy = max(table_metric_initvect_TV, na.rm = T)  + 0.4 * max(table_metric_initvect_TV, na.rm = T)
+    miny = min(table_metric_initvect_TV, na.rm = TRUE ) - 0.4 * min(table_metric_initvect_TV, na.rm = TRUE )
+    maxy = max(table_metric_initvect_TV, na.rm = TRUE )  + 0.4 * max(table_metric_initvect_TV, na.rm = TRUE )
 
     # Define the vertices of the polygon
     xinit <-
       c(
-        min(tableStartYear, na.rm = T),
-        max(tableStartYear, na.rm = T),
-        max(tableStartYear,na.rm = T),
-        min(tableStartYear, na.rm = T)
+        min(tableStartYear, na.rm = TRUE ),
+        max(tableStartYear, na.rm = TRUE ),
+        max(tableStartYear,na.rm = TRUE ),
+        min(tableStartYear, na.rm = TRUE )
       )
     yinit <-
       c(
-        min(table_metric_initvect_TV, na.rm = T),
-        min(table_metric_initvect_TV, na.rm = T),
-        max(table_metric_initvect_TV, na.rm = T),
-        max(table_metric_initvect_TV, na.rm = T)
+        min(table_metric_initvect_TV, na.rm = TRUE ),
+        min(table_metric_initvect_TV, na.rm = TRUE ),
+        max(table_metric_initvect_TV, na.rm = TRUE ),
+        max(table_metric_initvect_TV, na.rm = TRUE )
       )
 
     # Create a plot
