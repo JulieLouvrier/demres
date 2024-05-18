@@ -1,5 +1,7 @@
 ---
-output: github_document
+output:
+  md_document:
+    variant: markdown_github
 editor_options: 
   chunk_output_type: console
 ---
@@ -89,7 +91,7 @@ all_BlueCrane1_demres
 
 ### Calculate demographic resilience metrics based on a list of Matrices
 
-The function `demres` is made to calculate demographic resilience metrics based on a lost Matrix Population Models. It returns a `dataframe`
+The function `demres` is made to calculate demographic resilience metrics based on a lost Matrix Population Models. It returns a `dataframe` with both time-varying and time-constant approaches when required with the option `time`.
 
 ```{r, demres}
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
@@ -99,198 +101,36 @@ initvec = Crane_vec1, bounds = TRUE, popname = "Blue Crane", time = "both")
 #let's take a look at what we got
 all_BlueCrane_demres
 ```
-  
-### Create the data with the baseline mortality information
 
-```{r, prep WB}
-data_baseline_mortality <- prepare_data_WB() ## the data do sometimes change from day to day!
-data_baseline_mortality
+### Assessing the distance between the time-varying and the time-constant approaches
+
+The function `demres_dist` calculates the distance between the time-varying resilience metric and the time-constant one by measuring the RMSE, rRMSE and the MAPE: 
+
+#### RMSE : 
+(sqrt(mean((TV-TC)^2)) with TV: the time-Varying resilience metric and TC the time constant one)
+
+#### rRMSE: 
+(sqrt(mean((TV-TC)^2)) / sd(TV) 
+
+#### MAPE": 
+(mean(abs(TV - TC)) 
+
+```{r, distance}
+#let's calculate all measures of distance for inertia
+dist_BC <- demres_dist(table = all_BlueCrane_demres, metric = "inertia", measure = "all")
+
+#let's take a look at what we got
+dist_BC
 ```
 
-### Make plots:
+### plotting the results
 
-To look at daily deaths, using the baseline mortality from each country:
-```{r, plot1}
-plot_deaths(data_ECDC = data_COVID,
-            data_WB = data_baseline_mortality,
-            type_major = "daily",
-            baseline_major = "country",
-            select_major = "worst_day",
-            type_minor = "daily",
-            baseline_minor = "country",
-            select_minor = "last_day",
-            title = "Deaths by COVID19 on the worst and last day (light & dark colour)\nrelative to baseline country mortality")
+`demres_plot` provides a plot to visually inspect the resilience metric along a time axis
+
+```{r, plotting}
+#specifying the metric that we want to visually inspect
+metric = "inertia"
+#plotting
+demres_plot(table = all_BlueCrane_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE)
+
 ```
-
-```{r, save plot1, echo = FALSE}
-ggplot2::ggsave(filename = paste0("./figures/extra_mortality_daily_country",
-                                  today, ".png"), width = 9, height = 6, units = "in")
-```
-
-To look at daily deaths, using the baseline mortality from the world:
-```{r, plot2}
-plot_deaths(data_ECDC = data_COVID,
-            data_WB = data_baseline_mortality,
-            type_major = "daily",
-            baseline_major = "world",
-            select_major = "worst_day",
-            type_minor = "daily",
-            baseline_minor = "world",
-            select_minor = "last_day",
-            title = "Deaths by COVID19 on the worst and last day (light & dark colour)\nrelative to baseline worldwide mortality")
-```
-
-To look at cumulative deaths, using the baseline mortality from each country:
-```{r, plot3}
-plot_deaths(data_ECDC = data_COVID,
-            data_WB = data_baseline_mortality,
-            type_major = "cumul",
-            baseline_major = "country",
-            select_major = "worst_day",
-            type_minor = "cumul",
-            baseline_minor = "country",
-            select_minor = "last_day",
-            title = "Cumulative deaths by COVID19 on the worst and last day (light & dark colour)\nrelative to baseline country mortality")
-```
-
-```{r, save plot3, echo = FALSE}
-ggplot2::ggsave(filename = paste0("./figures/extra_mortality_cumul_country",
-                                  today, ".png"), width = 9, height = 6, units = "in")
-```
-
-To look at cumulative deaths, using the baseline mortality from the world:
-```{r, plot4}
-plot_deaths(data_ECDC = data_COVID,
-            data_WB = data_baseline_mortality,
-            type_major = "cumul",
-            baseline_major = "world",
-            select_major = "worst_day",
-            type_minor = "cumul",
-            baseline_minor = "world",
-            select_minor = "last_day",
-            title = "Cumulative deaths by COVID19 on the worst and last day (light & dark colour)\nrelative to baseline worldwide mortality")
-```
-
-## More advanced usage of the package
-
-### Do your own plot
-
-The workhorse function that lead to tidy longitudinal series is `merge_datasets()`.
-You can for example use it like that:
-
-```{r, merge}
-full_data <- merge_datasets(data_ECDC = data_COVID,
-                            data_WB = data_baseline_mortality,
-                            type = "daily",
-                            baseline = "country",
-                            select = "worst_day")
-```
-
-```{r, merge output}
-str(full_data)
-```
-
-
-### Recover the data behind the plot
-```{r, recover plot_data, fig.keep="none"}
-plot_data <- plot_deaths(data_ECDC = data_COVID,
-            data_WB = data_baseline_mortality,
-            type_major = "daily",
-            baseline_major = "country",
-            select_major = "worst_day",
-            type_minor = "daily",
-            baseline_minor = "country",
-            select_minor = "last_day",
-            title = "Deaths by COVID19 on the worst and last day (light & dark colour)\nrelative to baseline mortality")
-```
-
-
-```{r, recover plot_data2}
-class(plot_data)
-```
-
-
-### Modify the plot
-
-Just add `return_plot = TRUE`, when calling `plot_deaths()` and store the output in an object. The object created will be a plot.
-
-```{r, recover plot_plot, fig.keep="none"}
-plot_plot <- plot_deaths(data_ECDC = data_COVID,
-            data_WB = data_baseline_mortality,
-            type_major = "daily",
-            baseline_major = "country",
-            select_major = "worst_day",
-            type_minor = "daily",
-            baseline_minor = "country",
-            select_minor = "last_day",
-            title = "Deaths by COVID19 on the worst and last day (light & dark colour)\nrelative to baseline mortality",
-            return_plot = TRUE)
-```
-
-```{r, recover plot_plot2}
-class(plot_plot)
-```
-
-
-## Known caveats
-
-There are many limitation that directly stem from the data. For example:
-
-- some countries (seem to under-report death by COVID19. This is because for many deaths occurying outside hospitals the exact cause of death is not known. (We will be able to look at that when overall death rates will be known.)
-
-- some countries are not included because either we have no data for COVID19, or the population and mortality data are not in the database I am using. The latter is for example the case of Taiwan.
-
-- the baseline mortality is based on **average** daily mortality from 2018.
-
-- comorbidities are not accounted for.
-
-## Developers corner
-
-Here is my current R/computer configuration:
-```{r, info session}
-devtools::session_info()
-```
-
-## Help & feedbacks wanted!
-
-If you find that this project interesting an idea worth pursuing, please let me know by liking, RT or messaging on Twitter (@alexcourtiol).
-
-Developing is always more fun when it becomes a collaborative work, so please also email me (or leave an issue) if you want to get involved!
-
-
-## General tips for interpreting the plots
-
-### How to read the axes?
-
-Here I express the number of _reported_ COVID19 deaths compared to 100 "normal" deaths.
-
-For example, a value of 50 would imply that if 100 normal deaths used to occur in a city, then we would observe 150 deaths in total (100 normal + 50 COVID19 ones) assuming that normal deaths have not changed.
-
-This is more informative than expressing the result as a percentage: if the COVID deaths reach very large numbers, we will still see on this graph such an increase progressing linearly. Instead, expressed as a percentage, the death toll would just slowly converge towards 100%.
-
-If you still want to express such number as a percentage, just do:
-
-If you still want to express such number as a percentage, just do `100 * X/(100 + X)`. For example, with 50 COVID death per 100 normal ones,
-the percentage of COVID death is thus 100 * 50/150 = 33.333%.
-
-If instead you want to instead express values along the x-axis as the odd of dying from COVID, just divide the value X you read on the axis by 100: `(X / (100 + X))/(100 / (100 + X)) = X/100`. For example, with 50 COVID death per 100 normal ones,
-the odd of COVID death is thus 50/100 = 0.5.
-
-### Daily vs cumulative deaths
-
-The package allows to explore or plot either daily deaths or cumulated deaths since a given country had reached a total of 10 deaths. Daily deaths are susceptible to vary due to lags in reporting alone. For this reason, I try to discount the lump reports from nursing homes when they correspond to several days, but I cannot keep track of all of them.
-
-Cumulative deaths are thus probably better since when the deaths are being reported matters less.
-
-### Baseline
-
-When deaths are counted on a daily basis, the baseline is also computed on a daily basis.
-
-When deaths are cumulated, the baseline is computed using normal mortality that would have occurred during the period between the date when the country reached 10 cumulative total deaths and the date of the report being analysed.
-
-To count normal deaths and produce a baseline, the package allows you to either use the most recent mortality data for the same country that is analysed (2018), or to use the average mortality data from the entire world (which is much higher than the country level one in the healthier countries). The choice of the baseline impacts on the ranking.
-
-### Why on Earth can cumulative mortality go down?
-
-It is because the cumulative deaths are expressed relatively to the baseline mortality that occurs during the same period. Therefore, if the deaths caused by COVID19 pile up more slowly that the normal deaths, then the relative measure shown in the plot can go down.
-
