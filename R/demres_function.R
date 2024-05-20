@@ -197,9 +197,9 @@ demres <- function(listA,
       }
   }
 
-    if (length(msg) > 0) {
-      message(msg)
-    }
+    # if (length(msg) > 0) {
+    #   message(msg)
+    # }
 
     return(met)
 }
