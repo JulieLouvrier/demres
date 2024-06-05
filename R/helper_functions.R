@@ -28,5 +28,5 @@ rRMSE <- function(TV, TC) {
 #' `MAPE` Calculates MAPE between the time-varying resilience
 #' metric and the time-constant one
 MAPE <- function(TV, TC) {
-  mean(abs(TV - TC), na.rm = TRUE)
+  mean(abs(TV - TC)/TC, na.rm = TRUE)
 }
