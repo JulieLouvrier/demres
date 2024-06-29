@@ -66,7 +66,7 @@ calc_resilience <-
       # class to be matrix
       stop("A must be a square matrix")
     }
-    if (any(is.na(A)) {
+    if (any(is.na(A))) {
       stop("Matrix should not contain any missing values")
     }
     if (!popdemo::isIrreducible(A)) {

@@ -30,8 +30,6 @@
 #' @param initvec a list of numeric vectors or one-column matrices describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific', stage age structure
 #' metric
-#' @param ssd default as FALSE, if TRUE will calculate the demographic resilience
-#' metrics based on the stable stage distribution vectors extracted from each matrix
 #' @param popname a character string describing the name of the population
 #' @param time a character string: "constant", "varying" or "both"
 #'            "constant" : if the metrics are to be calculated over the whole
@@ -71,7 +69,6 @@ demres <- function(listA,
                    metrics,
                    bounds = FALSE,
                    initvec = "n",
-                   ssd = FALSE,
                    popname = NULL,
                    time) {
 
