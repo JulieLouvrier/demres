@@ -60,8 +60,14 @@ calc_resilience <-
     if (is.null(metrics)) {
       stop("Please specify metrics")
     }
-    if (any(length(dim(A)) != 2, dim(A)[1] != dim(A)[2])) {
+    if (any(! is.matrix(A), dim(A)[1] != dim(A)[2])) { #V: length(dim(A)) == 2 is not a reliable test for a matrix!
+      # df can also have exact same number of rows and cols, but df cannot be
+      # supplied for any of the resilience functions inb popdemo. You should check for
+      # class to be matrix
       stop("A must be a square matrix")
+    }
+    if (any(is.na(A)) {
+      stop("Matrix should not contain any missing values")
     }
     if (!popdemo::isIrreducible(A)) {
       stop("Matrix is reducible")
