@@ -9,7 +9,7 @@
 #'
 #' @param listA a list of square, primitive, irreducible, non-negative numeric
 #' matrices of any dimension
-#' @param metrics: "reac": Calculates reactivity: first-timestep amplification
+#' @param metrics "reac": Calculates reactivity: first-timestep amplification
 #'                 and first-timestep attenuation for a population matrix
 #'                 projection model.
 #'                 "inertia": Calculates population inertia for a population

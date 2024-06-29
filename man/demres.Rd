@@ -5,19 +5,24 @@
 \title{Provides time-varying and time-constant resilience metrics for animal
 populations based on a list of matrix population models}
 \usage{
-demres(
-  listA,
-  metrics,
-  bounds = FALSE,
-  initvec = "n",
-  ssd = FALSE,
-  popname = NULL,
-  time
-)
+demres(listA, metrics, bounds = FALSE, initvec = "n", popname = NULL, time)
 }
 \arguments{
 \item{listA}{a list of square, primitive, irreducible, non-negative numeric
 matrices of any dimension}
+
+\item{metrics}{"reac": Calculates reactivity: first-timestep amplification
+and first-timestep attenuation for a population matrix
+projection model.
+"inertia": Calculates population inertia for a population
+matrix projection model.
+"dr": Calculate the damping ratio of a given population
+matrix projection model.
+"maxamp": Calculate maximal amplification for a population
+matrix projection model.
+"maxatt": Calculate maximal attenuation for a population
+matrix projection model.
+"all": all of the above metrics are provided}
 
 \item{bounds}{(optional) if TRUE, specifies whether the upper and  lower
 bound should be calculated
@@ -30,28 +35,12 @@ based on the inital vector}
 distribution ('demographic structure') used to calculate a 'case-specific', stage age structure
 metric}
 
-\item{ssd}{default as FALSE, if TRUE will calculate the demographic resilience
-metrics based on the stable stage distribution vectors extracted from each matrix}
-
 \item{popname}{a character string describing the name of the population}
 
 \item{time}{a character string: "constant", "varying" or "both"
 "constant" : if the metrics are to be calculated over the whole
 study period
 "varying": if the metrics are to be calculated for each time step}
-
-\item{metrics:}{"reac": Calculates reactivity: first-timestep amplification
-and first-timestep attenuation for a population matrix
-projection model.
-"inertia": Calculates population inertia for a population
-matrix projection model.
-"dr": Calculate the damping ratio of a given population
-matrix projection model.
-"maxamp": Calculate maximal amplification for a population
-matrix projection model.
-"maxatt": Calculate maximal attenuation for a population
-matrix projection model.
-"all": all of the above metrics are provided}
 }
 \value{
 A dataframe containing all the resilience metrics

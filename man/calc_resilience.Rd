@@ -10,6 +10,19 @@ calc_resilience(A, metrics, bounds = FALSE, initvec = "n", popname = NULL)
 \item{A}{a square, primitive, irreducible, non-negative numeric matrix of any
 dimension}
 
+\item{metrics}{"reac": Calculates reactivity: first-timestep amplification
+and first-timestep attenuation for a population matrix
+projection model.
+"inertia": Calculates population inertia for a population
+matrix projection model.
+"dr": Calculate the damping ratio of a given population
+matrix projection model.
+"maxamp": Calculate maximal amplification for a population
+matrix projection model.
+"maxatt": Calculate maximal attenuation for a population
+matrix projection model.
+"all": all of the above metrics are provided}
+
 \item{bounds}{(optional) if TRUE, specifies whether the upper and  lower bound
 should be calculated
 if vec is not specified, the function provides metrics in their upper and
@@ -22,19 +35,6 @@ distribution ('demographic structure') used to calculate a 'case-specific'
 maximal amplification}
 
 \item{popname}{a character string describing the name of the population}
-
-\item{metrics:}{"reac": Calculates reactivity: first-timestep amplification
-and first-timestep attenuation for a population matrix
-projection model.
-"inertia": Calculates population inertia for a population
-matrix projection model.
-"dr": Calculate the damping ratio of a given population
-matrix projection model.
-"maxamp": Calculate maximal amplification for a population
-matrix projection model.
-"maxatt": Calculate maximal attenuation for a population
-matrix projection model.
-"all": all of the above metrics are provided}
 }
 \value{
 A vector containing all the resilience metrics

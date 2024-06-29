@@ -76,9 +76,14 @@ BC_TVTC_demres <-
   )
 
 
-  ##plotting with RMSE
+#plotting with RMSE
 
 metric = "inertia"
-demres_plot(table = BC_TVTC_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE, MAPE =TRUE)
+demres_plot(table = BC_TVTC_demres,
+            metric = metric,
+            plotname = paste0(getwd(),
+            "/plots/plot_demres_", metric, ".pdf"),
+            RMSE = TRUE,
+            MAPE = TRUE)
 
 }

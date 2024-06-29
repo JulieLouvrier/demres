@@ -52,10 +52,15 @@
 #'   )
 #'
 #'
-#'   ##plotting with RMSE
+#' #plotting with RMSE
 #'
-#'metric = "inertia"
-#'demres_plot(table = BC_TVTC_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE, MAPE =TRUE)
+#' metric = "inertia"
+#' demres_plot(table = BC_TVTC_demres,
+#'             metric = metric,
+#'             plotname = paste0(getwd(),
+#'             "/plots/plot_demres_", metric, ".pdf"),
+#'             RMSE = TRUE,
+#'             MAPE = TRUE)
 #'
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
