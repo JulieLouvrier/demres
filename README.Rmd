@@ -19,12 +19,12 @@ knitr::opts_chunk$set(
 
 The goal of __{demres}__ is to provide easy functions to calculate different time-varying and time- constant demographic resilience metrics. It also allows plotting the resulting metrics and measuring the discrepancy between the time-varying and the time-constant approach. 
 
-The different metrics provided are: 
-- Damping ratio 
-- Inertia
-_ Reactivity
-- Maximum amplification
-- Maximum attenuation
+The different metrics provided are:   
+- Damping ratio    
+- Inertia  
+- Reactivity   
+- Maximum amplification   
+- Maximum attenuation   
 
 It is build around one dependency:
 
@@ -101,14 +101,15 @@ all_BlueCrane_demres
 
 The function `demres_dist` calculates the distance between the time-varying resilience metric and the time-constant one by measuring the RMSE, rRMSE and the MAPE: 
 
-#### RMSE : 
-(sqrt(mean((TV-TC)^2)) with TV: the time-Varying resilience metric and TC the time constant one)
+#### RMSE: 
+$$\sqrt{mean((TV-TC)^2)}$$   
+with TV - the time-varying resilience metric and TC - the time-constant one
 
 #### rRMSE: 
-(sqrt(mean((TV-TC)^2)) / sd(TV) 
+$$\sqrt{mean((TV-TC)^2)} / sd(TV)$$   
 
-#### MAPE": 
-(mean(abs(TV - TC)) 
+#### MAPE: 
+$$ \frac{(mean(abs(TV - TC))}{100}$$ 
 
 ```{r, distance}
 #let's calculate all measures of distance for inertia
