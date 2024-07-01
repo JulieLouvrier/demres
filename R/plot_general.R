@@ -102,32 +102,42 @@ plot_general <- function(metric, table, plotname,
     }
   }
 
-  else{
-    if(length(table_metric_lwr_TV) == 0) {
+  else if(length(table_metric_lwr_TV) == 0) {
       table_metric_lwr_TV <- rep(NA, nrow(table))
-      if(length(table_metric_initvect_TV) == 0) {
-        table_metric_initvec_TV <- rep(NA, nrow(table))
-        ltydefault = c(1)
-        legenddefault = c("Upper bound")
-        coldefault = c("red")
-        pchdefault = c(19)
+      maxy <- (max(all, na.rm = TRUE) + 0.4 * max(all, na.rm = TRUE))
+
+      if(length(table_metric_upr_TV) == 0){
+        table_metric_upr_TV <- rep(NA, nrow(table))
+        ltydefault = 1
+        legenddefault = "With initial vector"
+        coldefault = "purple"
+        pchdefault = 19
       }
       else {
-        ltydefault = c(1, 1)
-        legenddefault = c("Upper bound", "With initial vector")
-        coldefault = c("red", "purple")
-        pchdefault = c(19, 19)
+        if(length(table_metric_initvect_TV) == 0){
+          table_metric_initvect_TV <- rep(NA, nrow(table))
+          ltydefault = c(1)
+          legenddefault = c("Upper bound")
+          coldefault = c("red")
+          pchdefault = c(19)
+        }
+        else {
+          ltydefault = c(1, 1)
+          legenddefault = c("With initial vector", "Upper bound")
+          coldefault = c("purple", "red")
+          pchdefault = c(19, 19)
+
+        }
       }
     }
 
-    else{
-      if(length(table_metric_initvect_TV) == 0) {
-        table_metric_initvec_TV <- rep(NA, nrow(table))
+    else if(length(table_metric_initvect_TV) == 0) {
+        table_metric_initvect_TV <- rep(NA, nrow(table))
         ltydefault = c(1, 1)
         legenddefault = c("Upper bound", "Lower bound")
         coldefault = c("red", "blue")
         pchdefault = c(19, 19)
-      }
+    }
       else {
         ltydefault = c(1, 1,1)
         legenddefault = c("Upper bound", "With initial vector", "Lower bound")
@@ -135,8 +145,6 @@ plot_general <- function(metric, table, plotname,
         pchdefault = c(19, 19, 19)
       }
 
-    }
-  }
 
   if(length(table_metric_upr_TC) == 0){
     table_metric_upr_TC <- rep(NA, nrow(table))
@@ -157,7 +165,7 @@ plot_general <- function(metric, table, plotname,
       max(tableStartYear,na.rm = TRUE),
       min(tableStartYear, na.rm = TRUE)
     )
-  if(length(which(is.na(table_metric_upr_TV))) == nrow(table)) {
+  if(length(which(is.na(table_metric_upr_TV))) == nrow(table) | length(table_metric_upr_TV) ==0) {
     yup = c(NA, NA, NA, NA)
   }
   else{
@@ -177,7 +185,7 @@ plot_general <- function(metric, table, plotname,
       min(tableStartYear, na.rm = TRUE)
     )
 
-  if(length(which(is.na(table_metric_lwr_TV))) == nrow(table)) {
+  if(length(which(is.na(table_metric_lwr_TV))) == nrow(table) | length(table_metric_lwr_TV) ==0) {
     ylow = c(NA, NA, NA, NA)
   }
   else{
@@ -197,7 +205,7 @@ plot_general <- function(metric, table, plotname,
       min(tableStartYear, na.rm = TRUE)
     )
 
-  if(length(which(is.na(table_metric_initvect_TV))) == nrow(table)) {
+  if(length(which(is.na(table_metric_initvect_TV))) == nrow(table) | length(table_metric_initvect_TV) ==0) {
     yinit = c(NA, NA, NA, NA)
   }
   else{

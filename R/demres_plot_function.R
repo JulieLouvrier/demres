@@ -54,13 +54,12 @@
 #'
 #' #plotting with RMSE
 #'
-#' metric = "inertia"
+#' metric = "dr"
 #' demres_plot(table = BC_TVTC_demres,
 #'             metric = metric,
 #'             plotname = paste0(getwd(),
 #'             "/plots/plot_demres_", metric, ".pdf"),
-#'             RMSE = TRUE,
-#'             MAPE = TRUE)
+#'             RMSE = TRUE)
 #'
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
@@ -77,14 +76,12 @@ demres_plot <- function(metric,
   speciesName <- unique(table$popname)
   tableStartYear <- table$timestep
 
-  ## if grep[_TV] is null warning message and stop here
   if(length(grep("_TV", names(table))) == 0){
     stop("The function requires at least one metric
           calculated with the time-varying approach")
 
   }
-  # if (sum(is.na(table$)))
-  if(length(grep(metric, names(table))) == 0) {
+  if(length(grep(as.character(metric), names(table))) == 0) {
     stop("The metric you required can not be found in the table")
   }
 
@@ -190,9 +187,6 @@ demres_plot <- function(metric,
         title.adj = 0.15
       )
 
-
-
-      text(y = maxy, x = max(tableStartYear)-2, label = paste0("RMSE_dr = ", round(RMSE_dr,3)))
     }
 
     if(rRMSE == TRUE){
