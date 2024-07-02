@@ -22,7 +22,7 @@
 #' @param rRMSE: (optional) if TRUE: calculates the relative RMSE
 #' (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
 #' and TC the time constant ) and adds it on the plot
-#' @param MAPE: (optional) if TRUE: calculates the MAPE (mean(abs(TV - TC)))
+#' @param MAPE: (optional) if TRUE: calculates the MAPE ((mean(abs(TV - TC))/100)
 #' and adds it on the plot
 #' @param plotname: name of the plot with directory. By default:
 #' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")

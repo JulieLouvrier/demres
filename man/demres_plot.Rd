@@ -37,7 +37,7 @@ and adds it on the plot.}
 (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
 and TC the time constant ) and adds it on the plot}
 
-\item{MAPE:}{(optional) if TRUE: calculates the MAPE (mean(abs(TV - TC)))
+\item{MAPE:}{(optional) if TRUE: calculates the MAPE ((mean(abs(TV - TC))/100)
 and adds it on the plot}
 
 \item{plotname:}{name of the plot with directory. By default:
@@ -78,12 +78,11 @@ BC_TVTC_demres <-
 
 #plotting with RMSE
 
-metric = "inertia"
+metric = "dr"
 demres_plot(table = BC_TVTC_demres,
             metric = metric,
             plotname = paste0(getwd(),
             "/plots/plot_demres_", metric, ".pdf"),
-            RMSE = TRUE,
-            MAPE = TRUE)
+            RMSE = TRUE)
 
 }
