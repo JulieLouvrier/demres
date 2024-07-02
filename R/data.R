@@ -14,7 +14,7 @@
 #' @usage data(blue_crane)
 #'
 #' @format
-#' Object of class \code{list} of \{matrices}
+#' Object of class \code{list} of \code{matrices}
 #'
 #' @references
 #' \itemize{
