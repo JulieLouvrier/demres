@@ -1,4 +1,3 @@
-################################################################################
 #' Blue crane list of matrices
 #'
 #' List of Matrix Projection Models for the blue crane \emph{Gopherus agassizii}
@@ -12,7 +11,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(bluecrane)
+#' @usage data(blue_crane)
 #'
 #' @format
 #' Object of class \code{list} of \{matrices}
@@ -27,12 +26,12 @@
 #'
 #' @examples
 #'   # read in data and view
-#'   data(bluecrane)
-#'   bluecrane
+#'   data(blue_crane)
+#'   blue_crane
 #'
 #' @concept data
 #' @concept crane
 #' @concept blue
 #' @concept Anthropoides paradiseus
 #'
-"bluecrane"
+"blue_crane"
