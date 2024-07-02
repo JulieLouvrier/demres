@@ -5,7 +5,7 @@
 \alias{blue_crane}
 \title{Blue crane list of matrices}
 \format{
-Object of class \code{list} of \{matrices}
+Object of class \code{list} of \code{matrices}
 }
 \usage{
 data(blue_crane)
