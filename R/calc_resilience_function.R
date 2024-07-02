@@ -171,7 +171,7 @@ calc_resilience <-
             error = function(e)
               e
           )
-        if (is(tt.error.maxamp, "error")) {
+        if (methods::is(tt.error.maxamp, "error")) {
           message(paste0(tt.error.maxamp[1]$message, " with the stated initial vector, Na is displayed"))
 
           dat$maxamp <- 999
@@ -214,7 +214,7 @@ calc_resilience <-
             error = function(e)
               e
           )
-        if (is(tt.error.maxatt, "error")) {
+        if (methods::is(tt.error.maxatt, "error")) {
           msg <- c(msg, paste0(tt.error.maxatt[1]$message, ", with the stated initial vector, Na is displayed"))
           dat$maxatt <- 999
         }
@@ -269,7 +269,7 @@ calc_resilience <-
             error = function(e)
               e
           )
-        if (is(tt.error.maxamp, "error")) {
+        if (methods::is(tt.error.maxamp, "error")) {
           message(paste0(tt.error.maxamp[1]$message, ", with the stated initial vector, Na is displayed"))
           dat$maxamp <- 999
         }
@@ -282,7 +282,7 @@ calc_resilience <-
             error = function(e)
               e
           )
-        if (is(tt.error.maxatt, "error")) {
+        if (methods::is(tt.error.maxatt, "error")) {
           msg <- c(msg, paste0(tt.error.maxatt[1]$message, ", with the stated initial vector, Na is displayed"))
           dat$maxatt <- 999
         }

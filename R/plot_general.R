@@ -6,7 +6,7 @@
 #' @inheritParams demres_plot
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the demres function
-#' @param metric: "reac": Reactivity: first-timestep amplification
+#' @param metric "reac": Reactivity: first-timestep amplification
 #'                 and first-timestep attenuation for a population matrix
 #'                 projection model.
 #'                 "inertia": Population inertia for a population
@@ -17,14 +17,15 @@
 #'                 matrix projection model.
 #'                 "maxatt": Maximal attenuation for a population
 #'                 matrix projection model.
-#' @param plotname: name of the plot with directory. By default:
+#' @param plotname name of the plot with directory. By default:
 #' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
 #' @name plot_general
 #' @keywords internal
 
-plot_general <- function(metric, table, plotname,
+plot_general <- function(metric, table,
+                         plotname,
                          rRMSE = FALSE,
                          RMSE = FALSE,
                          MAPE = FALSE){
@@ -218,8 +219,8 @@ plot_general <- function(metric, table, plotname,
       )
   }
   # Create a plot
-  pdf(plotname)
-  par(mar = c(5, 4, 4, 10), xpd = TRUE)
+  grDevices::pdf(plotname)
+  graphics::par(mar = c(5, 4, 4, 10), xpd = TRUE)
   plot(
     tableStartYear,
     table_metric_upr_TV,
@@ -229,7 +230,7 @@ plot_general <- function(metric, table, plotname,
     xlab = "Time step",
     ylab = paste0(name_metric)
   )  # Set limits to make the square more visually clear
-  points(
+  graphics::points(
     tableStartYear,
     table_metric_upr_TV,
     type = "p",
@@ -237,7 +238,7 @@ plot_general <- function(metric, table, plotname,
     col = "red",
     ylim = c(miny, maxy)
   )
-  points(
+  graphics::points(
     tableStartYear,
     table_metric_lwr_TV,
     type = "p",
@@ -245,7 +246,7 @@ plot_general <- function(metric, table, plotname,
     col = "blue",
     ylim = c(miny, maxy)
   )
-  points(
+  graphics::points(
     tableStartYear,
     table_metric_initvect_TV,
     type = "p",
@@ -253,7 +254,7 @@ plot_general <- function(metric, table, plotname,
     col = "purple",
     ylim = c(miny, maxy)
   )
-  lines(
+  graphics::lines(
     tableStartYear,
     table_metric_upr_TC,
     type = "l",
@@ -261,7 +262,7 @@ plot_general <- function(metric, table, plotname,
     col = "red",
     ylim = c(miny, maxy)
   )
-  lines(
+  graphics::lines(
     tableStartYear,
     table_metric_lwr_TC,
     type = "l",
@@ -269,7 +270,7 @@ plot_general <- function(metric, table, plotname,
     col = "blue",
     ylim = c(miny, maxy)
   )
-  lines(
+  graphics::lines(
     tableStartYear,
     table_metric_initvect_TC,
     type = "l",
@@ -278,13 +279,13 @@ plot_general <- function(metric, table, plotname,
     ylim = c(miny, maxy)
   )
   # Draw the polygons
-  polygon(xup, yup, col = rgb(1, 0, 0, 0.3), border = FALSE)
-  polygon(xlow, ylow, col = rgb(0, 0, 1, 0.3), border = FALSE)
-  polygon(xinit, yinit, col = rgb(1, 0, 1, 0.3), border = FALSE)
+  graphics::polygon(xup, yup, col = grDevices::rgb(1, 0, 0, 0.3), border = FALSE)
+  graphics::polygon(xlow, ylow, col = grDevices::rgb(0, 0, 1, 0.3), border = FALSE)
+  graphics::polygon(xinit, yinit, col = grDevices::rgb(1, 0, 1, 0.3), border = FALSE)
   #legend
 
   if(!length(grep("_TC", names(table))) == 0){
-    legend(
+    graphics::legend(
       "topright",
       inset = c(-0.4, 0),
       legend = legenddefault,
@@ -298,7 +299,7 @@ plot_general <- function(metric, table, plotname,
   }
 
   #legend
-  legend(
+  graphics::legend(
     "topright",
     inset = c(-0.4, 0.2),
     legend = legenddefault,
@@ -313,7 +314,7 @@ plot_general <- function(metric, table, plotname,
   if(RMSE == TRUE){
     RMSE <- demres_dist(table = table, metric = metric, measure = "RMSE")
 
-    legend(
+    graphics::legend(
       "topright",
       inset = c(-0.4, 0.4),
       legend = c(paste0("Upper bound: ", round(RMSE[3],3)),
@@ -331,7 +332,7 @@ plot_general <- function(metric, table, plotname,
 
   if(rRMSE == TRUE){
     rRMSE <- demres_dist(table = table, metric = metric, measure = "rRMSE")
-    legend(
+    graphics::legend(
       "topright",
       inset = c(-0.4, 0.4),
       legend = c(paste0("Upper bound: ", round(rRMSE[3],3)),
@@ -349,7 +350,7 @@ plot_general <- function(metric, table, plotname,
 
   if(MAPE == TRUE){
     MAPE <- demres_dist(table = table, metric = metric, measure = "MAPE")
-    legend(
+    graphics::legend(
       "topright",
       inset = c(-0.4, 0.4),
       legend = c(paste0("Upper bound: ", round(MAPE[3],3)),
@@ -366,5 +367,5 @@ plot_general <- function(metric, table, plotname,
       }
 
 
-  dev.off()
+  grDevices::dev.off()
 }

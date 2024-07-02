@@ -5,7 +5,7 @@
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the demres function
-#' @param metric: "reac": Reactivity: first-timestep amplification
+#' @param metric "reac": Reactivity: first-timestep amplification
 #'                 and first-timestep attenuation for a population matrix
 #'                 projection model.
 #'                 "inertia": Population inertia for a population
@@ -16,15 +16,15 @@
 #'                 matrix projection model.
 #'                 "maxatt": Maximal attenuation for a population
 #'                 matrix projection model.
-#' @param RMSE: (optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
+#' @param RMSE (optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
 #' with TV: the time-Varying resilience metric and TC the time constant one)
 #' and adds it on the plot.
-#' @param rRMSE: (optional) if TRUE: calculates the relative RMSE
+#' @param rRMSE (optional) if TRUE: calculates the relative RMSE
 #' (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
 #' and TC the time constant ) and adds it on the plot
-#' @param MAPE: (optional) if TRUE: calculates the MAPE ((mean(abs(TV - TC))/100)
+#' @param MAPE (optional) if TRUE: calculates the MAPE ((mean(abs(TV - TC))/100)
 #' and adds it on the plot
-#' @param plotname: name of the plot with directory. By default:
+#' @param plotname name of the plot with directory. By default:
 #' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
 #' @examples
 #' # load data
@@ -44,7 +44,7 @@
 #' BC_TVTC_demres <-
 #'   demres(
 #'     blue_crane_matA,
-#'     metrics = "all",
+#'     metric = "all",
 #'     bounds = TRUE,
 #'     initvec = Cranevec1,
 #'     popname = "blue crane",
@@ -117,9 +117,9 @@ demres_plot <- function(metric,
       )
 
     # Create a plot
-    pdf(plotname)
+    grDevices::pdf(plotname)
 
-    par(mar = c(5, 4, 4, 10), xpd = TRUE)
+    graphics::par(mar = c(5, 4, 4, 10), xpd = TRUE)
     plot(
       tableStartYear,
       table_metric_initvect_TV,
@@ -130,7 +130,7 @@ demres_plot <- function(metric,
       ylab = paste0(name_metric)
     )  # Set limits to make the square more visually clear
 
-    points(
+    graphics::points(
       tableStartYear,
       table_metric_initvect_TV,
       type = "p",
@@ -138,7 +138,7 @@ demres_plot <- function(metric,
       col = "purple",
       ylim = c(miny, maxy)
     )
-    lines(
+    graphics::lines(
       tableStartYear,
       table_metric_initvect_TC,
       type = "l",
@@ -147,9 +147,9 @@ demres_plot <- function(metric,
       ylim = c(miny, maxy)
     )
     # Draw the polygons
-    polygon(xinit, yinit, col = rgb(1, 0, 1, 0.3), border = FALSE)
+    graphics::polygon(xinit, yinit, col = grDevices::rgb(1, 0, 1, 0.3), border = FALSE)
     #legend
-    legend(
+    graphics::legend(
       "topright",
       inset = c(-0.4, 0),
       legend = c("Damping ratio"),
@@ -161,7 +161,7 @@ demres_plot <- function(metric,
     )
 
     #legend
-    legend(
+    graphics::legend(
       "topright",
       inset = c(-0.4, 0.2),
       legend = c("Damping ratio"),
@@ -175,7 +175,7 @@ demres_plot <- function(metric,
 
     if(RMSE == TRUE){
       RMSE_dr <- demres_dist(table = table, metric = metric, measure = "RMSE")
-      legend(
+      graphics::legend(
         "topright",
         inset = c(-0.4, 0.4),
         legend = c(paste0("RMSE dr: ", round(RMSE_dr,3))),
@@ -191,7 +191,7 @@ demres_plot <- function(metric,
 
     if(rRMSE == TRUE){
       rRMSE_dr <- demres_dist(table = table, metric = metric, measure = "rRMSE")
-      legend(
+      graphics::legend(
         "topright",
         inset = c(-0.4, 0.4),
         legend = c(paste0("rRMSE dr: ", round(rRMSE_dr,3))),
@@ -205,7 +205,7 @@ demres_plot <- function(metric,
 
     if(MAPE == TRUE){
       MAPE_dr <- demres_dist(table = table, metric = metric, measure = "MAPE")
-      legend(
+      graphics::legend(
         "topright",
         inset = c(-0.4, 0.4),
         legend = c(paste0("MAPE dr: ", round(MAPE_dr,3))),
@@ -218,7 +218,7 @@ demres_plot <- function(metric,
       )    }
 
 
-    dev.off()
+    grDevices::dev.off()
 
   }
 

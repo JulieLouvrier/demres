@@ -6,7 +6,7 @@
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the demres function
-#' @param metric: "reac": Reactivity: first-timestep amplification
+#' @param metric "reac": Reactivity: first-timestep amplification
 #'                 and first-timestep attenuation for a population matrix
 #'                 projection model.
 #'                 "inertia": Population inertia for a population
@@ -17,7 +17,7 @@
 #'                 matrix projection model.
 #'                 "maxatt": Maximal attenuation for a population
 #'                 matrix projection model.
-#' @param measure: "RMSE": calculates the RMSE (sqrt(mean((TV-TC)^2))
+#' @param measure "RMSE": calculates the RMSE (sqrt(mean((TV-TC)^2))
 #' with TV: the time-Varying resilience metric and TC the time constant one)
 #'                 "rRMSE":calculates the relative RMSE
 #' (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
@@ -43,7 +43,7 @@
 #' BC_TVTC_demres <-
 #'   demres(
 #'     blue_crane_matA,
-#'     metrics = "all",
+#'     metric = "all",
 #'     bounds = TRUE,
 #'     initvec = Cranevec1,
 #'     popname = "blue crane",

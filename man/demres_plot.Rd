@@ -14,10 +14,7 @@ demres_plot(
 )
 }
 \arguments{
-\item{table}{A dataframe containing all the resilience metrics calculated
-with the demres function}
-
-\item{metric:}{"reac": Reactivity: first-timestep amplification
+\item{metric}{"reac": Reactivity: first-timestep amplification
 and first-timestep attenuation for a population matrix
 projection model.
 "inertia": Population inertia for a population
@@ -29,19 +26,22 @@ matrix projection model.
 "maxatt": Maximal attenuation for a population
 matrix projection model.}
 
-\item{RMSE:}{(optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
-with TV: the time-Varying resilience metric and TC the time constant one)
-and adds it on the plot.}
+\item{table}{A dataframe containing all the resilience metrics calculated
+with the demres function}
 
-\item{rRMSE:}{(optional) if TRUE: calculates the relative RMSE
+\item{plotname}{name of the plot with directory. By default:
+plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")}
+
+\item{rRMSE}{(optional) if TRUE: calculates the relative RMSE
 (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
 and TC the time constant ) and adds it on the plot}
 
-\item{MAPE:}{(optional) if TRUE: calculates the MAPE ((mean(abs(TV - TC))/100)
-and adds it on the plot}
+\item{RMSE}{(optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
+with TV: the time-Varying resilience metric and TC the time constant one)
+and adds it on the plot.}
 
-\item{plotname:}{name of the plot with directory. By default:
-plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")}
+\item{MAPE}{(optional) if TRUE: calculates the MAPE ((mean(abs(TV - TC))/100)
+and adds it on the plot}
 }
 \value{
 A plot displaying the chosen metric along a time axis
@@ -68,7 +68,7 @@ Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 BC_TVTC_demres <-
   demres(
     blue_crane_matA,
-    metrics = "all",
+    metric = "all",
     bounds = TRUE,
     initvec = Cranevec1,
     popname = "blue crane",

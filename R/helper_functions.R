@@ -21,7 +21,7 @@ RMSE <- function(TV, TC) {
 #' `rRMSE` Calculates rRMSE between the time-varying resilience
 #' @export
 rRMSE <- function(TV, TC) {
-  sqrt(mean((TV - TC) ^ 2, na.rm = TRUE)) / sd(TV, na.rm = TRUE)
+  sqrt(mean((TV - TC) ^ 2, na.rm = TRUE)) / stats::sd(TV, na.rm = TRUE)
 }
 
 #' @describeIn helper_functions
