@@ -11,7 +11,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(blue_crane)
+#' @usage data("blue_crane")
 #'
 #' @format
 #' Object of class \code{list} of \code{matrices}

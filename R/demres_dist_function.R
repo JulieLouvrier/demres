@@ -27,13 +27,7 @@
 #'                 "all": calculates all of the above measures
 #' @examples
 #' # load data
-#' comadre <- cdb_fetch("comadre")
-#'
-#' #selecting the blue crane
-#' blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
-#'
-#' #extracting matrices
-#' blue_crane_matA <- matA(blue_crane)
+#' data(blue_crane)
 #'
 #' # simulate an initial vector
 #' Cranevec1 <- runif(5)
@@ -42,14 +36,13 @@
 #'
 #' BC_TVTC_demres <-
 #'   demres(
-#'     blue_crane_matA,
+#'     blue_crane,
 #'     metric = "all",
 #'     bounds = TRUE,
 #'     initvec = Cranevec1,
 #'     popname = "blue crane",
 #'     time = "both"
 #'   )
-#'
 #'
 #' dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia",
 #' measure = "all")

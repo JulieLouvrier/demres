@@ -52,13 +52,7 @@ library(demres)
 ### Import Matrix Population Models 
 ```{r, import data}
 # load data
-comadre <- Rcompadre::cdb_fetch("comadre")
-
-#selecting the blue crane
-blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
-
-#extracting matrices
-blue_crane_matA <- Rcompadre::matA(blue_crane)
+data(blue_crane)
 
 ```
 

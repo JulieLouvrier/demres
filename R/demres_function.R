@@ -38,13 +38,8 @@
 #' @examples
 #'
 #' # load data
-#' comadre <- cdb_fetch("comadre")
-#'
-#' #selecting the blue crane
-#' blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
-#'
-#' #extracting matrices
-#' blue_crane_matA <- matA(blue_crane)
+#' # load data
+#' data(blue_crane)
 #'
 #' # simulate an initial vector
 #' Cranevec1 <- runif(5)
@@ -53,10 +48,11 @@
 #'
 #' BC_TVTC_demres <-
 #'   demres(
-#'     blue_crane_matA,
+#'     blue_crane,
 #'     metrics = "all",
 #'     bounds = TRUE,
 #'     initvec = Cranevec1,
+#'     TDinitvec = TRUE,
 #'     popname = "blue crane",
 #'     time = "both"
 #'   )
@@ -69,6 +65,7 @@ demres <- function(listA,
                    metrics,
                    bounds = FALSE,
                    initvec = "n",
+                   TDinitvec = FALSE,
                    popname = NULL,
                    time) {
 
@@ -76,8 +73,11 @@ demres <- function(listA,
     stop("Warning: a list of matrices should be provided")
   }
 
-
   else{
+    if(TDinitvec == TRUE){
+      initvec <- get_TD_initvec(IV = initvec, listA = listA)
+    }
+
     if(is.list(initvec)){
       if(!length(initvec) == length(listA)){
         stop("please provide a list of initial vectors with an equal length as the list of matrices")

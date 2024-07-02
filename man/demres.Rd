@@ -5,7 +5,15 @@
 \title{Provides time-varying and time-constant resilience metrics for animal
 populations based on a list of matrix population models}
 \usage{
-demres(listA, metrics, bounds = FALSE, initvec = "n", popname = NULL, time)
+demres(
+  listA,
+  metrics,
+  bounds = FALSE,
+  initvec = "n",
+  TDinitvec = FALSE,
+  popname = NULL,
+  time
+)
 }
 \arguments{
 \item{listA}{a list of square, primitive, irreducible, non-negative numeric
@@ -56,13 +64,8 @@ and returns either time-varying metrics or time-constant metrics
 \examples{
 
 # load data
-comadre <- cdb_fetch("comadre")
-
-#selecting the blue crane
-blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
-
-#extracting matrices
-blue_crane_matA <- matA(blue_crane)
+# load data
+data(blue_crane)
 
 # simulate an initial vector
 Cranevec1 <- runif(5)
@@ -71,8 +74,8 @@ Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 
 BC_TVTC_demres <-
   demres(
-    blue_crane_matA,
-    metrics = "all",
+    blue_crane,
+    metric = "all",
     bounds = TRUE,
     initvec = Cranevec1,
     popname = "blue crane",

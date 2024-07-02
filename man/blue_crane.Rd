@@ -8,7 +8,7 @@
 Object of class \code{list} of \code{matrices}
 }
 \usage{
-data(blue_crane)
+data("blue_crane")
 }
 \description{
 List of Matrix Projection Models for the blue crane \emph{Gopherus agassizii}

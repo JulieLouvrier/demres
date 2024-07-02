@@ -30,3 +30,4 @@ rRMSE <- function(TV, TC) {
 MAPE <- function(TV, TC) {
   mean(abs(TV - TC)/TC, na.rm = TRUE)
 }
+

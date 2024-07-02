@@ -5,6 +5,8 @@
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the demres function
+#' @param plotpdf set to FALSE by default, if TRUE it produces a pdf woth the name specified
+#' by plotname
 #' @param metric "reac": Reactivity: first-timestep amplification
 #'                 and first-timestep attenuation for a population matrix
 #'                 projection model.
@@ -28,13 +30,7 @@
 #' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
 #' @examples
 #' # load data
-#' comadre <- cdb_fetch("comadre")
-#'
-#' #selecting the blue crane
-#' blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
-#'
-#' #extracting matrices
-#' blue_crane_matA <- matA(blue_crane)
+#' data(blue_crane)
 #'
 #' # simulate an initial vector
 #' Cranevec1 <- runif(5)
@@ -43,7 +39,7 @@
 #'
 #' BC_TVTC_demres <-
 #'   demres(
-#'     blue_crane_matA,
+#'     blue_crane,
 #'     metric = "all",
 #'     bounds = TRUE,
 #'     initvec = Cranevec1,
@@ -57,8 +53,9 @@
 #' metric = "dr"
 #' demres_plot(table = BC_TVTC_demres,
 #'             metric = metric,
+#'             plotpdf = FALSE,
 #'             plotname = paste0(getwd(),
-#'             "/plots/plot_demres_", metric, ".pdf"),
+#'             "/plot_demres_", metric, ".pdf"),
 #'             RMSE = TRUE)
 #'
 #' @return A plot displaying the chosen metric along a time axis
@@ -67,7 +64,8 @@
 
 demres_plot <- function(metric,
                         table,
-                        plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf"),
+                        plotpdf = FALSE,
+                        plotname = NULL,
                         rRMSE = FALSE,
                         RMSE = FALSE,
                         MAPE = FALSE) {
@@ -75,6 +73,10 @@ demres_plot <- function(metric,
   popname = table$popname
   speciesName <- unique(table$popname)
   tableStartYear <- table$timestep
+
+  if(plotpdf == TRUE){
+    plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
+  }
 
   if(length(grep("_TV", names(table))) == 0){
     stop("The function requires at least one metric

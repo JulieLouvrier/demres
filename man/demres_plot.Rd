@@ -7,7 +7,8 @@
 demres_plot(
   metric,
   table,
-  plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf"),
+  plotpdf = FALSE,
+  plotname = NULL,
   rRMSE = FALSE,
   RMSE = FALSE,
   MAPE = FALSE
@@ -28,6 +29,9 @@ matrix projection model.}
 
 \item{table}{A dataframe containing all the resilience metrics calculated
 with the demres function}
+
+\item{plotpdf}{set to FALSE by default, if TRUE it produces a pdf woth the name specified
+by plotname}
 
 \item{plotname}{name of the plot with directory. By default:
 plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")}
@@ -52,13 +56,7 @@ along a time axis
 }
 \examples{
 # load data
-comadre <- cdb_fetch("comadre")
-
-#selecting the blue crane
-blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
-
-#extracting matrices
-blue_crane_matA <- matA(blue_crane)
+data(blue_crane)
 
 # simulate an initial vector
 Cranevec1 <- runif(5)
@@ -67,7 +65,7 @@ Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 
 BC_TVTC_demres <-
   demres(
-    blue_crane_matA,
+    blue_crane,
     metric = "all",
     bounds = TRUE,
     initvec = Cranevec1,
@@ -81,8 +79,9 @@ BC_TVTC_demres <-
 metric = "dr"
 demres_plot(table = BC_TVTC_demres,
             metric = metric,
+            plotpdf = FALSE,
             plotname = paste0(getwd(),
-            "/plots/plot_demres_", metric, ".pdf"),
+            "/plot_demres_", metric, ".pdf"),
             RMSE = TRUE)
 
 }
