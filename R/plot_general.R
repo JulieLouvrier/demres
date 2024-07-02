@@ -71,7 +71,7 @@ plot_general <- function(metric, table,
   titleTCdefault = "Time-Constant"
   titleTVdefault = "Time-Varying"
   legenddefault = c("Upper bound", "With initial vector", "Lower bound")
-  coldefault = c("red", "purple", "blue")
+  coldefault = c("#CC79A7", "black", "#009E73")
   pchdefault = c(19, 19, 19)
 
   if(length(table_metric_upr_TV) == 0){
@@ -82,7 +82,7 @@ plot_general <- function(metric, table,
       table_metric_lwr_TV <- rep(NA, nrow(table))
       ltydefault = 1
       legenddefault = "With initial vector"
-      coldefault = "purple"
+      coldefault = "black"
       pchdefault = 19
     }
     else {
@@ -90,13 +90,13 @@ plot_general <- function(metric, table,
         table_metric_initvect_TV <- rep(NA, nrow(table))
         ltydefault = c(1)
         legenddefault = c("Lower bound")
-        coldefault = c("blue")
+        coldefault = c("#009E73")
         pchdefault = c(19)
       }
       else {
         ltydefault = c(1, 1)
         legenddefault = c("With initial vector", "Lower bound")
-        coldefault = c("purple", "blue")
+        coldefault = c("black", "#009E73")
         pchdefault = c(19, 19)
 
       }
@@ -111,7 +111,7 @@ plot_general <- function(metric, table,
         table_metric_upr_TV <- rep(NA, nrow(table))
         ltydefault = 1
         legenddefault = "With initial vector"
-        coldefault = "purple"
+        coldefault = "black"
         pchdefault = 19
       }
       else {
@@ -119,13 +119,13 @@ plot_general <- function(metric, table,
           table_metric_initvect_TV <- rep(NA, nrow(table))
           ltydefault = c(1)
           legenddefault = c("Upper bound")
-          coldefault = c("red")
+          coldefault = c("#CC79A7")
           pchdefault = c(19)
         }
         else {
           ltydefault = c(1, 1)
           legenddefault = c("With initial vector", "Upper bound")
-          coldefault = c("purple", "red")
+          coldefault = c("black", "#CC79A7")
           pchdefault = c(19, 19)
 
         }
@@ -136,13 +136,13 @@ plot_general <- function(metric, table,
         table_metric_initvect_TV <- rep(NA, nrow(table))
         ltydefault = c(1, 1)
         legenddefault = c("Upper bound", "Lower bound")
-        coldefault = c("red", "blue")
+        coldefault = c("#CC79A7", "#009E73")
         pchdefault = c(19, 19)
     }
       else {
         ltydefault = c(1, 1,1)
         legenddefault = c("Upper bound", "With initial vector", "Lower bound")
-        coldefault = c("red","purple", "blue")
+        coldefault = c("#CC79A7","black", "#009E73")
         pchdefault = c(19, 19, 19)
       }
 
@@ -235,7 +235,7 @@ plot_general <- function(metric, table,
     table_metric_upr_TV,
     type = "p",
     pch = 19,
-    col = "red",
+    col = "#CC79A7",
     ylim = c(miny, maxy)
   )
   graphics::points(
@@ -243,7 +243,7 @@ plot_general <- function(metric, table,
     table_metric_lwr_TV,
     type = "p",
     pch = 19,
-    col = "blue",
+    col = "#009E73",
     ylim = c(miny, maxy)
   )
   graphics::points(
@@ -251,7 +251,7 @@ plot_general <- function(metric, table,
     table_metric_initvect_TV,
     type = "p",
     pch = 19,
-    col = "purple",
+    col = "black",
     ylim = c(miny, maxy)
   )
   graphics::lines(
@@ -259,7 +259,7 @@ plot_general <- function(metric, table,
     table_metric_upr_TC,
     type = "l",
     lwd = 1,
-    col = "red",
+    col = "#CC79A7",
     ylim = c(miny, maxy)
   )
   graphics::lines(
@@ -267,7 +267,7 @@ plot_general <- function(metric, table,
     table_metric_lwr_TC,
     type = "l",
     lwd = 1,
-    col = "blue",
+    col = "#009E73",
     ylim = c(miny, maxy)
   )
   graphics::lines(
@@ -275,13 +275,13 @@ plot_general <- function(metric, table,
     table_metric_initvect_TC,
     type = "l",
     lwd = 1,
-    col = "purple",
+    col = "black",
     ylim = c(miny, maxy)
   )
   # Draw the polygons
-  graphics::polygon(xup, yup, col = grDevices::rgb(1, 0, 0, 0.3), border = FALSE)
-  graphics::polygon(xlow, ylow, col = grDevices::rgb(0, 0, 1, 0.3), border = FALSE)
-  graphics::polygon(xinit, yinit, col = grDevices::rgb(1, 0, 1, 0.3), border = FALSE)
+  graphics::polygon(xup, yup, col = grDevices::rgb(0.80, 0.47, 0.65, 0.3), border = FALSE)
+  graphics::polygon(xlow, ylow, col = grDevices::rgb(0, 0.61, 0.45, 0.3), border = FALSE)
+  graphics::polygon(xinit, yinit, col = grDevices::rgb(0, 0, 0, 0.3), border = FALSE)
   #legend
 
   if(!length(grep("_TC", names(table))) == 0){

@@ -135,7 +135,7 @@ demres_plot <- function(metric,
       table_metric_initvect_TV,
       type = "p",
       pch = 19,
-      col = "purple",
+      col = "black",
       ylim = c(miny, maxy)
     )
     graphics::lines(
@@ -143,17 +143,17 @@ demres_plot <- function(metric,
       table_metric_initvect_TC,
       type = "l",
       lwd = 1,
-      col = "purple",
+      col = "black",
       ylim = c(miny, maxy)
     )
     # Draw the polygons
-    graphics::polygon(xinit, yinit, col = grDevices::rgb(1, 0, 1, 0.3), border = FALSE)
+    graphics::polygon(xinit, yinit, col = grDevices::rgb(0, 0, 0, 0.3), border = FALSE)
     #legend
     graphics::legend(
       "topright",
       inset = c(-0.4, 0),
       legend = c("Damping ratio"),
-      col = c("purple"),
+      col = c("black"),
       lty = c(1),
       cex = 0.8,
       title = "Time-Constant",
@@ -165,7 +165,7 @@ demres_plot <- function(metric,
       "topright",
       inset = c(-0.4, 0.2),
       legend = c("Damping ratio"),
-      col = c("purple"),
+      col = c("black"),
       pch = c(19),
       cex = 0.8,
       title = "Time-Varying",
