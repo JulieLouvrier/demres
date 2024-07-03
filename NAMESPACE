@@ -2,13 +2,9 @@
 
 export(RMSE)
 export(calc_resilience)
-export(cdb_fetch)
 export(demres)
 export(demres_dist)
 export(demres_plot)
 export(get_TD_initvec)
-export(matA)
 export(plot_general)
 export(rRMSE)
-importFrom(Rcompadre,cdb_fetch)
-importFrom(Rcompadre,matA)
