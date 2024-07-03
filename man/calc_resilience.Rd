@@ -4,7 +4,14 @@
 \alias{calc_resilience}
 \title{Provides resilience metrics from the package popdemo for one matrix}
 \usage{
-calc_resilience(A, metrics, bounds = FALSE, initvec = "n", popname = NULL)
+calc_resilience(
+  A,
+  metrics,
+  bounds = FALSE,
+  initvec = "n",
+  popname = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{A}{a square, primitive, irreducible, non-negative numeric matrix of any
@@ -35,6 +42,8 @@ distribution ('demographic structure') used to calculate a 'case-specific'
 maximal amplification}
 
 \item{popname}{a character string describing the name of the population}
+
+\item{verbose}{a boolean indicating if messages about failure to compute particular metrics should be displayed or not (default = TRUE)}
 }
 \value{
 A vector containing all the resilience metrics
