@@ -75,9 +75,10 @@ Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 BC_TVTC_demres <-
   demres(
     blue_crane,
-    metric = "all",
+    metrics = "all",
     bounds = TRUE,
     initvec = Cranevec1,
+    TDinitvec = TRUE,
     popname = "blue crane",
     time = "both"
   )
