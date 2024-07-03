@@ -62,15 +62,18 @@ The function `calc_resilience` is made to calculate demographic resilience metri
 
 ```{r, resilience metrics}
 #select the first matrix 
-Crane_mat1 <- blue_crane_matA[[1]]
+Crane_mat1 <- blue_crane[[1]]
 
 # Create initial vector
+set.seed(1)
 Crane_vec1 <- runif(5)
 Crane_vec1 <- Crane_vec1 / sum(Crane_vec1) #scales the vec to sum to 1
+Crane_vec1 <- c(0, 0, 0, 0, 1)
 
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-all_BlueCrane1_demres <- calc_resilience(Crane_mat1, metrics = c("all"),
+all_BlueCrane1_demres <- calc_resilience(Crane_mat1, metrics = "all",
 initvec = Crane_vec1, bounds = TRUE, popname = "Blue Crane")
+attr(all_BlueCrane1_demres, "msg")
 
 #let's take a look at what we got
 all_BlueCrane1_demres
@@ -84,7 +87,7 @@ The function `demres` is made to calculate demographic resilience metrics based 
 
 ```{r, demres}
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-all_BlueCrane_demres <- demres(blue_crane_matA, metrics = c("all"),
+all_BlueCrane_demres <- demres(blue_crane, metrics = c("all"),
 initvec = Crane_vec1, bounds = TRUE, popname = "Blue Crane", time = "both")
 
 #let's take a look at what we got
@@ -119,7 +122,7 @@ dist_BC
 
 ```{r, plotting}
 #specifying the metric that we want to visually inspect
-metric = "inertia"
+metric <- "inertia"
 #plotting
 demres_plot(table = all_BlueCrane_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE)
 

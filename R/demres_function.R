@@ -89,7 +89,8 @@ demres <- function(listA,
                             metrics = metrics,
                             bounds = bounds,
                             initvec = X,
-                            popname = popname)
+                            popname = popname,
+                            verbose = FALSE)
           }, A = listA, X = initvec)
 
         metres <- t(temp_list)
@@ -198,5 +199,49 @@ demres <- function(listA,
     #   message(msg)
     # }
 
+    class(met) <- c("resil", class(met))
+
     return(met)
 }
+
+#' Printing method for objects of class resil
+#'
+#' @param x an object used to select a method
+#' @param ... further arguments passed to or from other methods
+#'
+#' @return the argument `x` (invisibly)
+#' @export
+#'
+print.resil <- function(x, ...) {
+  class(x) <- "data.frame"
+  print(x, ...)
+}
+
+#' Summary method for objects of class resil
+#'
+#' @param object an object used to select a method
+#' @param ... further arguments passed to or from other methods
+#'
+#' @return summary statistics
+#' @export
+#'
+summary.resil <- function(object, ...) {
+  demres_dist(object, metric = "inertia", measure = "all", ...)
+}
+
+#' Plotting method for objects of class resil
+#'
+#' @inheritParams demres_plot
+#' @param x an object used to select a method
+#' @param ... further arguments passed to or from other methods
+#'
+#' @return the argument `x` (invisibly)
+#' @export
+#'
+plot.resil <- function(x, rRMSE = FALSE,
+                          RMSE = FALSE,
+                          MAPE = FALSE, ...) {
+  demres_plot(x, metric = "inertia", rRMSE = rRMSE, RMSE = RMSE, MAPE = MAPE)
+}
+
+

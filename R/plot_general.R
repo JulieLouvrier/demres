@@ -219,7 +219,7 @@ plot_general <- function(metric, table,
       )
   }
   # Create a plot
-  grDevices::pdf(plotname)
+  #grDevices::pdf(plotname)
   graphics::par(mar = c(5, 4, 4, 10), xpd = TRUE)
   plot(
     tableStartYear,
@@ -367,5 +367,5 @@ plot_general <- function(metric, table,
       }
 
 
-  grDevices::dev.off()
+  #grDevices::dev.off()
 }
