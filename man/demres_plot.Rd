@@ -56,7 +56,7 @@ along a time axis
 }
 \examples{
 # load data
-data(blue_crane)
+data(bluecrane)
 
 # simulate an initial vector
 Cranevec1 <- runif(5)
@@ -65,10 +65,10 @@ Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 
 BC_TVTC_demres <-
   demres(
-    blue_crane,
+    bluecrane,
     metric = "all",
     bounds = TRUE,
-    initvec = Cranevec1,
+    vector = Cranevec1,
     popname = "blue crane",
     time = "both"
   )

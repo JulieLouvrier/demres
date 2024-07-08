@@ -41,16 +41,7 @@ library(demres)
 
 ``` r
 # load data
-comadre <- Rcompadre::cdb_fetch("comadre")
-#> This is COMADRE version 4.23.3.1 (release date Mar_24_2023)
-#> See user agreement at https://compadre-db.org/Help/UserAgreement
-#> See how to cite with `citation(Rcompadre)`
-
-#selecting the blue crane
-blue_crane <- comadre[comadre@data$SpeciesAccepted  == "Anthropoides paradiseus", ]
-
-#extracting matrices
-blue_crane_matA <- Rcompadre::matA(blue_crane)
+data(bluecrane)
 ```
 
 ### Calculate demographic resilience metrics based on one Matrix
@@ -61,7 +52,7 @@ resilience metrics based on one Matrix Population Model. It returns a
 
 ``` r
 #select the first matrix 
-Crane_mat1 <- blue_crane_matA[[1]]
+Crane_mat1 <- bluecrane[[1]]
 
 # Create initial vector
 Crane_vec1 <- runif(5)
@@ -69,7 +60,7 @@ Crane_vec1 <- Crane_vec1 / sum(Crane_vec1) #scales the vec to sum to 1
 
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
 all_BlueCrane1_demres <- calc_resilience(Crane_mat1, metrics = c("all"),
-initvec = Crane_vec1, bounds = TRUE, popname = "Blue Crane")
+vector = Crane_vec1, bounds = TRUE, popname = "Blue Crane")
 #> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
 
 #let's take a look at what we got
@@ -89,8 +80,8 @@ required with the option `time`.
 
 ``` r
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-all_BlueCrane_demres <- demres(blue_crane_matA, metrics = c("all"),
-initvec = Crane_vec1, bounds = TRUE, popname = "Blue Crane", time = "both")
+all_BlueCrane_demres <- demres(bluecrane, metrics = c("all"),
+vector = Crane_vec1, bounds = TRUE, popname = "Blue Crane", time = "both")
 #> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
 #> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
 #> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
@@ -188,7 +179,7 @@ dist_BC <- demres_dist(table = all_BlueCrane_demres, metric = "inertia", measure
 dist_BC
 #>                         RMSE     rRMSE        MAPE
 #> inertia_lwr      0.020053213 0.9611536 0.017429949
-#> inertia_initvect 0.006052127 0.9604719 0.005106478
+#> inertia_vector 0.006052127 0.9604719 0.005106478
 #> inertia_upr      0.178977159 0.9586754 0.151706049
 ```
 

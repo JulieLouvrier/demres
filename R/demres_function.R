@@ -23,11 +23,11 @@
 #'                 "all": all of the above metrics are provided
 #' @param bounds (optional) if TRUE, specifies whether the upper and  lower
 #' bound should be calculated
-#' if initvec is not specified, the function provides metrics in their upper and
+#' if vector is not specified, the function provides metrics in their upper and
 #' lower bound, calculated based on the stage-biased vector
-#' if initvec is specified, the function provides also the metrics calculated
+#' if vector is specified, the function provides also the metrics calculated
 #' based on the inital vector
-#' @param initvec a list of numeric vectors or one-column matrices describing the age/stage
+#' @param vector a list of numeric vectors or one-column matrices describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific', stage age structure
 #' metric
 #' @param popname a character string describing the name of the population
@@ -39,7 +39,7 @@
 #'
 #' # load data
 #' # load data
-#' data(blue_crane)
+#' data(bluecrane)
 #'
 #' # simulate an initial vector
 #' Cranevec1 <- runif(5)
@@ -48,11 +48,11 @@
 #'
 #' BC_TVTC_demres <-
 #'   demres(
-#'     blue_crane,
+#'     bluecrane,
 #'     metrics = "all",
 #'     bounds = TRUE,
-#'     initvec = Cranevec1,
-#'     TDinitvec = TRUE,
+#'     vector = Cranevec1,
+#'     TDvector = TRUE,
 #'     popname = "blue crane",
 #'     time = "both"
 #'   )
@@ -64,8 +64,8 @@
 demres <- function(listA,
                    metrics,
                    bounds = FALSE,
-                   initvec = "n",
-                   TDinitvec = FALSE,
+                   vector = "n",
+                   TDvector = FALSE,
                    popname = NULL,
                    time) {
 
@@ -74,12 +74,12 @@ demres <- function(listA,
   }
 
   else{
-    if(TDinitvec == TRUE){
-      initvec <- get_TD_initvec(IV = initvec, listA = listA)
+    if(TDvector == TRUE){
+      vector <- get_TD_vector(IV = vector, listA = listA)
     }
 
-    if(is.list(initvec)){
-      if(!length(initvec) == length(listA)){
+    if(is.list(vector)){
+      if(!length(vector) == length(listA)){
         stop("please provide a list of initial vectors with an equal length as the list of matrices")
       }
       if(time == "both") {
@@ -88,17 +88,17 @@ demres <- function(listA,
             calc_resilience(A,
                             metrics = metrics,
                             bounds = bounds,
-                            initvec = X,
+                            vector = X,
                             popname = popname,
                             verbose = FALSE)
-          }, A = listA, X = initvec)
+          }, A = listA, X = vector)
 
         metres <- t(temp_list)
         colnames(metres)[-1] <- paste0(colnames(metres)[-1], "_TV")
         metres <- cbind(timestep = c(1:nrow(metres)), metres)
 
         meanA <- apply(simplify2array(listA), 1:2, mean)
-        meanvec <- apply(simplify2array(initvec), 1, mean)
+        meanvec <- apply(simplify2array(vector), 1, mean)
         res <- calc_resilience(meanA, metrics, bounds, meanvec, popname)
         names(res)[-1] <- paste0(names(res)[-1], "_TC")
         met <- cbind(metres, res)
@@ -115,9 +115,9 @@ demres <- function(listA,
               calc_resilience(A,
                               metrics = metrics,
                               bounds = bounds,
-                              initvec = X,
+                              vector = X,
                               popname = popname)
-            }, A = listA, X = initvec)
+            }, A = listA, X = vector)
 
 
           met <- t(temp_list)
@@ -129,7 +129,7 @@ demres <- function(listA,
         }
         if(time == "constant") {
           meanA <- apply(simplify2array(listA), 1:2, mean)
-          meanvec <- apply(simplify2array(initvec), 1, mean)
+          meanvec <- apply(simplify2array(vector), 1, mean)
           res <- calc_resilience(meanA, metrics, bounds, meanvec, popname)
           names(res)[-1] <- paste0(names(res)[-1], "_TC")
           met <- res
@@ -147,7 +147,7 @@ demres <- function(listA,
               calc_resilience,
               metrics = metrics,
               bounds = bounds,
-              initvec = initvec,
+              vector = vector,
               popname = popname
             )
 
@@ -159,7 +159,7 @@ demres <- function(listA,
           metres <- cbind(timestep = c(1:nrow(metres)), metres)
 
           meanA <- apply(simplify2array(listA), 1:2, mean)
-          res <- calc_resilience(meanA, metrics, bounds, initvec, popname)
+          res <- calc_resilience(meanA, metrics, bounds, vector, popname)
           names(res)[-1] <- paste0(names(res)[-1], "_TC")
           met <- cbind(metres, res)
 
@@ -176,7 +176,7 @@ demres <- function(listA,
                 calc_resilience,
                 metrics = metrics,
                 bounds = bounds,
-                initvec = initvec,
+                vector = vector,
                 popname = popname
               )
             met <- do.call(rbind.data.frame, temp_list)
@@ -187,7 +187,7 @@ demres <- function(listA,
           }
           if(time == "constant") {
             meanA <- apply(simplify2array(listA), 1:2, mean)
-            res <- calc_resilience(meanA, metrics, bounds, initvec, popname)
+            res <- calc_resilience(meanA, metrics, bounds, vector, popname)
             names(res)[-1] <- paste0(names(res)[-1], "_TC")
             met <- res
           }

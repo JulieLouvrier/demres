@@ -11,7 +11,7 @@
 #'
 #' @docType data
 #'
-#' @usage data("blue_crane")
+#' @usage data("bluecrane")
 #'
 #' @format
 #' Object of class \code{list} of \code{matrices}
@@ -26,12 +26,12 @@
 #'
 #' @examples
 #'   # read in data and view
-#'   data(blue_crane)
-#'   blue_crane
+#'   data(bluecrane)
+#'   bluecrane
 #'
 #' @concept data
 #' @concept crane
 #' @concept blue
 #' @concept Anthropoides paradiseus
 #'
-"blue_crane"
+"bluecrane"

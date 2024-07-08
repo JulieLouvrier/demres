@@ -27,7 +27,7 @@
 #' lower bound, calculated based on the stage-biased vec
 #' if vec is specified, the function provides also the metrics calculated based
 #' on the inital vec
-#' @param initvec a numeric vec or one-column matrix describing the age/stage
+#' @param vector a numeric vec or one-column matrix describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific'
 #' maximal amplification
 #' @param popname a character string describing the name of the population
@@ -40,7 +40,7 @@
 #' Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
 #'
 #' all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
-#' initvec = Tortvec1, bounds = TRUE, popname = "Tortoise")
+#' vector = Tortvec1, bounds = TRUE, popname = "Tortoise")
 #'
 #' @return A vector containing all the resilience metrics
 #' @name calc_resilience
@@ -49,7 +49,7 @@ calc_resilience <-
   function(A,
            metrics,
            bounds = FALSE,
-           initvec = "n",
+           vector = "n",
            popname = NULL,
            verbose = TRUE) {
 
@@ -72,7 +72,7 @@ calc_resilience <-
       stop("Matrix is reducible")
     }
     if (!popdemo::isPrimitive(A)) {
-      print("Warning: Matrix is imprimitive")
+      stop("Warning: Matrix is imprimitive")
     }
 
     if(is.null(popname)) {
@@ -105,7 +105,7 @@ calc_resilience <-
 
     # reac  -------------------------------------------------------------
     if ("reac" %in% metrics) {
-      reac_res <- calc_reac_or_inertia(metrics = "reac", initvec = initvec, A = A, bounds = bounds)
+      reac_res <- calc_reac_or_inertia(metrics = "reac", vector = vector, A = A, bounds = bounds)
       dat$reac     <- reac_res$value
       dat$reac_lwr <- reac_res$lwr
       dat$reac_upr <- reac_res$upr
@@ -113,7 +113,7 @@ calc_resilience <-
 
     # inertia  ----------------------------------------------------------------
     if ("inertia" %in% metrics) {
-      inertia_res <- calc_reac_or_inertia(metrics = "inertia", initvec = initvec, A = A, bounds = bounds)
+      inertia_res <- calc_reac_or_inertia(metrics = "inertia", vector = vector, A = A, bounds = bounds)
       dat$inertia     <- inertia_res$value
       dat$inertia_lwr <- inertia_res$lwr
       dat$inertia_upr <- inertia_res$upr
@@ -121,7 +121,7 @@ calc_resilience <-
 
     # maxamp ------------------------------------------------------------------
     if ("maxamp" %in% metrics) {
-      if (initvec[1] == "n") {
+      if (vector[1] == "n") {
         if (!bounds) {
           stop("Please specify bound=\"upper\", bound=\"lower\" or specify vec for maxamp")
         } else {
@@ -136,7 +136,7 @@ calc_resilience <-
       else{
         tt.error.maxamp <-
           tryCatch(
-            maxamp <- popdemo::maxamp(A, vec = initvec),
+            maxamp <- popdemo::maxamp(A, vec = vector),
             error = function(e)
               e
           )
@@ -151,8 +151,8 @@ calc_resilience <-
 
 
         if (bounds) {
-          print(
-            "Warning: The lower bound of maximum amplification cannot be computed \n Therefore, the lower maximum attenuation is calculated using the default stage biased vector"
+          message(
+            "The lower bound of maximum amplification cannot be computed \n Therefore, the lower maximum attenuation is calculated using the default stage biased vector"
           )
           dat$maxatt_lwr <- popdemo::maxatt(A)
           dat$maxamp_upr <- popdemo::maxamp(A)
@@ -162,14 +162,14 @@ calc_resilience <-
 
     # maxatt ------------------------------------------------------------------
     if ("maxatt" %in% metrics) {
-      if (initvec[1] == "n") {
+      if (vector[1] == "n") {
         if (!bounds) {
           stop("Please specify bound=\"upper\", bound=\"lower\" or specify vec for maxatt")
         }
 
         if (bounds) {
-          print(
-            "Warning: The upper bound was requested with maximum attenuation \n Therefore, the upper maximum amplification is calculated using the default stage biased vector"
+          message(
+            "The upper bound was requested with maximum attenuation \n Therefore, the upper maximum amplification is calculated using the default stage biased vector"
           )
           dat$maxatt_lwr <- popdemo::maxatt(A)
           dat$maxamp_upr <- popdemo::maxamp(A)
@@ -179,7 +179,7 @@ calc_resilience <-
       else{
         tt.error.maxatt <-
           tryCatch(
-            maxatt <- popdemo::maxatt(A, vec = initvec),
+            maxatt <- popdemo::maxatt(A, vec = vector),
             error = function(e)
               e
           )
@@ -208,7 +208,7 @@ calc_resilience <-
 
     # ALL --------------------------------------------------------------------
     if ("all" %in% metrics) {
-      if (initvec[1] == "n") {
+      if (vector[1] == "n") {
         if (!bounds) {
           stop(
             "Please specify bound=\"upper\", bound=\"lower\" or specify vec for reac and inertia"
@@ -227,12 +227,12 @@ calc_resilience <-
         }
       } else {
         dat$dr <- popdemo::dr(A)
-        dat$reac <- popdemo::reac(A, vec = initvec)
-        dat$inertia <- popdemo::inertia(A, vec = initvec)
+        dat$reac <- popdemo::reac(A, vec = vector)
+        dat$inertia <- popdemo::inertia(A, vec = vector)
 
         tt.error.maxamp <-
           tryCatch(
-            maxamp <- popdemo::maxamp(A, vec = initvec),
+            maxamp <- popdemo::maxamp(A, vec = vector),
             error = function(e)
               e
           )
@@ -241,11 +241,11 @@ calc_resilience <-
           dat$maxamp <- 999
         }
         else{
-          dat$maxamp <- popdemo::maxamp(A, vec = initvec)
+          dat$maxamp <- popdemo::maxamp(A, vec = vector)
         }
         tt.error.maxatt <-
           tryCatch(
-            maxatt <- popdemo::maxatt(A, vec = initvec),
+            maxatt <- popdemo::maxatt(A, vec = vector),
             error = function(e)
               e
           )
@@ -254,7 +254,7 @@ calc_resilience <-
           dat$maxatt <- 999
         }
         else{
-          dat$maxatt <- popdemo::maxatt(A, vec = initvec)
+          dat$maxatt <- popdemo::maxatt(A, vec = vector)
         }
         if (bounds) {
           dat$reac_lwr <- popdemo::reac(A, bound = "lower")
@@ -290,7 +290,7 @@ calc_resilience <-
 #' @inheritParams calc_resilience
 #' @seealso [calc_resilience()]
 #'
-calc_reac_or_inertia <- function(metrics, initvec, A, bounds) {
+calc_reac_or_inertia <- function(metrics, vector, A, bounds) {
 
   if (length(metrics) != 1 || (!"reac" %in% metrics && !"inertia" %in% metrics)) {
     stop("this function can only use 'reac' or 'inertia' as metrics")
@@ -302,8 +302,8 @@ calc_reac_or_inertia <- function(metrics, initvec, A, bounds) {
                reac = popdemo::reac,
                inertia = popdemo::inertia)
 
-  if (initvec[1] != "n") {
-    list_res$value <- fn(A, vec = initvec)
+  if (vector[1] != "n") {
+    list_res$value <- fn(A, vec = vector)
   } else {
     if (!bounds) {
       stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vec for", metrics))

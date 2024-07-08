@@ -8,7 +8,7 @@ calc_resilience(
   A,
   metrics,
   bounds = FALSE,
-  initvec = "n",
+  vector = "n",
   popname = NULL,
   verbose = TRUE
 )
@@ -37,7 +37,7 @@ lower bound, calculated based on the stage-biased vec
 if vec is specified, the function provides also the metrics calculated based
 on the inital vec}
 
-\item{initvec}{a numeric vec or one-column matrix describing the age/stage
+\item{vector}{a numeric vec or one-column matrix describing the age/stage
 distribution ('demographic structure') used to calculate a 'case-specific'
 maximal amplification}
 
@@ -63,6 +63,6 @@ Tortvec1 <- runif(8) # create initial vec
 Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
 
 all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
-initvec = Tortvec1, bounds = TRUE, popname = "Tortoise")
+vector = Tortvec1, bounds = TRUE, popname = "Tortoise")
 
 }

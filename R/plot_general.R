@@ -49,7 +49,7 @@ plot_general <- function(metric, table,
     table[, grep(paste0(metric, "_upr_TV"), colnames(table))]
   table_metric_lwr_TV <-
     table[, grep(paste0(metric, "_lwr_TV"), colnames(table))]
-  table_metric_initvect_TV <-
+  table_metric_vector_TV <-
     table[, grep(paste0(metric, "_TV"), colnames(table))]
 
   #time constant
@@ -57,11 +57,11 @@ plot_general <- function(metric, table,
     table[, grep(paste0(metric, "_upr_TC"), colnames(table))]
   table_metric_lwr_TC <-
     table[, grep(paste0(metric, "_lwr_TC"), colnames(table))]
-  table_metric_initvect_TC <-
+  table_metric_vector_TC <-
     table[, grep(paste0(metric, "_TC"), colnames(table))]
 
-  all <- data.frame(table_metric_upr_TV, table_metric_lwr_TV, table_metric_initvect_TV,
-                    table_metric_upr_TC, table_metric_lwr_TC, table_metric_initvect_TC)
+  all <- data.frame(table_metric_upr_TV, table_metric_lwr_TV, table_metric_vector_TV,
+                    table_metric_upr_TC, table_metric_lwr_TC, table_metric_vector_TC)
 
 
   miny = (min(all, na.rm = TRUE) - 0.4 * min(all, na.rm = TRUE))
@@ -86,8 +86,8 @@ plot_general <- function(metric, table,
       pchdefault = 19
     }
     else {
-      if(length(table_metric_initvect_TV) == 0){
-        table_metric_initvect_TV <- rep(NA, nrow(table))
+      if(length(table_metric_vector_TV) == 0){
+        table_metric_vector_TV <- rep(NA, nrow(table))
         ltydefault = c(1)
         legenddefault = c("Lower bound")
         coldefault = c("#009E73")
@@ -115,8 +115,8 @@ plot_general <- function(metric, table,
         pchdefault = 19
       }
       else {
-        if(length(table_metric_initvect_TV) == 0){
-          table_metric_initvect_TV <- rep(NA, nrow(table))
+        if(length(table_metric_vector_TV) == 0){
+          table_metric_vector_TV <- rep(NA, nrow(table))
           ltydefault = c(1)
           legenddefault = c("Upper bound")
           coldefault = c("#CC79A7")
@@ -132,8 +132,8 @@ plot_general <- function(metric, table,
       }
     }
 
-    else if(length(table_metric_initvect_TV) == 0) {
-        table_metric_initvect_TV <- rep(NA, nrow(table))
+    else if(length(table_metric_vector_TV) == 0) {
+        table_metric_vector_TV <- rep(NA, nrow(table))
         ltydefault = c(1, 1)
         legenddefault = c("Upper bound", "Lower bound")
         coldefault = c("#CC79A7", "#009E73")
@@ -153,8 +153,8 @@ plot_general <- function(metric, table,
   if(length(table_metric_lwr_TC) == 0){
     table_metric_lwr_TC <- rep(NA, nrow(table))
   }
-  if(length(table_metric_initvect_TC) == 0){
-    table_metric_initvect_TC <- rep(NA, nrow(table))
+  if(length(table_metric_vector_TC) == 0){
+    table_metric_vector_TC <- rep(NA, nrow(table))
   }
 
 
@@ -206,16 +206,16 @@ plot_general <- function(metric, table,
       min(tableStartYear, na.rm = TRUE)
     )
 
-  if(length(which(is.na(table_metric_initvect_TV))) == nrow(table) | length(table_metric_initvect_TV) ==0) {
+  if(length(which(is.na(table_metric_vector_TV))) == nrow(table) | length(table_metric_vector_TV) ==0) {
     yinit = c(NA, NA, NA, NA)
   }
   else{
     yinit <-
       c(
-        min(table_metric_initvect_TV, na.rm = TRUE),
-        min(table_metric_initvect_TV, na.rm = TRUE),
-        max(table_metric_initvect_TV, na.rm = TRUE),
-        max(table_metric_initvect_TV, na.rm = TRUE)
+        min(table_metric_vector_TV, na.rm = TRUE),
+        min(table_metric_vector_TV, na.rm = TRUE),
+        max(table_metric_vector_TV, na.rm = TRUE),
+        max(table_metric_vector_TV, na.rm = TRUE)
       )
   }
   # Create a plot
@@ -248,7 +248,7 @@ plot_general <- function(metric, table,
   )
   graphics::points(
     tableStartYear,
-    table_metric_initvect_TV,
+    table_metric_vector_TV,
     type = "p",
     pch = 19,
     col = "black",
@@ -272,7 +272,7 @@ plot_general <- function(metric, table,
   )
   graphics::lines(
     tableStartYear,
-    table_metric_initvect_TC,
+    table_metric_vector_TC,
     type = "l",
     lwd = 1,
     col = "black",

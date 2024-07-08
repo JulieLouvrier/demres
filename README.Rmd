@@ -52,7 +52,7 @@ library(demres)
 ### Import Matrix Population Models 
 ```{r, import data}
 # load data
-data(blue_crane)
+data(bluecrane)
 
 ```
 
@@ -62,7 +62,7 @@ The function `calc_resilience` is made to calculate demographic resilience metri
 
 ```{r, resilience metrics}
 #select the first matrix 
-Crane_mat1 <- blue_crane[[1]]
+Crane_mat1 <- bluecrane[[1]]
 
 # Create initial vector
 set.seed(1)
@@ -72,7 +72,7 @@ Crane_vec1 <- c(0, 0, 0, 0, 1)
 
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
 all_BlueCrane1_demres <- calc_resilience(Crane_mat1, metrics = "all",
-initvec = Crane_vec1, bounds = TRUE, popname = "Blue Crane")
+vector = Crane_vec1, bounds = TRUE, popname = "Blue Crane")
 attr(all_BlueCrane1_demres, "msg")
 
 #let's take a look at what we got
@@ -87,8 +87,8 @@ The function `demres` is made to calculate demographic resilience metrics based 
 
 ```{r, demres}
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-all_BlueCrane_demres <- demres(blue_crane, metrics = c("all"),
-initvec = Crane_vec1, bounds = TRUE, popname = "Blue Crane", time = "both")
+all_BlueCrane_demres <- demres(bluecrane, metrics = c("all"),
+vector = Crane_vec1, bounds = TRUE, popname = "Blue Crane", time = "both")
 
 #let's take a look at what we got
 all_BlueCrane_demres

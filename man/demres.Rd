@@ -9,8 +9,8 @@ demres(
   listA,
   metrics,
   bounds = FALSE,
-  initvec = "n",
-  TDinitvec = FALSE,
+  vector = "n",
+  TDvector = FALSE,
   popname = NULL,
   time
 )
@@ -34,12 +34,12 @@ matrix projection model.
 
 \item{bounds}{(optional) if TRUE, specifies whether the upper and  lower
 bound should be calculated
-if initvec is not specified, the function provides metrics in their upper and
+if vector is not specified, the function provides metrics in their upper and
 lower bound, calculated based on the stage-biased vector
-if initvec is specified, the function provides also the metrics calculated
+if vector is specified, the function provides also the metrics calculated
 based on the inital vector}
 
-\item{initvec}{a list of numeric vectors or one-column matrices describing the age/stage
+\item{vector}{a list of numeric vectors or one-column matrices describing the age/stage
 distribution ('demographic structure') used to calculate a 'case-specific', stage age structure
 metric}
 
@@ -65,7 +65,7 @@ and returns either time-varying metrics or time-constant metrics
 
 # load data
 # load data
-data(blue_crane)
+data(bluecrane)
 
 # simulate an initial vector
 Cranevec1 <- runif(5)
@@ -74,11 +74,11 @@ Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 
 BC_TVTC_demres <-
   demres(
-    blue_crane,
+    bluecrane,
     metrics = "all",
     bounds = TRUE,
-    initvec = Cranevec1,
-    TDinitvec = TRUE,
+    vector = Cranevec1,
+    TDvector = TRUE,
     popname = "blue crane",
     time = "both"
   )

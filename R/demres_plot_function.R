@@ -30,7 +30,7 @@
 #' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
 #' @examples
 #' # load data
-#' data(blue_crane)
+#' data(bluecrane)
 #'
 #' # simulate an initial vector
 #' Cranevec1 <- runif(5)
@@ -39,10 +39,10 @@
 #'
 #' BC_TVTC_demres <-
 #'   demres(
-#'     blue_crane,
+#'     bluecrane,
 #'     metric = "all",
 #'     bounds = TRUE,
-#'     initvec = Cranevec1,
+#'     vector = Cranevec1,
 #'     popname = "blue crane",
 #'     time = "both"
 #'   )
@@ -92,15 +92,15 @@ demres_plot <- function(metric,
     name_metric = "Damping ratio"
 
     #time varying
-    table_metric_initvect_TV <-
+    table_metric_vector_TV <-
       table[, grep(paste0(metric, "_TV"), colnames(table))]
 
     #time constant
-    table_metric_initvect_TC <-
+    table_metric_vector_TC <-
       table[, grep(paste0(metric, "_TC"), colnames(table))]
 
-    miny = min(table_metric_initvect_TV, na.rm = TRUE ) - 0.4 * min(table_metric_initvect_TV, na.rm = TRUE )
-    maxy = max(table_metric_initvect_TV, na.rm = TRUE )  + 0.4 * max(table_metric_initvect_TV, na.rm = TRUE )
+    miny = min(table_metric_vector_TV, na.rm = TRUE ) - 0.4 * min(table_metric_vector_TV, na.rm = TRUE )
+    maxy = max(table_metric_vector_TV, na.rm = TRUE )  + 0.4 * max(table_metric_vector_TV, na.rm = TRUE )
 
     # Define the vertices of the polygon
     xinit <-
@@ -112,10 +112,10 @@ demres_plot <- function(metric,
       )
     yinit <-
       c(
-        min(table_metric_initvect_TV, na.rm = TRUE ),
-        min(table_metric_initvect_TV, na.rm = TRUE ),
-        max(table_metric_initvect_TV, na.rm = TRUE ),
-        max(table_metric_initvect_TV, na.rm = TRUE )
+        min(table_metric_vector_TV, na.rm = TRUE ),
+        min(table_metric_vector_TV, na.rm = TRUE ),
+        max(table_metric_vector_TV, na.rm = TRUE ),
+        max(table_metric_vector_TV, na.rm = TRUE )
       )
 
     # Create a plot
@@ -124,7 +124,7 @@ demres_plot <- function(metric,
     graphics::par(mar = c(5, 4, 4, 10), xpd = TRUE)
     plot(
       tableStartYear,
-      table_metric_initvect_TV,
+      table_metric_vector_TV,
       type = "n",
       ylim = c(miny, maxy),
       main = paste0(name_metric, " of ", unique(popname), " population"),
@@ -134,7 +134,7 @@ demres_plot <- function(metric,
 
     graphics::points(
       tableStartYear,
-      table_metric_initvect_TV,
+      table_metric_vector_TV,
       type = "p",
       pch = 19,
       col = "black",
@@ -142,7 +142,7 @@ demres_plot <- function(metric,
     )
     graphics::lines(
       tableStartYear,
-      table_metric_initvect_TC,
+      table_metric_vector_TC,
       type = "l",
       lwd = 1,
       col = "black",

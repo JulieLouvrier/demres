@@ -4,7 +4,7 @@
 \alias{calc_reac_or_inertia}
 \title{Calculate reactivity or inertia metric}
 \usage{
-calc_reac_or_inertia(metrics, initvec, A, bounds)
+calc_reac_or_inertia(metrics, vector, A, bounds)
 }
 \arguments{
 \item{metrics}{"reac": Calculates reactivity: first-timestep amplification
@@ -20,7 +20,7 @@ matrix projection model.
 matrix projection model.
 "all": all of the above metrics are provided}
 
-\item{initvec}{a numeric vec or one-column matrix describing the age/stage
+\item{vector}{a numeric vec or one-column matrix describing the age/stage
 distribution ('demographic structure') used to calculate a 'case-specific'
 maximal amplification}
 

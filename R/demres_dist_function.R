@@ -27,7 +27,7 @@
 #'                 "all": calculates all of the above measures
 #' @examples
 #' # load data
-#' data(blue_crane)
+#' data(bluecrane)
 #'
 #' # simulate an initial vector
 #' Cranevec1 <- runif(5)
@@ -36,10 +36,10 @@
 #'
 #' BC_TVTC_demres <-
 #'   demres(
-#'     blue_crane,
+#'     bluecrane,
 #'     metric = "all",
 #'     bounds = TRUE,
-#'     initvec = Cranevec1,
+#'     vector = Cranevec1,
 #'     popname = "blue crane",
 #'     time = "both"
 #'   )
@@ -69,7 +69,7 @@ demres_dist <- function(table,
       table[, grep(paste0(metric, "_upr_TV"), colnames(table))]
     table_metric_lwr_TV <-
       table[, grep(paste0(metric, "_lwr_TV"), colnames(table))]
-    table_metric_initvect_TV <-
+    table_metric_vector_TV <-
       table[, grep(paste0(metric, "_TV"), colnames(table))]
 
     #time constant
@@ -77,7 +77,7 @@ demres_dist <- function(table,
       table[, grep(paste0(metric, "_upr_TC"), colnames(table))]
     table_metric_lwr_TC <-
       table[, grep(paste0(metric, "_lwr_TC"), colnames(table))]
-    table_metric_initvect_TC <-
+    table_metric_vector_TC <-
       table[, grep(paste0(metric, "_TC"), colnames(table))]
 
 
@@ -90,12 +90,12 @@ demres_dist <- function(table,
         RMSE_lwr <-
           RMSE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
       }
-      if(length(table_metric_initvect_TV) == 0){
+      if(length(table_metric_vector_TV) == 0){
         RMSE_init = NA
       }
       else{
         RMSE_init <-
-          RMSE(TV = table_metric_initvect_TV, TC = table_metric_initvect_TC)
+          RMSE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
       }
       if(length(table_metric_upr_TV) == 0) {
         RMSE_upr = NA
@@ -108,7 +108,7 @@ demres_dist <- function(table,
       RMSE_res <- c(RMSE_lwr,
                     RMSE_init,
                     RMSE_upr)
-      names(RMSE_res) <- c(paste0("RMSE_", metric, "_lwr"), paste0("RMSE_", metric, "_initvect"), paste0("RMSE_", metric, "_upr"))
+      names(RMSE_res) <- c(paste0("RMSE_", metric, "_lwr"), paste0("RMSE_", metric, "_vector"), paste0("RMSE_", metric, "_upr"))
 
       distance_demres <- RMSE_res
     }
@@ -121,12 +121,12 @@ demres_dist <- function(table,
         rRMSE_lwr <-
           rRMSE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
       }
-      if(length(table_metric_initvect_TV) == 0){
+      if(length(table_metric_vector_TV) == 0){
         rRMSE_init = NA
       }
       else{
         rRMSE_init <-
-          rRMSE(TV = table_metric_initvect_TV, TC = table_metric_initvect_TC)
+          rRMSE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
       }
       if(length(table_metric_upr_TV) == 0) {
         rRMSE_upr = NA
@@ -139,7 +139,7 @@ demres_dist <- function(table,
       rRMSE_res <- c(rRMSE_lwr,
                      rRMSE_init,
                      rRMSE_upr)
-      names(rRMSE_res) <- c(paste0("rRMSE_", metric, "_lwr"), paste0("rRMSE_", metric, "_initvect"), paste0("rRMSE_", metric, "_upr"))
+      names(rRMSE_res) <- c(paste0("rRMSE_", metric, "_lwr"), paste0("rRMSE_", metric, "_vector"), paste0("rRMSE_", metric, "_upr"))
 
       distance_demres <- rRMSE_res
     }
@@ -151,12 +151,12 @@ demres_dist <- function(table,
         MAPE_lwr <-
           MAPE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
       }
-      if(length(table_metric_initvect_TV) == 0){
+      if(length(table_metric_vector_TV) == 0){
         MAPE_init = NA
       }
       else{
         MAPE_init <-
-          MAPE(TV = table_metric_initvect_TV, TC = table_metric_initvect_TC)
+          MAPE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
       }
       if(length(table_metric_upr_TV) == 0) {
         MAPE_upr = NA
@@ -169,7 +169,7 @@ demres_dist <- function(table,
       MAPE_res <- c(MAPE_lwr,
                     MAPE_init,
                     MAPE_upr)
-      names(MAPE_res) <- c(paste0("MAPE_", metric, "_lwr"), paste0("MAPE_", metric, "_initvect"), paste0("MAPE_", metric, "_upr"))
+      names(MAPE_res) <- c(paste0("MAPE_", metric, "_lwr"), paste0("MAPE_", metric, "_vector"), paste0("MAPE_", metric, "_upr"))
 
       distance_demres <- MAPE_res
     }
@@ -181,12 +181,12 @@ demres_dist <- function(table,
         RMSE_lwr <-
           RMSE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
       }
-      if(length(table_metric_initvect_TV) == 0){
+      if(length(table_metric_vector_TV) == 0){
         RMSE_init = NA
       }
       else{
         RMSE_init <-
-          RMSE(TV = table_metric_initvect_TV, TC = table_metric_initvect_TC)
+          RMSE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
       }
       if(length(table_metric_upr_TV) == 0) {
         RMSE_upr = NA
@@ -206,12 +206,12 @@ demres_dist <- function(table,
         rRMSE_lwr <-
           rRMSE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
       }
-      if(length(table_metric_initvect_TV) == 0){
+      if(length(table_metric_vector_TV) == 0){
         rRMSE_init = NA
       }
       else{
         rRMSE_init <-
-          rRMSE(TV = table_metric_initvect_TV, TC = table_metric_initvect_TC)
+          rRMSE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
       }
       if(length(table_metric_upr_TV) == 0) {
         rRMSE_upr = NA
@@ -232,12 +232,12 @@ demres_dist <- function(table,
         MAPE_lwr <-
           MAPE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
       }
-      if(length(table_metric_initvect_TV) == 0){
+      if(length(table_metric_vector_TV) == 0){
         MAPE_init = NA
       }
       else{
         MAPE_init <-
-          MAPE(TV = table_metric_initvect_TV, TC = table_metric_initvect_TC)
+          MAPE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
       }
       if(length(table_metric_upr_TV) == 0) {
         MAPE_upr = NA
@@ -256,7 +256,7 @@ demres_dist <- function(table,
                                     MAPE = MAPE_res)
 
       rownames(distance_demres) <-  c(paste0(metric, "_lwr"),
-                                      paste0(metric, "_initvect"),
+                                      paste0(metric, "_vector"),
                                       paste0(metric, "_upr"))
 
 
@@ -269,7 +269,7 @@ demres_dist <- function(table,
     distance_demres <- distance_demres[-which(is.na(distance_demres))]
     }
     if(metric == "dr") {
-      names(distance_demres) <- sub(x = names(distance_demres), "_initvect.*", "")
+      names(distance_demres) <- sub(x = names(distance_demres), "_vector.*", "")
     }
 
   }
