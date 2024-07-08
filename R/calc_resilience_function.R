@@ -23,11 +23,11 @@
 #'                 "all": all of the above metrics are provided
 #' @param bounds (optional) if TRUE, specifies whether the upper and  lower bound
 #' should be calculated
-#' if vec is not specified, the function provides metrics in their upper and
-#' lower bound, calculated based on the stage-biased vec
-#' if vec is specified, the function provides also the metrics calculated based
-#' on the inital vec
-#' @param vector a numeric vec or one-column matrix describing the age/stage
+#' if vector is not specified, the function provides metrics in their upper and
+#' lower bound, calculated based on the stage-biased vector
+#' if vector is specified, the function provides also the metrics calculated based
+#' on the inital vector
+#' @param vector a numeric vector or one-column matrix describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific'
 #' maximal amplification
 #' @param popname a character string describing the name of the population
@@ -36,8 +36,8 @@
 #' @examples
 #' data(Tort, package = "popdemo")
 #'
-#' Tortvec1 <- runif(8) # create initial vec
-#' Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
+#' Tortvec1 <- runif(8) # create initial vector
+#' Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vector to sum to 1
 #'
 #' all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
 #' vector = Tortvec1, bounds = TRUE, popname = "Tortoise")
@@ -123,7 +123,7 @@ calc_resilience <-
     if ("maxamp" %in% metrics) {
       if (vector[1] == "n") {
         if (!bounds) {
-          stop("Please specify bound=\"upper\", bound=\"lower\" or specify vec for maxamp")
+          stop("Please specify bound=\"upper\", bound=\"lower\" or specify vector for maxamp")
         } else {
           message(
             "The lower bound of maximum amplification cannot be computed \n Therefore, the lower maximum attenuation is calculated using the default stage biased vector"
@@ -136,7 +136,7 @@ calc_resilience <-
       else{
         tt.error.maxamp <-
           tryCatch(
-            maxamp <- popdemo::maxamp(A, vec = vector),
+            maxamp <- popdemo::maxamp(A, vector = vector),
             error = function(e)
               e
           )
@@ -164,7 +164,7 @@ calc_resilience <-
     if ("maxatt" %in% metrics) {
       if (vector[1] == "n") {
         if (!bounds) {
-          stop("Please specify bound=\"upper\", bound=\"lower\" or specify vec for maxatt")
+          stop("Please specify bound=\"upper\", bound=\"lower\" or specify vector for maxatt")
         }
 
         if (bounds) {
@@ -179,7 +179,7 @@ calc_resilience <-
       else{
         tt.error.maxatt <-
           tryCatch(
-            maxatt <- popdemo::maxatt(A, vec = vector),
+            maxatt <- popdemo::maxatt(A, vector = vector),
             error = function(e)
               e
           )
@@ -206,67 +206,6 @@ calc_resilience <-
       dat$dr <- popdemo::dr(A)
     }
 
-    # ALL --------------------------------------------------------------------
-    if ("all" %in% metrics) {
-      if (vector[1] == "n") {
-        if (!bounds) {
-          stop(
-            "Please specify bound=\"upper\", bound=\"lower\" or specify vec for reac and inertia"
-          )
-        }
-        dat$dr <- popdemo::dr(A)
-
-        if (bounds) {
-          dat$reac_lwr <- popdemo::reac(A, bound = "lower")
-          dat$inertia_lwr <- popdemo::inertia(A, bound = "lower")
-          dat$maxatt_lwr <- popdemo::maxatt(A)
-          dat$reac_upr <- popdemo::reac(A, bound = "upper")
-          dat$inertia_upr <- popdemo::inertia(A, bound = "upper")
-          dat$maxamp_upr <- popdemo::maxamp(A)
-
-        }
-      } else {
-        dat$dr <- popdemo::dr(A)
-        dat$reac <- popdemo::reac(A, vec = vector)
-        dat$inertia <- popdemo::inertia(A, vec = vector)
-
-        tt.error.maxamp <-
-          tryCatch(
-            maxamp <- popdemo::maxamp(A, vec = vector),
-            error = function(e)
-              e
-          )
-        if (methods::is(tt.error.maxamp, "error")) {
-          message(paste0(tt.error.maxamp[1]$message, ", with the stated initial vector, Na is displayed"))
-          dat$maxamp <- 999
-        }
-        else{
-          dat$maxamp <- popdemo::maxamp(A, vec = vector)
-        }
-        tt.error.maxatt <-
-          tryCatch(
-            maxatt <- popdemo::maxatt(A, vec = vector),
-            error = function(e)
-              e
-          )
-        if (methods::is(tt.error.maxatt, "error")) {
-          msg <- c(msg, paste0(tt.error.maxatt[1]$message, ", with the stated initial vector, Na is displayed"))
-          dat$maxatt <- 999
-        }
-        else{
-          dat$maxatt <- popdemo::maxatt(A, vec = vector)
-        }
-        if (bounds) {
-          dat$reac_lwr <- popdemo::reac(A, bound = "lower")
-          dat$inertia_lwr <- popdemo::inertia(A, bound = "lower")
-          dat$maxatt_lwr <- popdemo::maxatt(A)
-          dat$reac_upr <- popdemo::reac(A, bound = "upper")
-          dat$inertia_upr <- popdemo::inertia(A, bound = "upper")
-          dat$maxamp_upr <- popdemo::maxamp(A)
-
-        }
-      }
-    }
     if ("TRUE" %in% is.na(dat)){
     dat <- dat[,-which(is.na(dat))] #taking out columns with NAs in them
     }
@@ -303,10 +242,45 @@ calc_reac_or_inertia <- function(metrics, vector, A, bounds) {
                inertia = popdemo::inertia)
 
   if (vector[1] != "n") {
-    list_res$value <- fn(A, vec = vector)
+    list_res$value <- fn(A, vector = vector)
   } else {
     if (!bounds) {
       stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vec for", metrics))
+    }
+  }
+
+  if (bounds) {
+    list_res$lwr <- fn(A, bound = "lower")
+    list_res$upr <- fn(A, bound = "upper")
+  }
+
+  list_res
+}
+
+#' Calculate maxam or maxatt metric
+#'
+#' Internal functions used by [calc_resilience()].
+#'
+#' @inheritParams calc_resilience
+#' @seealso [calc_resilience()]
+#'
+calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
+
+  if (length(metrics) != 1 || (!"maxamp" %in% metrics && !"maxatt" %in% metrics)) {
+    stop("this function can only use 'maxamp' or 'maxatt' as metrics")
+  }
+
+  list_res <- list(value = NA, lwr = NA, upr = NA)
+
+  fn <- switch(metrics,
+               maxamp = popdemo::maxamp,
+               maxatt = popdemo::maxatt)
+
+  if (vector[1] != "n") {
+    list_res$value <- fn(A, vector = vector)
+  } else {
+    if (!bounds) {
+      stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vector for", metrics))
     }
   }
 

@@ -67,7 +67,7 @@ Crane_mat1 <- bluecrane[[1]]
 # Create initial vector
 set.seed(1)
 Crane_vec1 <- runif(5)
-Crane_vec1 <- Crane_vec1 / sum(Crane_vec1) #scales the vec to sum to 1
+Crane_vec1 <- Crane_vec1 / sum(Crane_vec1) #scales the vector to sum to 1
 Crane_vec1 <- c(0, 0, 0, 0, 1)
 
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector

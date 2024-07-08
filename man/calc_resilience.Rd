@@ -32,12 +32,12 @@ matrix projection model.
 
 \item{bounds}{(optional) if TRUE, specifies whether the upper and  lower bound
 should be calculated
-if vec is not specified, the function provides metrics in their upper and
-lower bound, calculated based on the stage-biased vec
-if vec is specified, the function provides also the metrics calculated based
-on the inital vec}
+if vector is not specified, the function provides metrics in their upper and
+lower bound, calculated based on the stage-biased vector
+if vector is specified, the function provides also the metrics calculated based
+on the inital vector}
 
-\item{vector}{a numeric vec or one-column matrix describing the age/stage
+\item{vector}{a numeric vector or one-column matrix describing the age/stage
 distribution ('demographic structure') used to calculate a 'case-specific'
 maximal amplification}
 
@@ -59,8 +59,8 @@ package based on a population matrix projection model.
 \examples{
 data(Tort, package = "popdemo")
 
-Tortvec1 <- runif(8) # create initial vec
-Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vec to sum to 1
+Tortvec1 <- runif(8) # create initial vector
+Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vector to sum to 1
 
 all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
 vector = Tortvec1, bounds = TRUE, popname = "Tortoise")
