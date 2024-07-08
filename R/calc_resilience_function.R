@@ -40,10 +40,11 @@
 #' Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vector to sum to 1
 #'
 #' all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
-#' vector = Tortvec1, bounds = TRUE, popname = "Tortoise")
+#' vector = Tortvec1, bounds = TRUE, popname = "Tortoise", verbose = FALSE)
 #'
 #' @return A vector containing all the resilience metrics
 #' @name calc_resilience
+#' @keywords internal
 
 calc_resilience <-
   function(A,
@@ -120,85 +121,19 @@ calc_resilience <-
     }
 
     # maxamp ------------------------------------------------------------------
-    if ("maxamp" %in% metrics) {
-      if (vector[1] == "n") {
-        if (!bounds) {
-          stop("Please specify bound=\"upper\", bound=\"lower\" or specify vector for maxamp")
-        } else {
-          message(
-            "The lower bound of maximum amplification cannot be computed \n Therefore, the lower maximum attenuation is calculated using the default stage biased vector"
-          )
-          dat$maxatt_lwr <- popdemo::maxatt(A)
-          dat$maxamp_upr <- popdemo::maxamp(A)
-        }
-      }
-
-      else{
-        tt.error.maxamp <-
-          tryCatch(
-            maxamp <- popdemo::maxamp(A, vector = vector),
-            error = function(e)
-              e
-          )
-        if (methods::is(tt.error.maxamp, "error")) {
-          message(paste0(tt.error.maxamp[1]$message, " with the stated initial vector, Na is displayed"))
-
-          dat$maxamp <- 999
-        }
-        else{
-          dat$maxamp <- maxamp
-        }
-
-
-        if (bounds) {
-          message(
-            "The lower bound of maximum amplification cannot be computed \n Therefore, the lower maximum attenuation is calculated using the default stage biased vector"
-          )
-          dat$maxatt_lwr <- popdemo::maxatt(A)
-          dat$maxamp_upr <- popdemo::maxamp(A)
-        }
-      }
+     if ("maxamp" %in% metrics) {
+       maxamp_res <- calc_maxamp_or_maxatt(metrics = "maxamp", vector = vector, A = A, bounds = bounds)
+       dat$maxamp     <- maxamp_res$value
+       dat$maxatt_lwr <- maxamp_res$lwr
+       dat$maxamp_upr <- maxamp_res$upr
     }
 
     # maxatt ------------------------------------------------------------------
     if ("maxatt" %in% metrics) {
-      if (vector[1] == "n") {
-        if (!bounds) {
-          stop("Please specify bound=\"upper\", bound=\"lower\" or specify vector for maxatt")
-        }
-
-        if (bounds) {
-          message(
-            "The upper bound was requested with maximum attenuation \n Therefore, the upper maximum amplification is calculated using the default stage biased vector"
-          )
-          dat$maxatt_lwr <- popdemo::maxatt(A)
-          dat$maxamp_upr <- popdemo::maxamp(A)
-        }
-      }
-
-      else{
-        tt.error.maxatt <-
-          tryCatch(
-            maxatt <- popdemo::maxatt(A, vector = vector),
-            error = function(e)
-              e
-          )
-        if (methods::is(tt.error.maxatt, "error")) {
-          msg <- c(msg, paste0(tt.error.maxatt[1]$message, ", with the stated initial vector, Na is displayed"))
-          dat$maxatt <- 999
-        }
-        else{
-          dat$maxatt <- maxatt
-        }
-
-        if (bounds) {
-          message(
-            "The upper bound was requested with maximum attenuation \n Therefore, the upper maximum amplification is calculated using the default stage biased vector"
-          )
-          dat$maxatt_lwr <- popdemo::maxatt(A)
-          dat$maxamp_upr <- popdemo::maxamp(A)
-        }
-      }
+      maxatt_res <- calc_maxamp_or_maxatt(metrics = "maxatt", vector = vector, A = A, bounds = bounds)
+      dat$maxatt     <- maxatt_res$value
+      dat$maxatt_lwr <- maxatt_res$lwr
+      dat$maxamp_upr <- maxatt_res$upr
     }
 
     # DAMPING RATIO -----------------------------------------------------------
@@ -211,8 +146,8 @@ calc_resilience <-
     }
     dat[,which(dat == 999)] <- NA
 
-    print(verbose)
-    print(msg)
+    # print(verbose)
+    # print(msg)
     if (verbose && length(msg) > 0) {
       message(msg)
     }
@@ -235,7 +170,7 @@ calc_reac_or_inertia <- function(metrics, vector, A, bounds) {
     stop("this function can only use 'reac' or 'inertia' as metrics")
   }
 
-  list_res <- list(value = NA, lwr = NA, upr = NA)
+  list_res <- list(value = 999, lwr = 999, upr = 999)
 
   fn <- switch(metrics,
                reac = popdemo::reac,
@@ -270,23 +205,44 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
     stop("this function can only use 'maxamp' or 'maxatt' as metrics")
   }
 
-  list_res <- list(value = NA, lwr = NA, upr = NA)
+
+  list_res <- list(value = 999, lwr = 999, upr = 999)
 
   fn <- switch(metrics,
                maxamp = popdemo::maxamp,
                maxatt = popdemo::maxatt)
 
   if (vector[1] != "n") {
-    list_res$value <- fn(A, vector = vector)
+    tt.error.maxa <-
+      tryCatch(
+        maxa <- fn(A, vector = vector),
+        error = function(e)
+          e
+      )
+    if (methods::is(tt.error.maxa, "error")) {
+      message(paste0(tt.error.maxa[1]$message, " with the stated initial vector, Na is displayed"))
+      list_res$value <- 999
+    }
+    else{
+      list_res$value <- fn(A, vector = vector)
+    }
   } else {
     if (!bounds) {
       stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vector for", metrics))
     }
   }
-
   if (bounds) {
-    list_res$lwr <- fn(A, bound = "lower")
-    list_res$upr <- fn(A, bound = "upper")
+    list_res$lwr <- fn(A)
+    list_res$upr <- fn(A)
+    if(metrics == "maxamp") {
+      message("The lower bound of maximum amplification cannot be computed
+            Therefore, the lower maximum attenuation is calculated using the default stage biased vector")
+    }
+
+    if(metrics == "maxatt") {
+      message("The upper bound of maximum attenuation cannot be computed
+            Therefore, the upper maximum amplification is calculated using the default stage biased vector")
+    }
   }
 
   list_res

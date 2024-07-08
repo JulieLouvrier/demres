@@ -43,6 +43,10 @@ based on the inital vector}
 distribution ('demographic structure') used to calculate a 'case-specific', stage age structure
 metric}
 
+\item{TDvector}{specifies whether or not the user wants to get a Time-Dependant list of initial vectors,
+corresponding to the population stage distribution projection for each year with each matrix of each year.
+The result is a list of X initial vectors with X the number of matrices that are in the list.}
+
 \item{popname}{a character string describing the name of the population}
 
 \item{time}{a character string: "constant", "varying" or "both"

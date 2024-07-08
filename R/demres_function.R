@@ -30,6 +30,9 @@
 #' @param vector a list of numeric vectors or one-column matrices describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific', stage age structure
 #' metric
+#' @param TDvector specifies whether or not the user wants to get a Time-Dependant list of initial vectors,
+#' corresponding to the population stage distribution projection for each year with each matrix of each year.
+#' The result is a list of X initial vectors with X the number of matrices that are in the list.
 #' @param popname a character string describing the name of the population
 #' @param time a character string: "constant", "varying" or "both"
 #'            "constant" : if the metrics are to be calculated over the whole
