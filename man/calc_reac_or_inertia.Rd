@@ -18,6 +18,8 @@ matrix projection model.
 matrix projection model.
 "maxatt": Calculate maximal attenuation for a population
 matrix projection model.
+"convt": Calculate the time to convergence of a population
+matrix projection model from the model projection
 "all": all of the above metrics are provided}
 
 \item{vector}{a numeric vector or one-column matrix describing the age/stage

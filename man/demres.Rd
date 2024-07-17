@@ -7,12 +7,15 @@ populations based on a list of matrix population models}
 \usage{
 demres(
   listA,
-  metrics,
+  metrics = "all",
   bounds = FALSE,
   vector = "n",
   TDvector = FALSE,
   popname = NULL,
-  time
+  time = "both",
+  verbose = TRUE,
+  accuracy = 0.01,
+  iterations = 1e+05
 )
 }
 \arguments{
@@ -30,6 +33,8 @@ matrix projection model.
 matrix projection model.
 "maxatt": Calculate maximal attenuation for a population
 matrix projection model.
+"convt": Calculate the time to convergence of a population
+matrix projection model from the model projection
 "all": all of the above metrics are provided}
 
 \item{bounds}{(optional) if TRUE, specifies whether the upper and  lower
@@ -53,6 +58,13 @@ The result is a list of X initial vectors with X the number of matrices that are
 "constant" : if the metrics are to be calculated over the whole
 study period
 "varying": if the metrics are to be calculated for each time step}
+
+\item{verbose}{a boolean indicating if messages about failure to compute particular metrics should be displayed or not (default = TRUE)}
+
+\item{accuracy}{the accuracy with which to determine convergence on asymptotic growth, expressed as a proportion}
+
+\item{iterations}{the maximum number of iterations of the model before the code breaks. For slowly-converging models
+and/or high specified convergence accuracy, this may need to be increased.}
 }
 \value{
 A dataframe containing all the resilience metrics
@@ -68,23 +80,24 @@ and returns either time-varying metrics or time-constant metrics
 \examples{
 
 # load data
-# load data
 data(bluecrane)
 
 # simulate an initial vector
+set.seed(1234)
 Cranevec1 <- runif(5)
 Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 
 
 BC_TVTC_demres <-
   demres(
-    bluecrane,
+    listA = bluecrane,
     metrics = "all",
     bounds = TRUE,
     vector = Cranevec1,
     TDvector = TRUE,
     popname = "blue crane",
-    time = "both"
+    time = "both",
+    verbose = TRUE
   )
 
 }

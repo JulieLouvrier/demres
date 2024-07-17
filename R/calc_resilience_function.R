@@ -20,6 +20,8 @@
 #'                 matrix projection model.
 #'                 "maxatt": Calculate maximal attenuation for a population
 #'                 matrix projection model.
+#'                 "convt": Calculate the time to convergence of a population
+#'                 matrix projection model from the model projection
 #'                 "all": all of the above metrics are provided
 #' @param bounds (optional) if TRUE, specifies whether the upper and  lower bound
 #' should be calculated
@@ -31,16 +33,21 @@
 #' distribution ('demographic structure') used to calculate a 'case-specific'
 #' maximal amplification
 #' @param popname a character string describing the name of the population
+#' @param accuracy the accuracy with which to determine convergence on asymptotic growth, expressed as a proportion
+#' @param iterations the maximum number of iterations of the model before the code breaks. For slowly-converging models
+#' and/or high specified convergence accuracy, this may need to be increased.
 #' @param verbose a boolean indicating if messages about failure to compute particular metrics should be displayed or not (default = TRUE)
 #' @export
 #' @examples
-#' data(Tort, package = "popdemo")
+#' data(bluecrane)
 #'
-#' Tortvec1 <- runif(8) # create initial vector
-#' Tortvec1 <- Tortvec1/sum(Tortvec1) #scales the vector to sum to 1
+#' set.seed(1234)
+#' Cranevec1 <- runif(5)
+#' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
+#' crane1 <- bluecrane[[1]]
 #'
-#' all_tort_demres <- calc_resilience(Tort, metrics = c("all"),
-#' vector = Tortvec1, bounds = TRUE, popname = "Tortoise", verbose = FALSE)
+#' all_crane_demres <- calc_resilience(crane1, metrics = c("all"),
+#' vector = Cranevec1, bounds = TRUE, popname = "blue crane", verbose = TRUE)
 #'
 #' @return A vector containing all the resilience metrics
 #' @name calc_resilience
@@ -48,11 +55,13 @@
 
 calc_resilience <-
   function(A,
-           metrics,
+           metrics = "all",
            bounds = FALSE,
            vector = "n",
            popname = NULL,
-           verbose = TRUE) {
+           verbose = TRUE,
+           accuracy = 0.01,
+           iterations = 1e+05) {
 
     if (is.null(A)) {
       stop("No Matrix was found")
@@ -88,6 +97,9 @@ calc_resilience <-
     msg <- character(0)
 
     dat <- data.frame(popname = popname,
+                      convt = NA,
+                      convt_lwr = NA,
+                      convt_upr = NA,
                       dr = NA,
                       inertia = NA,
                       inertia_lwr = NA,
@@ -101,7 +113,7 @@ calc_resilience <-
                       reac_upr = NA)
 
     if (metrics == "all") {
-      metrics <- c("reac", "inertia", "maxatt", "maxamp", "dr")
+      metrics <- c("reac", "inertia", "maxatt", "maxamp", "dr", "convt")
     }
 
     # reac  -------------------------------------------------------------
@@ -126,6 +138,7 @@ calc_resilience <-
        dat$maxamp     <- maxamp_res$value
        dat$maxatt_lwr <- maxamp_res$lwr
        dat$maxamp_upr <- maxamp_res$upr
+       msg <- cbind(msg, maxamp_res$msg)
     }
 
     # maxatt ------------------------------------------------------------------
@@ -134,6 +147,8 @@ calc_resilience <-
       dat$maxatt     <- maxatt_res$value
       dat$maxatt_lwr <- maxatt_res$lwr
       dat$maxamp_upr <- maxatt_res$upr
+      msg <- cbind(msg, maxatt_res$msg)
+
     }
 
     # DAMPING RATIO -----------------------------------------------------------
@@ -141,17 +156,30 @@ calc_resilience <-
       dat$dr <- popdemo::dr(A)
     }
 
+    # convergence time
+    if ("convt" %in% metrics) {
+      convt_res <- calc_convt(metrics = "convt",
+                              vector = vector,
+                              A = A,
+                              bounds = bounds ,
+                              accuracy = accuracy,
+                              iterations = iterations)
+
+      dat$convt     <- convt_res$value
+      dat$convt_lwr <- convt_res$lwr
+      dat$convt_upr <- convt_res$upr
+    }
+
     if ("TRUE" %in% is.na(dat)){
     dat <- dat[,-which(is.na(dat))] #taking out columns with NAs in them
-    }
+     }
     dat[,which(dat == 999)] <- NA
 
-    # print(verbose)
-    # print(msg)
     if (verbose && length(msg) > 0) {
-      message(msg)
+      #message(msg)
+      attr(dat, "msg") <- msg
+
     }
-    attr(dat, "msg") <- msg
 
     return(dat)
   }
@@ -200,13 +228,14 @@ calc_reac_or_inertia <- function(metrics, vector, A, bounds) {
 #' @seealso [calc_resilience()]
 #'
 calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
+  msg <- character(0)
 
   if (length(metrics) != 1 || (!"maxamp" %in% metrics && !"maxatt" %in% metrics)) {
     stop("this function can only use 'maxamp' or 'maxatt' as metrics")
   }
 
 
-  list_res <- list(value = 999, lwr = 999, upr = 999)
+  list_res <- list(value = 999, lwr = 999, upr = 999, msg = character(0))
 
   fn <- switch(metrics,
                maxamp = popdemo::maxamp,
@@ -220,7 +249,7 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
           e
       )
     if (methods::is(tt.error.maxa, "error")) {
-      message(paste0(tt.error.maxa[1]$message, " with the stated initial vector, Na is displayed"))
+      msg <- cbind(msg,(paste0(tt.error.maxa[1]$message, " with the stated initial vector, Na is displayed\n")))
       list_res$value <- 999
     }
     else{
@@ -235,14 +264,50 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
     list_res$lwr <- fn(A)
     list_res$upr <- fn(A)
     if(metrics == "maxamp") {
-      message("The lower bound of maximum amplification cannot be computed
-            Therefore, the lower maximum attenuation is calculated using the default stage biased vector")
+      message_maxamp<- c("The lower bound of maximum amplification cannot be computed.
+Therefore, the lower maximum attenuation is calculated using the default stage biased vector\n")
+      msg <- cbind(msg, message_maxamp)
     }
 
     if(metrics == "maxatt") {
-      message("The upper bound of maximum attenuation cannot be computed
-            Therefore, the upper maximum amplification is calculated using the default stage biased vector")
+      message_maxatt <- c("The upper bound of maximum attenuation cannot be computed.
+Therefore, the upper maximum amplification is calculated using the default stage biased vector\n")
+      msg <- cbind(msg, message_maxatt)
     }
+  }
+
+  list_res$msg <- msg
+
+  list_res
+}
+
+
+#' Calculate convergence time
+#'
+#' Internal functions used by [calc_resilience()].
+#'
+#' @inheritParams calc_resilience
+#' @seealso [calc_resilience()]
+#'
+calc_convt <- function(metrics, vector, A, bounds, accuracy, iterations) {
+
+  if (!"convt" %in% metrics) {
+    stop("this function can only use 'convt'")
+  }
+
+  list_res <- list(value = 999, lwr = 999, upr = 999)
+
+  if (vector[1] != "n") {
+    list_res$value <- popdemo::convt(A, vector = vector, accuracy = accuracy, iterations = iterations)
+  } else {
+    if (!bounds) {
+      stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vec for", metrics))
+    }
+  }
+
+  if (bounds) {
+    list_res$lwr <- min(popdemo::convt(A, accuracy = accuracy, iterations = iterations))
+    list_res$upr <- max(popdemo::convt(A, accuracy = accuracy, iterations = iterations))
   }
 
   list_res
