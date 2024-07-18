@@ -85,10 +85,38 @@ demres <- function(listA,
   message_varying <- character(0)
   message_constant <- character(0)
 
-  if(!is.list(listA)) {
-    stop("Warning: a list of matrices should be provided")
+  if(is.list(listA) && length(listA) == 1){
+    message("Warning: you provided a list of one matrix.
+    A list of several matrices should be provided.
+    Resilience is nevertheless calculated for this one matrix")
+    listA <- listA[[1]]
   }
 
+  if(!is.list(listA)) {
+    message("Warning: a list of several matrices should be provided.
+            Resilience is nevertheless calculated for this one matrix")
+    met <- calc_resilience(A = listA,
+                           metrics = metrics,
+                           bounds = bounds,
+                           vector = vector,
+                           popname = popname,
+                           verbose = verbose,
+                           accuracy = accuracy,
+                           iterations = iterations)
+
+    message <- data.frame(t(attr(met, "msg")))
+    rownames(message) <- NULL
+    colnames(message) <- "Message for one matrix"
+
+
+    if (verbose) {
+      if(length(message) > 0){
+        print(message)
+      }
+    }
+  }
+
+  else{
   if(TDvector){
     vector <- get_TD_vector(IV = vector, listA = listA)
   }
@@ -192,7 +220,7 @@ demres <- function(listA,
           )
 
         message_varying <- data.frame(sapply(temp_list, function(e) attr(e, "msg")))
-        colnames(message_varying) <- paste0("Message for time-varying resilience at time step", seq (1:length(listA)))
+        colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
 
         metres <- do.call(rbind.data.frame, temp_list)
         names(metres)[-1] <- paste0(names(metres)[-1], "_TV")
@@ -237,7 +265,7 @@ demres <- function(listA,
             )
 
           message_varying <- data.frame(sapply(temp_list, function(e) attr(e, "msg")))
-          colnames(message_varying) <- paste0("Message for time-varying resilience at time step", seq (1:length(listA)))
+          colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
 
           met <- do.call(rbind.data.frame, temp_list)
           names(met)[-1] <- paste0(names(met)[-1], "_TV")
@@ -278,7 +306,7 @@ demres <- function(listA,
       print("no error message occurred")
     }
   }
-
+}
 
   class(met) <- c("resil", class(met))
 

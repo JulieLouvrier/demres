@@ -30,18 +30,21 @@
 #' data(bluecrane)
 #'
 #' # simulate an initial vector
+#' set.seed(1234)
 #' Cranevec1 <- runif(5)
 #' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 #'
 #'
 #' BC_TVTC_demres <-
 #'   demres(
-#'     bluecrane,
-#'     metric = "all",
+#'     listA = bluecrane,
+#'     metrics = "all",
 #'     bounds = TRUE,
 #'     vector = Cranevec1,
+#'     TDvector = FALSE,
 #'     popname = "blue crane",
-#'     time = "both"
+#'     time = "both",
+#'     verbose = TRUE
 #'   )
 #'
 #' dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia",
@@ -51,14 +54,25 @@
 #' @export
 #' @name demres_dist
 
-demres_dist <- function(table,
-                        metric,
-                        measure) {
-  if (length(grep(metric, colnames(table))) == 0) {
-    stop("The requested metric is not available in the provided dataframe, try another metric")
-  }
+demres_dist <- function(table) {
 
-  if(length(grep("_TV", names(table))) == 0 | length(grep("_TC", names(table))) == 0){
+  dist <- data.frame(#popname = unique(table$popname),
+                    convt = NA,
+                    convt_lwr = NA,
+                    convt_upr = NA,
+                    dr = NA,
+                    inertia = NA,
+                    inertia_lwr = NA,
+                    inertia_upr = NA,
+                    maxamp = NA,
+                    maxamp_upr = NA,
+                    maxatt = NA,
+                    maxatt_lwr = NA,
+                    reac = NA,
+                    reac_lwr = NA,
+                    reac_upr = NA)
+
+    if(length(grep("_TV", names(table))) == 0 || length(grep("_TC", names(table))) == 0){
     stop("To calculte the distance metrics, both time-varying and time-constant approaches are necessary")
 
   }

@@ -5,7 +5,7 @@
 \title{Calculates distance between the time-varying resilience metric and the time-
 constant one}
 \usage{
-demres_dist(table, metric, measure)
+demres_dist(table)
 }
 \arguments{
 \item{table}{A dataframe containing all the resilience metrics calculated
@@ -44,18 +44,21 @@ metric and the time-constant one
 data(bluecrane)
 
 # simulate an initial vector
+set.seed(1234)
 Cranevec1 <- runif(5)
 Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 
 
 BC_TVTC_demres <-
   demres(
-    bluecrane,
-    metric = "all",
+    listA = bluecrane,
+    metrics = "all",
     bounds = TRUE,
     vector = Cranevec1,
+    TDvector = FALSE,
     popname = "blue crane",
-    time = "both"
+    time = "both",
+    verbose = TRUE
   )
 
 dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia",
