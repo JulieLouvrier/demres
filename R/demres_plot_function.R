@@ -5,8 +5,6 @@
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the demres function
-#' @param plotpdf set to FALSE by default, if TRUE it produces a pdf woth the name specified
-#' by plotname
 #' @param metric "reac": Reactivity: first-timestep amplification
 #'                 and first-timestep attenuation for a population matrix
 #'                 projection model.
@@ -18,16 +16,6 @@
 #'                 matrix projection model.
 #'                 "maxatt": Maximal attenuation for a population
 #'                 matrix projection model.
-#' @param RMSE (optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
-#' with TV: the time-Varying resilience metric and TC the time constant one)
-#' and adds it on the plot.
-#' @param rRMSE (optional) if TRUE: calculates the relative RMSE
-#' (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
-#' and TC the time constant ) and adds it on the plot
-#' @param MAPE (optional) if TRUE: calculates the MAPE ((mean(abs(TV - TC))/100)
-#' and adds it on the plot
-#' @param plotname name of the plot with directory. By default:
-#' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
 #' @examples
 #' # load data
 #' data(bluecrane)
@@ -40,7 +28,7 @@
 #' BC_TVTC_demres <-
 #'   demres(
 #'     bluecrane,
-#'     metric = "all",
+#'     metrics = "all",
 #'     bounds = TRUE,
 #'     vector = Cranevec1,
 #'     popname = "blue crane",
@@ -52,31 +40,18 @@
 #'
 #' metric = "dr"
 #' demres_plot(table = BC_TVTC_demres,
-#'             metric = metric,
-#'             plotpdf = FALSE,
-#'             plotname = paste0(getwd(),
-#'             "/plot_demres_", metric, ".pdf"),
-#'             RMSE = TRUE)
+#'             metric = metric)
 #'
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
 #' @name demres_plot
 
 demres_plot <- function(metric,
-                        table,
-                        plotpdf = FALSE,
-                        plotname = NULL,
-                        rRMSE = FALSE,
-                        RMSE = FALSE,
-                        MAPE = FALSE) {
+                        table) {
 
   popname = table$popname
   speciesName <- unique(table$popname)
   tableStartYear <- table$timestep
-
-  if(plotpdf == TRUE){
-    plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
-  }
 
   if(length(grep("_TV", names(table))) == 0){
     stop("The function requires at least one metric
@@ -119,7 +94,6 @@ demres_plot <- function(metric,
       )
 
     # Create a plot
-    grDevices::pdf(plotname)
 
     graphics::par(mar = c(5, 4, 4, 10), xpd = TRUE)
     plot(
@@ -153,7 +127,7 @@ demres_plot <- function(metric,
     #legend
     graphics::legend(
       "topright",
-      inset = c(-0.4, 0),
+      inset = c(-0.5, 0.2),
       legend = c("Damping ratio"),
       col = c("black"),
       lty = c(1),
@@ -165,7 +139,7 @@ demres_plot <- function(metric,
     #legend
     graphics::legend(
       "topright",
-      inset = c(-0.4, 0.2),
+      inset = c(-0.5, 0.5),
       legend = c("Damping ratio"),
       col = c("black"),
       pch = c(19),
@@ -175,57 +149,11 @@ demres_plot <- function(metric,
       title.adj = 0.15
     )
 
-    if(RMSE == TRUE){
-      RMSE_dr <- demres_dist(table = table, metric = metric, measure = "RMSE")
-      graphics::legend(
-        "topright",
-        inset = c(-0.4, 0.4),
-        legend = c(paste0("RMSE dr: ", round(RMSE_dr,3))),
-        col = NA,
-        pch = NA,
-        cex = 0.8,
-        title = NA,
-        box.lty = 0,
-        title.adj = 0.15
-      )
-
-    }
-
-    if(rRMSE == TRUE){
-      rRMSE_dr <- demres_dist(table = table, metric = metric, measure = "rRMSE")
-      graphics::legend(
-        "topright",
-        inset = c(-0.4, 0.4),
-        legend = c(paste0("rRMSE dr: ", round(rRMSE_dr,3))),
-        col = NA,
-        pch = NA,
-        cex = 0.8,
-        title = NA,
-        box.lty = 0,
-        title.adj = 0.15
-      )    }
-
-    if(MAPE == TRUE){
-      MAPE_dr <- demres_dist(table = table, metric = metric, measure = "MAPE")
-      graphics::legend(
-        "topright",
-        inset = c(-0.4, 0.4),
-        legend = c(paste0("MAPE dr: ", round(MAPE_dr,3))),
-        col = NA,
-        pch = NA,
-        cex = 0.8,
-        title = NA,
-        box.lty = 0,
-        title.adj = 0.15
-      )    }
-
-
-    grDevices::dev.off()
 
   }
 
   else{
-    plot_general(metric = metric, table = table, plotname = plotname, RMSE = RMSE, rRMSE = rRMSE, MAPE = MAPE)
+    plot_general(metric = metric, table = table)
   }
 
 }

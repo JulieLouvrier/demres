@@ -3,7 +3,6 @@
 #' `plot_general` provides a plot to visually inspect the resilience metric
 #' along a time axis
 #'
-#' @inheritParams demres_plot
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the demres function
 #' @param metric "reac": Reactivity: first-timestep amplification
@@ -17,18 +16,13 @@
 #'                 matrix projection model.
 #'                 "maxatt": Maximal attenuation for a population
 #'                 matrix projection model.
-#' @param plotname name of the plot with directory. By default:
-#' plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
 #' @name plot_general
 #' @keywords internal
 
-plot_general <- function(metric, table,
-                         plotname,
-                         rRMSE = FALSE,
-                         RMSE = FALSE,
-                         MAPE = FALSE){
+plot_general <- function(metric,
+                         table){
   if(metric == "reac"){
     name_metric = "Reactivity"}
   else if(metric == "maxamp") {
@@ -219,7 +213,6 @@ plot_general <- function(metric, table,
       )
   }
   # Create a plot
-  #grDevices::pdf(plotname)
   graphics::par(mar = c(5, 4, 4, 10), xpd = TRUE)
   plot(
     tableStartYear,
@@ -287,7 +280,7 @@ plot_general <- function(metric, table,
   if(!length(grep("_TC", names(table))) == 0){
     graphics::legend(
       "topright",
-      inset = c(-0.4, 0),
+      inset = c(-0.5, 0.2),
       legend = legenddefault,
       col = coldefault,
       lty = ltydefault,
@@ -301,7 +294,7 @@ plot_general <- function(metric, table,
   #legend
   graphics::legend(
     "topright",
-    inset = c(-0.4, 0.2),
+    inset = c(-0.5, 0.5),
     legend = legenddefault,
     col = coldefault,
     pch = pchdefault,
@@ -311,61 +304,4 @@ plot_general <- function(metric, table,
     title.adj = 0.15
   )
 
-  if(RMSE == TRUE){
-    RMSE <- demres_dist(table = table, metric = metric, measure = "RMSE")
-
-    graphics::legend(
-      "topright",
-      inset = c(-0.4, 0.4),
-      legend = c(paste0("Upper bound: ", round(RMSE[3],3)),
-                 paste0("With initial vector: ", round(RMSE[2],3)),
-                 paste0("Lower bound: ", round(RMSE[1],3))),
-      col = NA,
-      pch = NA,
-      cex = 0.8,
-      title = "RMSE",
-      box.lty = 0,
-      title.adj = 0.15
-    )
-
-  }
-
-  if(rRMSE == TRUE){
-    rRMSE <- demres_dist(table = table, metric = metric, measure = "rRMSE")
-    graphics::legend(
-      "topright",
-      inset = c(-0.4, 0.4),
-      legend = c(paste0("Upper bound: ", round(rRMSE[3],3)),
-                 paste0("With initial vector: ", round(rRMSE[2],3)),
-                 paste0("Lower bound: ", round(rRMSE[1],3))),
-      col = NA,
-      pch = NA,
-      cex = 0.8,
-      title = "rRMSE",
-      box.lty = 0,
-      title.adj = 0.15
-    )
-
-      }
-
-  if(MAPE == TRUE){
-    MAPE <- demres_dist(table = table, metric = metric, measure = "MAPE")
-    graphics::legend(
-      "topright",
-      inset = c(-0.4, 0.4),
-      legend = c(paste0("Upper bound: ", round(MAPE[3],3)),
-                 paste0("With initial vector: ", round(MAPE[2],3)),
-                 paste0("Lower bound: ", round(MAPE[1],3))),
-      col = NA,
-      pch = NA,
-      cex = 0.8,
-      title = "MAPE",
-      box.lty = 0,
-      title.adj = 0.15
-    )
-
-      }
-
-
-  #grDevices::dev.off()
 }
