@@ -4,15 +4,7 @@
 \alias{demres_plot}
 \title{Plot the resulting demographic resilience metrics}
 \usage{
-demres_plot(
-  metric,
-  table,
-  plotpdf = FALSE,
-  plotname = NULL,
-  rRMSE = FALSE,
-  RMSE = FALSE,
-  MAPE = FALSE
-)
+demres_plot(metric, table)
 }
 \arguments{
 \item{metric}{"reac": Reactivity: first-timestep amplification
@@ -29,23 +21,6 @@ matrix projection model.}
 
 \item{table}{A dataframe containing all the resilience metrics calculated
 with the demres function}
-
-\item{plotpdf}{set to FALSE by default, if TRUE it produces a pdf woth the name specified
-by plotname}
-
-\item{plotname}{name of the plot with directory. By default:
-plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")}
-
-\item{rRMSE}{(optional) if TRUE: calculates the relative RMSE
-(sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
-and TC the time constant ) and adds it on the plot}
-
-\item{RMSE}{(optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
-with TV: the time-Varying resilience metric and TC the time constant one)
-and adds it on the plot.}
-
-\item{MAPE}{(optional) if TRUE: calculates the MAPE ((mean(abs(TV - TC))/100)
-and adds it on the plot}
 }
 \value{
 A plot displaying the chosen metric along a time axis
@@ -66,7 +41,7 @@ Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 BC_TVTC_demres <-
   demres(
     bluecrane,
-    metric = "all",
+    metrics = "all",
     bounds = TRUE,
     vector = Cranevec1,
     popname = "blue crane",
@@ -78,10 +53,6 @@ BC_TVTC_demres <-
 
 metric = "dr"
 demres_plot(table = BC_TVTC_demres,
-            metric = metric,
-            plotpdf = FALSE,
-            plotname = paste0(getwd(),
-            "/plot_demres_", metric, ".pdf"),
-            RMSE = TRUE)
+            metric = metric)
 
 }

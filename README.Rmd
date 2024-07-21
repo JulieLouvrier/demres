@@ -124,6 +124,6 @@ dist_BC
 #specifying the metric that we want to visually inspect
 metric <- "inertia"
 #plotting
-demres_plot(table = all_BlueCrane_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE)
+demres_plot(table = all_BlueCrane_demres, metric = metric)
 
 ```

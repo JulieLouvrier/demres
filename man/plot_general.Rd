@@ -4,14 +4,7 @@
 \alias{plot_general}
 \title{Helper function for the demres_plot function}
 \usage{
-plot_general(
-  metric,
-  table,
-  plotname,
-  rRMSE = FALSE,
-  RMSE = FALSE,
-  MAPE = FALSE
-)
+plot_general(metric, table)
 }
 \arguments{
 \item{metric}{"reac": Reactivity: first-timestep amplification
@@ -28,20 +21,6 @@ matrix projection model.}
 
 \item{table}{A dataframe containing all the resilience metrics calculated
 with the demres function}
-
-\item{plotname}{name of the plot with directory. By default:
-plotname = paste0(getwd(), "/plot_demres_", metric, ".pdf")}
-
-\item{rRMSE}{(optional) if TRUE: calculates the relative RMSE
-(sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
-and TC the time constant ) and adds it on the plot}
-
-\item{RMSE}{(optional) if TRUE: calculates the RMSE (sqrt(mean((TV-TC)^2))
-with TV: the time-Varying resilience metric and TC the time constant one)
-and adds it on the plot.}
-
-\item{MAPE}{(optional) if TRUE: calculates the MAPE ((mean(abs(TV - TC))/100)
-and adds it on the plot}
 }
 \value{
 A plot displaying the chosen metric along a time axis
