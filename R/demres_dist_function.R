@@ -56,6 +56,16 @@
 
 demres_dist <- function(table) {
 
+  subs_names <- grep('[TVTC]', colnames(all_BlueCrane_demres), value = TRUE)
+
+  unique_combis <- unlist(strsplit(grep('TV', subs_names, value = TRUE), "_TV"))
+
+  RMSE <- unlist(lapply(unique_combis, FUN = function(x){RMSE(TV = unlist(all_BlueCrane_demres[grep(paste0(x, '_TV'), colnames(all_BlueCrane_demres), value= TRUE)]),
+                                                                TC = unlist(all_BlueCrane_demres[grep(paste0(x, '_TC'), colnames(all_BlueCrane_demres), value= TRUE)]))
+    }))
+
+    data.frame()
+
   dist <- data.frame(#popname = unique(table$popname),
                     convt = NA,
                     convt_lwr = NA,
