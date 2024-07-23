@@ -33,7 +33,7 @@ the time-Varying resilience metric and TC the time constant)
 "all": calculates all of the above measures}
 }
 \value{
-A dataframe displaying the mdistance measures for the selected metric
+A dataframe displaying the distance measures for the metrics that are present in the table
 }
 \description{
 \code{demres_dist} Calculates distance between the time-varying resilience
@@ -61,7 +61,6 @@ BC_TVTC_demres <-
     verbose = TRUE
   )
 
-dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia",
-measure = "all")
+dist_BC <- summary(table)
 
 }

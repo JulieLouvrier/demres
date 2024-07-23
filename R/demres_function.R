@@ -334,8 +334,8 @@ print.resil <- function(x, ...) {
 #' @return summary statistics
 #' @export
 #'
-summary.resil <- function(object, ...) {
-  demres_dist(object, metric = "inertia", measure = "all", ...)
+summary.resil <- function(table, ...) {
+  demres_dist(table, ...)
 }
 
 #' Plotting method for objects of class resil
@@ -347,10 +347,8 @@ summary.resil <- function(object, ...) {
 #' @return the argument `x` (invisibly)
 #' @export
 #'
-plot.resil <- function(x, rRMSE = FALSE,
-                       RMSE = FALSE,
-                       MAPE = FALSE, ...) {
-  demres_plot(x, metric = "inertia", rRMSE = rRMSE, RMSE = RMSE, MAPE = MAPE)
+plot.resil <- function(table, ...) {
+  demres_plot(table, ...)
 }
 
 

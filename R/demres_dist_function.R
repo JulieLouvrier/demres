@@ -1,30 +1,18 @@
 #' Calculates distance between the time-varying resilience metric and the time-
 #' constant one
 #'
-#' `demres_dist` Calculates distance between the time-varying resilience
-#' metric and the time-constant one
-#'
+#' `summary` Calculates distance between the time-varying resilience
+#' metric and the time-constant one:
+#' "RMSE": sqrt(mean((TV-TC)^2))
+#' with TV: the time-Varying resilience metric and TC the time constant one
+#' "rRMSE": sqrt(mean((TV-TC)^2)) / sd(TV)
+#' with TV: the time-Varying resilience metric and TC the time constant
+#' "MAPE": mean(abs(TV - TC))
+#' with TV: the time-Varying resilience metric and TC the time constant
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the demres function
-#' @param metric "reac": Reactivity: first-timestep amplification
-#'                 and first-timestep attenuation for a population matrix
-#'                 projection model.
-#'                 "inertia": Population inertia for a population
-#'                 matrix projection model.
-#'                 "dr": Damping ratio of a given population
-#'                 matrix projection model.
-#'                 "maxamp": Maximal amplification for a population
-#'                 matrix projection model.
-#'                 "maxatt": Maximal attenuation for a population
-#'                 matrix projection model.
-#' @param measure "RMSE": calculates the RMSE (sqrt(mean((TV-TC)^2))
-#' with TV: the time-Varying resilience metric and TC the time constant one)
-#'                 "rRMSE":calculates the relative RMSE
-#' (sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
-#' and TC the time constant )
-#'                 "MAPE": calculates the MAPE (mean(abs(TV - TC)) with TV:
-#'                 the time-Varying resilience metric and TC the time constant)
-#'                 "all": calculates all of the above measures
+#' @name summary
+#'
 #' @examples
 #' # load data
 #' data(bluecrane)
@@ -47,40 +35,13 @@
 #'     verbose = TRUE
 #'   )
 #'
-#' dist_BC <- demres_dist(table = BC_TVTC_demres, metric = "inertia",
-#' measure = "all")
+#' dist_BC <- summary(BC_TVTC_demres)
 #'
-#' @return A dataframe displaying the mdistance measures for the selected metric
+#' @return A dataframe displaying the distance measures for the metrics that are present in the table
 #' @export
 #' @name demres_dist
 
 demres_dist <- function(table) {
-
-  subs_names <- grep('[TVTC]', colnames(all_BlueCrane_demres), value = TRUE)
-
-  unique_combis <- unlist(strsplit(grep('TV', subs_names, value = TRUE), "_TV"))
-
-  RMSE <- unlist(lapply(unique_combis, FUN = function(x){RMSE(TV = unlist(all_BlueCrane_demres[grep(paste0(x, '_TV'), colnames(all_BlueCrane_demres), value= TRUE)]),
-                                                                TC = unlist(all_BlueCrane_demres[grep(paste0(x, '_TC'), colnames(all_BlueCrane_demres), value= TRUE)]))
-    }))
-
-    data.frame()
-
-  dist <- data.frame(#popname = unique(table$popname),
-                    convt = NA,
-                    convt_lwr = NA,
-                    convt_upr = NA,
-                    dr = NA,
-                    inertia = NA,
-                    inertia_lwr = NA,
-                    inertia_upr = NA,
-                    maxamp = NA,
-                    maxamp_upr = NA,
-                    maxatt = NA,
-                    maxatt_lwr = NA,
-                    reac = NA,
-                    reac_lwr = NA,
-                    reac_upr = NA)
 
     if(length(grep("_TV", names(table))) == 0 || length(grep("_TC", names(table))) == 0){
     stop("To calculte the distance metrics, both time-varying and time-constant approaches are necessary")
@@ -88,226 +49,29 @@ demres_dist <- function(table) {
   }
 
   else {
-    #time varying
-    table_metric_upr_TV <-
-      table[, grep(paste0(metric, "_upr_TV"), colnames(table))]
-    table_metric_lwr_TV <-
-      table[, grep(paste0(metric, "_lwr_TV"), colnames(table))]
-    table_metric_vector_TV <-
-      table[, grep(paste0(metric, "_TV"), colnames(table))]
 
-    #time constant
-    table_metric_upr_TC <-
-      table[, grep(paste0(metric, "_upr_TC"), colnames(table))]
-    table_metric_lwr_TC <-
-      table[, grep(paste0(metric, "_lwr_TC"), colnames(table))]
-    table_metric_vector_TC <-
-      table[, grep(paste0(metric, "_TC"), colnames(table))]
+    unique_combis <- unlist(strsplit(grep('TV', grep('[TVTC]', colnames(table), value = TRUE), value = TRUE), "_TV"))
 
+    RMSE_dist <- unlist(lapply(unique_combis, FUN = function(x){RMSE(TV = unlist(table[grep(paste0(x, '_TV'), colnames(table), value= TRUE)]),
+                                                                TC = unlist(table[grep(paste0(x, '_TC'), colnames(table), value= TRUE)]))
+    }))
 
+    rRMSE_dist <- unlist(lapply(unique_combis, FUN = function(x){rRMSE(TV = unlist(table[grep(paste0(x, '_TV'), colnames(table), value= TRUE)]),
+                                                                  TC = unlist(table[grep(paste0(x, '_TC'), colnames(table), value= TRUE)]))
+    }))
 
-    if (measure == "RMSE") {
-      if(length(table_metric_lwr_TV) == 0){
-        RMSE_lwr = NA
-      }
-      else{
-        RMSE_lwr <-
-          RMSE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
-      }
-      if(length(table_metric_vector_TV) == 0){
-        RMSE_init = NA
-      }
-      else{
-        RMSE_init <-
-          RMSE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
-      }
-      if(length(table_metric_upr_TV) == 0) {
-        RMSE_upr = NA
-      }
-      else{
-        RMSE_upr <-
-          RMSE(TV = table_metric_upr_TV, TC = table_metric_upr_TC)
-      }
+    MAPE_dist <- unlist(lapply(unique_combis, FUN = function(x){MAPE(TV = unlist(table[grep(paste0(x, '_TV'), colnames(table), value= TRUE)]),
+                                                                TC = unlist(table[grep(paste0(x, '_TC'), colnames(table), value= TRUE)]))
+    }))
 
-      RMSE_res <- c(RMSE_lwr,
-                    RMSE_init,
-                    RMSE_upr)
-      names(RMSE_res) <- c(paste0("RMSE_", metric, "_lwr"), paste0("RMSE_", metric, "_vector"), paste0("RMSE_", metric, "_upr"))
+    distance_demres <- t(data.frame(RMSE = RMSE_dist,
+                                  rRMSE = rRMSE_dist,
+                                  MAPE = MAPE_dist))
 
-      distance_demres <- RMSE_res
-    }
-
-    if (measure == "rRMSE") {
-      if(length(table_metric_lwr_TV) == 0){
-        rRMSE_lwr = NA
-      }
-      else{
-        rRMSE_lwr <-
-          rRMSE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
-      }
-      if(length(table_metric_vector_TV) == 0){
-        rRMSE_init = NA
-      }
-      else{
-        rRMSE_init <-
-          rRMSE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
-      }
-      if(length(table_metric_upr_TV) == 0) {
-        rRMSE_upr = NA
-      }
-      else{
-        rRMSE_upr <-
-          rRMSE(TV = table_metric_upr_TV, TC = table_metric_upr_TC)
-      }
-
-      rRMSE_res <- c(rRMSE_lwr,
-                     rRMSE_init,
-                     rRMSE_upr)
-      names(rRMSE_res) <- c(paste0("rRMSE_", metric, "_lwr"), paste0("rRMSE_", metric, "_vector"), paste0("rRMSE_", metric, "_upr"))
-
-      distance_demres <- rRMSE_res
-    }
-    if (measure == "MAPE") {
-      if(length(table_metric_lwr_TV) == 0){
-        MAPE_lwr = NA
-      }
-      else{
-        MAPE_lwr <-
-          MAPE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
-      }
-      if(length(table_metric_vector_TV) == 0){
-        MAPE_init = NA
-      }
-      else{
-        MAPE_init <-
-          MAPE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
-      }
-      if(length(table_metric_upr_TV) == 0) {
-        MAPE_upr = NA
-      }
-      else{
-        MAPE_upr <-
-          MAPE(TV = table_metric_upr_TV, TC = table_metric_upr_TC)
-      }
-
-      MAPE_res <- c(MAPE_lwr,
-                    MAPE_init,
-                    MAPE_upr)
-      names(MAPE_res) <- c(paste0("MAPE_", metric, "_lwr"), paste0("MAPE_", metric, "_vector"), paste0("MAPE_", metric, "_upr"))
-
-      distance_demres <- MAPE_res
-    }
-    if (measure == "all") {
-      if(length(table_metric_lwr_TV) == 0){
-        RMSE_lwr = NA
-      }
-      else{
-        RMSE_lwr <-
-          RMSE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
-      }
-      if(length(table_metric_vector_TV) == 0){
-        RMSE_init = NA
-      }
-      else{
-        RMSE_init <-
-          RMSE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
-      }
-      if(length(table_metric_upr_TV) == 0) {
-        RMSE_upr = NA
-      }
-      else{
-        RMSE_upr <-
-          RMSE(TV = table_metric_upr_TV, TC = table_metric_upr_TC)
-      }
-
-      RMSE_res <- c(RMSE_lwr,
-                    RMSE_init,
-                    RMSE_upr)
-      if(length(table_metric_lwr_TV) == 0){
-        rRMSE_lwr = NA
-      }
-      else{
-        rRMSE_lwr <-
-          rRMSE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
-      }
-      if(length(table_metric_vector_TV) == 0){
-        rRMSE_init = NA
-      }
-      else{
-        rRMSE_init <-
-          rRMSE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
-      }
-      if(length(table_metric_upr_TV) == 0) {
-        rRMSE_upr = NA
-      }
-      else{
-        rRMSE_upr <-
-          rRMSE(TV = table_metric_upr_TV, TC = table_metric_upr_TC)
-      }
-
-      rRMSE_res <- c(rRMSE_lwr,
-                     rRMSE_init,
-                     rRMSE_upr)
-
-      if(length(table_metric_lwr_TV) == 0){
-        MAPE_lwr = NA
-      }
-      else{
-        MAPE_lwr <-
-          MAPE(TV = table_metric_lwr_TV, TC = table_metric_lwr_TC)
-      }
-      if(length(table_metric_vector_TV) == 0){
-        MAPE_init = NA
-      }
-      else{
-        MAPE_init <-
-          MAPE(TV = table_metric_vector_TV, TC = table_metric_vector_TC)
-      }
-      if(length(table_metric_upr_TV) == 0) {
-        MAPE_upr = NA
-      }
-      else{
-        MAPE_upr <-
-          MAPE(TV = table_metric_upr_TV, TC = table_metric_upr_TC)
-      }
-
-      MAPE_res <- c(MAPE_lwr,
-                    MAPE_init,
-                    MAPE_upr)
-
-      distance_demres <- data.frame(RMSE = RMSE_res,
-                                    rRMSE = rRMSE_res,
-                                    MAPE = MAPE_res)
-
-      rownames(distance_demres) <-  c(paste0(metric, "_lwr"),
-                                      paste0(metric, "_vector"),
-                                      paste0(metric, "_upr"))
-
-
-    }
-
-  }
-
-  if(is.vector(distance_demres) == TRUE) {
-    if(!length(which(is.na(distance_demres))) == 0){
-    distance_demres <- distance_demres[-which(is.na(distance_demres))]
-    }
-    if(metric == "dr") {
-      names(distance_demres) <- sub(x = names(distance_demres), "_vector.*", "")
-    }
-
-  }
-  if(is.data.frame(distance_demres) == TRUE) {
-    if(!length(which(is.na(distance_demres))) == 0){
-    distance_demres <- distance_demres[-which(is.na(distance_demres$RMSE)),]
-    }
-    if(metric == "dr") {
-      rownames(distance_demres) <- "dr"
-    }
-  }
-
+    colnames(distance_demres) <- unique_combis
 
   return(distance_demres)
 
+  }
 }
 

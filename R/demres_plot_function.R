@@ -1,6 +1,51 @@
 #' Plot the resulting demographic resilience metrics
 #'
-#' `demres_plot` provides a plot to visually inspect the resilience metric
+#' `plot` provides a plot to visually inspect the resilience metric
+#' along a time axis
+#' @param table A dataframe containing all the resilience metrics calculated
+#' with the demres function
+#' @name plot
+#' @examples
+#' # load data
+#' data(bluecrane)
+#'
+#' # simulate an initial vector
+#' set.seed(1234)
+#' Cranevec1 <- runif(5)
+#' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
+#'
+#'
+#' BC_TVTC_demres <-
+#'   demres(
+#'     bluecrane,
+#'     metrics = "all",
+#'     bounds = TRUE,
+#'     vector = Cranevec1,
+#'     popname = "blue crane",
+#'     time = "both"
+#'   )
+#'
+#' plot(BC_TVTC_demres)
+#'
+#' @return A plot displaying the chosen metric along a time axis
+#' @export
+#' @name demres_plot
+
+demres_plot <- function(table) {
+  sub_names <- grep('[TVTC]', colnames(table), value = TRUE)
+
+  unique_combis_uprlwr <- unlist(strsplit(grep('TV', sub_names, value = TRUE), "_TV"))
+  unique_combis_lwr <- unlist(strsplit(unique_combis_uprlwr, "_upr"))
+  unique_combis <- unique(unlist(strsplit(unique_combis_lwr, "_lwr")))
+
+  unlist(lapply(unique_combis, FUN = function(x){help_plot(table = table,
+                                                           metric = x)}))
+
+}
+
+#' Helper function for the demres_plot function
+#'
+#' `help_plot` provides a plot to visually inspect the resilience metric
 #' along a time axis
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
@@ -16,37 +61,12 @@
 #'                 matrix projection model.
 #'                 "maxatt": Maximal attenuation for a population
 #'                 matrix projection model.
-#' @examples
-#' # load data
-#' data(bluecrane)
-#'
-#' # simulate an initial vector
-#' Cranevec1 <- runif(5)
-#' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
-#'
-#'
-#' BC_TVTC_demres <-
-#'   demres(
-#'     bluecrane,
-#'     metrics = "all",
-#'     bounds = TRUE,
-#'     vector = Cranevec1,
-#'     popname = "blue crane",
-#'     time = "both"
-#'   )
-#'
-#'
-#' #plotting with RMSE
-#'
-#' metric = "dr"
-#' demres_plot(table = BC_TVTC_demres,
-#'             metric = metric)
-#'
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
-#' @name demres_plot
+#' @name help_plot
+#' @keywords internal
 
-demres_plot <- function(metric,
+help_plot <- function(metric,
                         table) {
 
   popname = table$popname
@@ -58,10 +78,10 @@ demres_plot <- function(metric,
           calculated with the time-varying approach")
 
   }
+
   if(length(grep(as.character(metric), names(table))) == 0) {
     stop("The metric you required can not be found in the table")
   }
-
 
   if (metric == "dr") {
     name_metric = "Damping ratio"
@@ -94,8 +114,9 @@ demres_plot <- function(metric,
       )
 
     # Create a plot
-
-    graphics::par(mar = c(5, 4, 4, 10), xpd = TRUE)
+    dev.new()
+    graphics::par(mar = rep(2, 4), #c(5, 4, 4, 10),
+                  xpd = TRUE)
     plot(
       tableStartYear,
       table_metric_vector_TV,

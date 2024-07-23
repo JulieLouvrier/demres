@@ -31,6 +31,8 @@ plot_general <- function(metric,
     name_metric = "Maximum attenuation"
   } else if(metric == "inertia"){
     name_metric = "Inertia"
+  } else if(metric == "convt") {
+    name_metric = "Convergence time"
   }
 
   popname = table$popname
@@ -213,7 +215,9 @@ plot_general <- function(metric,
       )
   }
   # Create a plot
-  graphics::par(mar = c(5, 4, 4, 10), xpd = TRUE)
+  dev.new()
+  graphics::par(mar = rep(2, 4), #c(5, 4, 4, 10),
+                xpd = TRUE)
   plot(
     tableStartYear,
     table_metric_upr_TV,

@@ -136,7 +136,7 @@ calc_resilience <-
      if ("maxamp" %in% metrics) {
        maxamp_res <- calc_maxamp_or_maxatt(metrics = "maxamp", vector = vector, A = A, bounds = bounds)
        dat$maxamp     <- maxamp_res$value
-       dat$maxatt_lwr <- maxamp_res$lwr
+       #dat$maxatt_lwr <- maxamp_res$lwr
        dat$maxamp_upr <- maxamp_res$upr
        msg <- cbind(msg, maxamp_res$msg)
     }
@@ -146,7 +146,7 @@ calc_resilience <-
       maxatt_res <- calc_maxamp_or_maxatt(metrics = "maxatt", vector = vector, A = A, bounds = bounds)
       dat$maxatt     <- maxatt_res$value
       dat$maxatt_lwr <- maxatt_res$lwr
-      dat$maxamp_upr <- maxatt_res$upr
+      #dat$maxamp_upr <- maxatt_res$upr
       msg <- cbind(msg, maxatt_res$msg)
 
     }
