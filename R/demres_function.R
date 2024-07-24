@@ -220,8 +220,9 @@ demres <- function(listA,
           )
 
         message_varying <- data.frame(sapply(temp_list, function(e) attr(e, "msg")))
+        if(length(message_varying>0)){
         colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
-
+        }
         metres <- do.call(rbind.data.frame, temp_list)
         names(metres)[-1] <- paste0(names(metres)[-1], "_TV")
         metres <- cbind(timestep = c(1:nrow(metres)), metres)
@@ -235,11 +236,13 @@ demres <- function(listA,
                                         verbose = verbose,
                                         accuracy = accuracy,
                                         iterations = iterations)
-
+                 if(!is.null(attr(res, "msg"))){
         message_constant <- data.frame(t(attr(res, "msg")))
+        if(length(message_constant>0)){
         rownames(message_constant) <- NULL
         colnames(message_constant) <- "Message for time-constant resilience"
-
+        }
+                 }
 
         names(res)[-1] <- paste0(names(res)[-1], "_TC")
         met <- cbind(metres, res)
@@ -265,8 +268,9 @@ demres <- function(listA,
             )
 
           message_varying <- data.frame(sapply(temp_list, function(e) attr(e, "msg")))
+          if(length(message_varying>0)){
           colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
-
+          }
           met <- do.call(rbind.data.frame, temp_list)
           names(met)[-1] <- paste0(names(met)[-1], "_TV")
           met <- cbind( timestep = c(1:nrow(met)), met)
@@ -283,11 +287,13 @@ demres <- function(listA,
                                  verbose = verbose,
                                  accuracy = accuracy,
                                  iterations = iterations)
-
+          if(!is.null(attr(res, "msg"))){
           message_constant <- data.frame(t(attr(res, "msg")))
+          if(length(message_constant>0)){
           rownames(message_constant) <- NULL
           colnames(message_constant) <- "Message for time-constant resilience"
-
+          }
+          }
           names(res)[-1] <- paste0(names(res)[-1], "_TC")
           met <- res
         }

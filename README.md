@@ -55,6 +55,7 @@ resilience metrics based on one Matrix Population Model. It returns a
 Crane_mat1 <- bluecrane[[1]]
 
 # Create initial vector
+set.seed(1234)
 Crane_vec1 <- runif(5)
 Crane_vec1 <- Crane_vec1 / sum(Crane_vec1) #scales the vec to sum to 1
 
