@@ -40,9 +40,11 @@
 #'            "constant" : if the metrics are to be calculated over the whole
 #'            study period
 #'            "varying": if the metrics are to be calculated for each time step
-#' @param accuracy the accuracy with which to determine convergence on asymptotic growth, expressed as a proportion
+#' @param accuracy the accuracy with which to determine convergence on asymptotic growth,
+#' expressed as a proportion. Set to 0.01 by default.
 #' @param iterations the maximum number of iterations of the model before the code breaks. For slowly-converging models
 #' and/or high specified convergence accuracy, this may need to be increased.
+#' Set to 1e+05 by default.
 #' @param verbose a boolean indicating if messages about failure to compute particular metrics should be displayed or not (default = TRUE)
 #' @examples
 #'
@@ -61,7 +63,7 @@
 #'     metrics = "all",
 #'     bounds = TRUE,
 #'     vector = Cranevec1,
-#'     TDvector = FALSE,
+#'     TDvector = TRUE,
 #'     popname = "blue crane",
 #'     time = "both",
 #'     verbose = TRUE
@@ -136,10 +138,17 @@ demres <- function(listA,
                             verbose = verbose,
                             accuracy = accuracy,
                             iterations = iterations)
-          }, A = listA, X = vector)#
+          }, A = listA, X = vector, SIMPLIFY = FALSE)
 
-        ## for Vik: here I have the issue of this list of list,
-        ## temp_list is a list of 180 and also I lose the attributes aka the error message from calc_resilience
+        message_varying_temp <- sapply(temp_list, function(e) attr(e, "msg"))
+        if(length(message_varying_temp)>0){
+
+          n.obs <- sapply(message_varying_temp, length)
+          seq.max <- seq_len(max(n.obs))
+          message_varying <- data.frame(sapply(message_varying_temp, "[", i = seq.max))
+          message_varying[is.na(message_varying)] <- ""
+          colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
+        }
 
         metres <- t(temp_list)
         colnames(metres)[-1] <- paste0(colnames(metres)[-1], "_TV")
@@ -155,10 +164,19 @@ demres <- function(listA,
                                verbose = verbose,
                                accuracy = accuracy,
                                iterations = iterations)
+
+         if(!is.null(attr(res, "msg"))){
+          message_constant <- data.frame(t(attr(res, "msg")))
+          if(length(message_constant)>0){
+            rownames(message_constant) <- NULL
+            colnames(message_constant) <- "Message for time-constant resilience"
+          }
+        }
+
         names(res)[-1] <- paste0(names(res)[-1], "_TC")
         met <- cbind(metres, res)
 
-        if(length(which(duplicated(names(met)))>0)) {
+        if(length(which(duplicated(names(met))))>0) {
           met <- met[,-which(duplicated(names(met)))]
         }
         else{met <- met}
@@ -175,14 +193,21 @@ demres <- function(listA,
                               verbose = verbose,
                               accuracy = accuracy,
                               iterations = iterations)
-            }, A = listA, X = vector)
+            }, A = listA, X = vector, SIMPLIFY = FALSE)
 
+          message_varying_temp <- sapply(temp_list, function(e) attr(e, "msg"))
+          if(length(message_varying_temp)>0){
+
+            n.obs <- sapply(message_varying_temp, length)
+            seq.max <- seq_len(max(n.obs))
+            message_varying <- data.frame(sapply(message_varying_temp, "[", i = seq.max))
+            message_varying[is.na(message_varying)] <- ""
+            colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
+          }
 
           met <- t(temp_list)
           colnames(met)[-1] <- paste0(colnames(met)[-1], "_TV")
           met <- cbind(timestep = c(1:nrow(met)), met)
-
-
 
         }
         if(time == "constant") {
@@ -196,6 +221,14 @@ demres <- function(listA,
                                  verbose = verbose,
                                  accuracy = accuracy,
                                  iterations = iterations)
+
+          if(!is.null(attr(res, "msg"))){
+            message_constant <- data.frame(t(attr(res, "msg")))
+            if(length(message_constant)>0){
+              rownames(message_constant) <- NULL
+              colnames(message_constant) <- "Message for time-constant resilience"
+            }
+          }
 
           names(res)[-1] <- paste0(names(res)[-1], "_TC")
           met <- res
@@ -220,7 +253,7 @@ demres <- function(listA,
           )
 
         message_varying <- data.frame(sapply(temp_list, function(e) attr(e, "msg")))
-        if(length(message_varying>0)){
+        if(length(message_varying)>0){
         colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
         }
         metres <- do.call(rbind.data.frame, temp_list)
@@ -238,7 +271,7 @@ demres <- function(listA,
                                         iterations = iterations)
                  if(!is.null(attr(res, "msg"))){
         message_constant <- data.frame(t(attr(res, "msg")))
-        if(length(message_constant>0)){
+        if(length(message_constant)>0){
         rownames(message_constant) <- NULL
         colnames(message_constant) <- "Message for time-constant resilience"
         }
@@ -247,7 +280,7 @@ demres <- function(listA,
         names(res)[-1] <- paste0(names(res)[-1], "_TC")
         met <- cbind(metres, res)
 
-        if(length(which(duplicated(names(met)))>0)) {
+        if(length(which(duplicated(names(met))))>0) {
           met <- met[,-which(duplicated(names(met)))]
         }
         else{met <- met}
@@ -268,7 +301,7 @@ demres <- function(listA,
             )
 
           message_varying <- data.frame(sapply(temp_list, function(e) attr(e, "msg")))
-          if(length(message_varying>0)){
+          if(length(message_varying)>0){
           colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
           }
           met <- do.call(rbind.data.frame, temp_list)
@@ -289,7 +322,7 @@ demres <- function(listA,
                                  iterations = iterations)
           if(!is.null(attr(res, "msg"))){
           message_constant <- data.frame(t(attr(res, "msg")))
-          if(length(message_constant>0)){
+          if(length(message_constant)>0){
           rownames(message_constant) <- NULL
           colnames(message_constant) <- "Message for time-constant resilience"
           }
