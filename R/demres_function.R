@@ -23,7 +23,7 @@
 #'                 "convt": Calculate the time to convergence of a population
 #'                 matrix projection model from the model projection
 #'                 "all": all of the above metrics are provided
-#' @param bounds (optional) if TRUE, specifies whether the upper and  lower
+#' @param bounds (optional) set to FALSE as default. If TRUE, specifies whether the upper and  lower
 #' bound should be calculated
 #' if vector is not specified, the function provides metrics in their upper and
 #' lower bound, calculated based on the stage-biased vector
@@ -32,11 +32,11 @@
 #' @param vector a list of numeric vectors or one-column matrices describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific', stage age structure
 #' metric
-#' @param TDvector specifies whether or not the user wants to get a Time-Dependant list of initial vectors,
+#' @param TDvector set to FALSE as default. Specifies whether or not the user wants to get a Time-Dependant list of initial vectors,
 #' corresponding to the population stage distribution projection for each year with each matrix of each year.
 #' The result is a list of X initial vectors with X the number of matrices that are in the list.
 #' @param popname a character string describing the name of the population
-#' @param time a character string: "constant", "varying" or "both"
+#' @param time set to "both" as default. A character string: "constant", "varying" or "both"
 #'            "constant" : if the metrics are to be calculated over the whole
 #'            study period
 #'            "varying": if the metrics are to be calculated for each time step
@@ -45,7 +45,7 @@
 #' @param iterations the maximum number of iterations of the model before the code breaks. For slowly-converging models
 #' and/or high specified convergence accuracy, this may need to be increased.
 #' Set to 1e+05 by default.
-#' @param verbose a boolean indicating if messages about failure to compute particular metrics should be displayed or not (default = TRUE)
+#' @param verbose set to TRUE as default a boolean indicating if messages about failure to compute particular metrics should be displayed or not (default = TRUE)
 #' @examples
 #'
 #' # load data
