@@ -216,7 +216,7 @@ plot_general <- function(metric,
   }
   # Create a plot
   dev.new()
-  graphics::par(mar = rep(2, 4), #c(5, 4, 4, 10),
+  graphics::par(mar = c(4,4, 4, 10), #c(5, 4, 4, 10),
                 xpd = TRUE)
   plot(
     tableStartYear,
@@ -284,7 +284,7 @@ plot_general <- function(metric,
   if(!length(grep("_TC", names(table))) == 0){
     graphics::legend(
       "topright",
-      inset = c(-0.5, 0.2),
+      inset = c(-0.4, 0.2),
       legend = legenddefault,
       col = coldefault,
       lty = ltydefault,
@@ -298,7 +298,7 @@ plot_general <- function(metric,
   #legend
   graphics::legend(
     "topright",
-    inset = c(-0.5, 0.5),
+    inset = c(-0.4, 0.5),
     legend = legenddefault,
     col = coldefault,
     pch = pchdefault,

@@ -115,7 +115,7 @@ help_plot <- function(metric,
 
     # Create a plot
     dev.new()
-    graphics::par(mar = rep(2, 4), #c(5, 4, 4, 10),
+    graphics::par(mar = c(4,4, 4, 10), #c(5, 4, 4, 10),
                   xpd = TRUE)
     plot(
       tableStartYear,
@@ -148,7 +148,7 @@ help_plot <- function(metric,
     #legend
     graphics::legend(
       "topright",
-      inset = c(-0.5, 0.2),
+      inset = c(-0.4, 0.2),
       legend = c("Damping ratio"),
       col = c("black"),
       lty = c(1),
@@ -160,7 +160,7 @@ help_plot <- function(metric,
     #legend
     graphics::legend(
       "topright",
-      inset = c(-0.5, 0.5),
+      inset = c(-0.4, 0.5),
       legend = c("Damping ratio"),
       col = c("black"),
       pch = c(19),

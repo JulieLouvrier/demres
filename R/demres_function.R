@@ -34,7 +34,6 @@
 #' metric
 #' @param TDvector set to FALSE as default. Specifies whether or not the user wants to get a Time-Dependant list of initial vectors,
 #' corresponding to the population stage distribution projection for each year with each matrix of each year.
-#' The result is a list of X initial vectors with X the number of matrices that are in the list.
 #' @param popname a character string describing the name of the population
 #' @param time set to "both" as default. A character string: "constant", "varying" or "both"
 #'            "constant" : if the metrics are to be calculated over the whole
