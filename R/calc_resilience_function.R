@@ -208,7 +208,7 @@ calc_reac_or_inertia <- function(metrics, vector, A, bounds) {
     list_res$value <- fn(A, vector = vector)
   } else {
     if (!bounds) {
-      stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vec for", metrics))
+      stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vector for", metrics))
     }
   }
 
@@ -249,7 +249,7 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
           e
       )
     if (methods::is(tt.error.maxa, "error")) {
-      msg <- cbind(msg,(paste0(tt.error.maxa[1]$message, " with the stated initial vector, Na is displayed\n")))
+      msg <- cbind(msg,(paste0(tt.error.maxa[1]$message, " with the stated initial vector, Na is displayed ")))
       list_res$value <- 999
     }
     else{
@@ -264,14 +264,12 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
     list_res$lwr <- fn(A)
     list_res$upr <- fn(A)
     if(metrics == "maxamp") {
-      message_maxamp<- c("The lower bound of maximum amplification cannot be computed.
-Therefore, the lower maximum attenuation is calculated using the default stage biased vector\n")
+      message_maxamp<- c("The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector ")
       msg <- cbind(msg, message_maxamp)
     }
 
     if(metrics == "maxatt") {
-      message_maxatt <- c("The upper bound of maximum attenuation cannot be computed.
-Therefore, the upper maximum amplification is calculated using the default stage biased vector\n")
+      message_maxatt <- c("The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector ")
       msg <- cbind(msg, message_maxatt)
     }
   }

@@ -95,7 +95,7 @@ BC_TVTC_demres <-
     metrics = "all",
     bounds = TRUE,
     vector = Cranevec1,
-    TDvector = FALSE,
+    TDvector = TRUE,
     popname = "blue crane",
     time = "both",
     verbose = TRUE

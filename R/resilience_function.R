@@ -62,7 +62,7 @@
 #'     metrics = "all",
 #'     bounds = TRUE,
 #'     vector = Cranevec1,
-#'     TDvector = FALSE,
+#'     TDvector = TRUE,
 #'     popname = "blue crane",
 #'     time = "both",
 #'     verbose = TRUE
@@ -149,7 +149,12 @@ resilience <- function(listA,
           colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
         }
 
-        metres <- t(temp_list)
+        n.obs.res <- sapply(temp_list, length)
+        seq.max.res <- seq_len(max(n.obs.res))
+        metres.temp <- data.frame(sapply(temp_list, "[", i = seq.max.res))
+        metres <- data.frame(t(metres.temp))
+        rownames(metres) <- seq(1:length(listA))
+
         colnames(metres)[-1] <- paste0(colnames(metres)[-1], "_TV")
         metres <- cbind(timestep = c(1:nrow(metres)), metres)
 
@@ -204,7 +209,11 @@ resilience <- function(listA,
             colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
           }
 
-          met <- t(temp_list)
+          n.obs.res <- sapply(temp_list, length)
+          seq.max.res <- seq_len(max(n.obs.res))
+          metres.temp <- data.frame(sapply(temp_list, "[", i = seq.max.res))
+          met <- data.frame(t(metres.temp))
+          rownames(met) <- seq(1:length(listA))
           colnames(met)[-1] <- paste0(colnames(met)[-1], "_TV")
           met <- cbind(timestep = c(1:nrow(met)), met)
 

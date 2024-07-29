@@ -56,47 +56,37 @@ data(bluecrane)
 
 ```
 
-### Calculate demographic resilience metrics based on one Matrix
+### Calculate demographic resilience metrics based on a list of Matrices
 
-The function `calc_resilience` is made to calculate demographic resilience metrics based on one Matrix Population Model. It returns a `dataframe`
+The function `resilience` is made to calculate demographic resilience metrics based on a lost Matrix Population Models. It returns a `dataframe` with both time-varying and time-constant approaches when required with the option `time`.
 
 ```{r, resilience metrics}
 #select the first matrix 
 Crane_mat1 <- bluecrane[[1]]
 
 # Create initial vector
-set.seed(1)
+set.seed(1234)
 Crane_vec1 <- runif(5)
 Crane_vec1 <- Crane_vec1 / sum(Crane_vec1) #scales the vector to sum to 1
-Crane_vec1 <- c(0, 0, 0, 0, 1)
 
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-all_BlueCrane1_demres <- calc_resilience(Crane_mat1, metrics = "all",
-vector = Crane_vec1, bounds = TRUE, popname = "Blue Crane")
-attr(all_BlueCrane1_demres, "msg")
+BlueCrane_demres <- resilience(
+    listA = bluecrane,
+    metrics = "all",
+    bounds = TRUE,
+    vector = Cranevec1,
+    TDvector = TRUE,
+    popname = "blue crane",
+    time = "both",
+    verbose = TRUE )
 
 #let's take a look at what we got
-all_BlueCrane1_demres
-
-```
-
-
-### Calculate demographic resilience metrics based on a list of Matrices
-
-The function `demres` is made to calculate demographic resilience metrics based on a lost Matrix Population Models. It returns a `dataframe` with both time-varying and time-constant approaches when required with the option `time`.
-
-```{r, demres}
-#let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-all_BlueCrane_demres <- demres(bluecrane, metrics = c("all"),
-vector = Crane_vec1, bounds = TRUE, popname = "Blue Crane", time = "both")
-
-#let's take a look at what we got
-all_BlueCrane_demres
+BlueCrane_demres
 ```
 
 ### Assessing the distance between the time-varying and the time-constant approaches
 
-The function `demres_dist` calculates the distance between the time-varying resilience metric and the time-constant one by measuring the RMSE, rRMSE and the MAPE: 
+The function `summary` calculates the distance between the time-varying resilience metric and the time-constant one by measuring the RMSE, rRMSE and the MAPE: 
 
 #### RMSE: 
 $$\sqrt{mean((TV-TC)^2)}$$   
@@ -110,7 +100,7 @@ $$ \frac{(mean(abs(TV - TC))}{100}$$
 
 ```{r, distance}
 #let's calculate all measures of distance for inertia
-dist_BC <- demres_dist(table = all_BlueCrane_demres, metric = "inertia", measure = "all")
+dist_BC <- summary(BlueCrane_demres)
 
 #let's take a look at what we got
 dist_BC
@@ -121,9 +111,6 @@ dist_BC
 `demres_plot` provides a plot to visually inspect the resilience metric along a time axis
 
 ```{r, plotting}
-#specifying the metric that we want to visually inspect
-metric <- "inertia"
 #plotting
-demres_plot(table = all_BlueCrane_demres, metric = metric)
-
+plot(BlueCrane_demres)
 ```
