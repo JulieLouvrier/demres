@@ -1,10 +1,10 @@
 #' Provides time-varying and time-constant resilience metrics for animal
 #' populations based on a list of matrix population models
 #'
-#' `demres` calculates resilience metrics of a population based
+#' `resilience` calculates resilience metrics of a population based
 #' on a list of matrix population models
 #'
-#' This function applies the function "calc_resilience" to a list of matrices
+#' This function works with to a list of matrices or just one matrix
 #' and returns either time-varying metrics or time-constant metrics
 #'
 #' @param listA a list of square, primitive, irreducible, non-negative numeric
@@ -57,7 +57,7 @@
 #'
 #'
 #' BC_TVTC_demres <-
-#'   demres(
+#'   resilience(
 #'     listA = bluecrane,
 #'     metrics = "all",
 #'     bounds = TRUE,
@@ -70,9 +70,9 @@
 #'
 #' @return A dataframe containing all the resilience metrics
 #' @export
-#' @name demres
+#' @name resilience
 
-demres <- function(listA,
+resilience <- function(listA,
                    metrics = "all",
                    bounds = FALSE,
                    vector = "n",
@@ -355,7 +355,6 @@ demres <- function(listA,
 #'
 #' @param x an object used to select a method
 #' @param ... further arguments passed to or from other methods
-#'
 #' @return the argument `x` (invisibly)
 #' @export
 #'
@@ -366,27 +365,24 @@ print.resil <- function(x, ...) {
 
 #' Summary method for objects of class resil
 #'
-#' @param object an object used to select a method
+#' @param x an object used to select a method
 #' @param ... further arguments passed to or from other methods
-#'
 #' @return summary statistics
 #' @export
 #'
-summary.resil <- function(table, ...) {
-  demres_dist(table, ...)
+summary.resil <- function(x, ...) {
+  demres_dist(x)
 }
 
 #' Plotting method for objects of class resil
 #'
-#' @inheritParams demres_plot
 #' @param x an object used to select a method
 #' @param ... further arguments passed to or from other methods
-#'
-#' @return the argument `x` (invisibly)
+#' @return plots
 #' @export
 #'
-plot.resil <- function(table, ...) {
-  demres_plot(table, ...)
+plot.resil <- function(x,...) {
+  demres_plot(x)
 }
 
 

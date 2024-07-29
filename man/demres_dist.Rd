@@ -9,35 +9,20 @@ demres_dist(table)
 }
 \arguments{
 \item{table}{A dataframe containing all the resilience metrics calculated
-with the demres function}
-
-\item{metric}{"reac": Reactivity: first-timestep amplification
-and first-timestep attenuation for a population matrix
-projection model.
-"inertia": Population inertia for a population
-matrix projection model.
-"dr": Damping ratio of a given population
-matrix projection model.
-"maxamp": Maximal amplification for a population
-matrix projection model.
-"maxatt": Maximal attenuation for a population
-matrix projection model.}
-
-\item{measure}{"RMSE": calculates the RMSE (sqrt(mean((TV-TC)^2))
-with TV: the time-Varying resilience metric and TC the time constant one)
-"rRMSE":calculates the relative RMSE
-(sqrt(mean((TV-TC)^2)) / sd(TV) with TV: the time-Varying resilience metric
-and TC the time constant )
-"MAPE": calculates the MAPE (mean(abs(TV - TC)) with TV:
-the time-Varying resilience metric and TC the time constant)
-"all": calculates all of the above measures}
+with the resilience function}
 }
 \value{
 A dataframe displaying the distance measures for the metrics that are present in the table
 }
 \description{
-\code{demres_dist} Calculates distance between the time-varying resilience
-metric and the time-constant one
+\code{summary} Calculates distance between the time-varying resilience
+metric and the time-constant one:
+"RMSE": sqrt(mean((TV-TC)^2))
+with TV: the time-Varying resilience metric and TC the time constant one
+"rRMSE": sqrt(mean((TV-TC)^2)) / sd(TV)
+with TV: the time-Varying resilience metric and TC the time constant
+"MAPE": mean(abs(TV - TC))
+with TV: the time-Varying resilience metric and TC the time constant
 }
 \examples{
 # load data
@@ -50,7 +35,7 @@ Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 
 
 BC_TVTC_demres <-
-  demres(
+  resilience(
     listA = bluecrane,
     metrics = "all",
     bounds = TRUE,
@@ -61,6 +46,6 @@ BC_TVTC_demres <-
     verbose = TRUE
   )
 
-dist_BC <- summary(table)
+dist_BC <- summary(BC_TVTC_demres)
 
 }

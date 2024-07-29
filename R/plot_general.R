@@ -4,7 +4,7 @@
 #' along a time axis
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
-#' with the demres function
+#' with the resilience function
 #' @param metric "reac": Reactivity: first-timestep amplification
 #'                 and first-timestep attenuation for a population matrix
 #'                 projection model.
@@ -215,7 +215,9 @@ plot_general <- function(metric,
       )
   }
   # Create a plot
-  dev.new()
+  graphics::par(mar = c(4,4, 4, 10), #c(5, 4, 4, 10),
+                xpd = TRUE)
+  grDevices::dev.new()
   graphics::par(mar = c(4,4, 4, 10), #c(5, 4, 4, 10),
                 xpd = TRUE)
   plot(

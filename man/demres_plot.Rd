@@ -4,23 +4,11 @@
 \alias{demres_plot}
 \title{Plot the resulting demographic resilience metrics}
 \usage{
-demres_plot(metric, table)
+demres_plot(table)
 }
 \arguments{
-\item{metric}{"reac": Reactivity: first-timestep amplification
-and first-timestep attenuation for a population matrix
-projection model.
-"inertia": Population inertia for a population
-matrix projection model.
-"dr": Damping ratio of a given population
-matrix projection model.
-"maxamp": Maximal amplification for a population
-matrix projection model.
-"maxatt": Maximal attenuation for a population
-matrix projection model.}
-
 \item{table}{A dataframe containing all the resilience metrics calculated
-with the demres function}
+with the resilience function}
 }
 \value{
 A plot displaying the chosen metric along a time axis
@@ -34,12 +22,13 @@ along a time axis
 data(bluecrane)
 
 # simulate an initial vector
+set.seed(1234)
 Cranevec1 <- runif(5)
 Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 
 
 BC_TVTC_demres <-
-  demres(
+  resilience(
     bluecrane,
     metrics = "all",
     bounds = TRUE,
@@ -48,11 +37,5 @@ BC_TVTC_demres <-
     time = "both"
   )
 
-
-#plotting with RMSE
-
-metric = "dr"
-demres_plot(table = BC_TVTC_demres,
-            metric = metric)
-
+plot(BC_TVTC_demres)
 }

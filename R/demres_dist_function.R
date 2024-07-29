@@ -10,8 +10,8 @@
 #' "MAPE": mean(abs(TV - TC))
 #' with TV: the time-Varying resilience metric and TC the time constant
 #' @param table A dataframe containing all the resilience metrics calculated
-#' with the demres function
-#' @name summary
+#' with the resilience function
+#' @name demres_dist
 #'
 #' @examples
 #' # load data
@@ -24,7 +24,7 @@
 #'
 #'
 #' BC_TVTC_demres <-
-#'   demres(
+#'   resilience(
 #'     listA = bluecrane,
 #'     metrics = "all",
 #'     bounds = TRUE,
@@ -39,7 +39,6 @@
 #'
 #' @return A dataframe displaying the distance measures for the metrics that are present in the table
 #' @export
-#' @name demres_dist
 
 demres_dist <- function(table) {
 

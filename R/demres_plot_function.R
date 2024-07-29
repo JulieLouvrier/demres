@@ -1,10 +1,12 @@
 #' Plot the resulting demographic resilience metrics
 #'
-#' `plot` provides a plot to visually inspect the resilience metric
+#' `demres_plot` provides a plot to visually inspect the resilience metric
 #' along a time axis
 #' @param table A dataframe containing all the resilience metrics calculated
-#' with the demres function
-#' @name plot
+#' with the resilience function
+#' @name demres_plot
+#' @return A plot displaying the chosen metric along a time axis
+#' @export
 #' @examples
 #' # load data
 #' data(bluecrane)
@@ -16,7 +18,7 @@
 #'
 #'
 #' BC_TVTC_demres <-
-#'   demres(
+#'   resilience(
 #'     bluecrane,
 #'     metrics = "all",
 #'     bounds = TRUE,
@@ -26,10 +28,6 @@
 #'   )
 #'
 #' plot(BC_TVTC_demres)
-#'
-#' @return A plot displaying the chosen metric along a time axis
-#' @export
-#' @name demres_plot
 
 demres_plot <- function(table) {
   sub_names <- grep('[TVTC]', colnames(table), value = TRUE)
@@ -49,7 +47,7 @@ demres_plot <- function(table) {
 #' along a time axis
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
-#' with the demres function
+#' with the resilience function
 #' @param metric "reac": Reactivity: first-timestep amplification
 #'                 and first-timestep attenuation for a population matrix
 #'                 projection model.
@@ -63,7 +61,6 @@ demres_plot <- function(table) {
 #'                 matrix projection model.
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
-#' @name help_plot
 #' @keywords internal
 
 help_plot <- function(metric,
@@ -114,7 +111,9 @@ help_plot <- function(metric,
       )
 
     # Create a plot
-    dev.new()
+    graphics::par(mar = c(4,4, 4, 10), #c(5, 4, 4, 10),
+                  xpd = TRUE)
+    grDevices::dev.new()
     graphics::par(mar = c(4,4, 4, 10), #c(5, 4, 4, 10),
                   xpd = TRUE)
     plot(
