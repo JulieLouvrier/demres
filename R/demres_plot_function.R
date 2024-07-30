@@ -19,12 +19,14 @@
 #'
 #' BC_TVTC_demres <-
 #'   resilience(
-#'     bluecrane,
+#'     listA = bluecrane,
 #'     metrics = "all",
 #'     bounds = TRUE,
 #'     vector = Cranevec1,
+#'     TDvector = TRUE,
 #'     popname = "blue crane",
-#'     time = "both"
+#'     time = "both",
+#'     verbose = TRUE
 #'   )
 #'
 #' plot(BC_TVTC_demres)

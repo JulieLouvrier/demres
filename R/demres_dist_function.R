@@ -22,14 +22,13 @@
 #' Cranevec1 <- runif(5)
 #' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 #'
-#'
 #' BC_TVTC_demres <-
 #'   resilience(
 #'     listA = bluecrane,
 #'     metrics = "all",
 #'     bounds = TRUE,
 #'     vector = Cranevec1,
-#'     TDvector = FALSE,
+#'     TDvector = TRUE,
 #'     popname = "blue crane",
 #'     time = "both",
 #'     verbose = TRUE

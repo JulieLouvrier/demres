@@ -61,9 +61,6 @@ data(bluecrane)
 The function `resilience` is made to calculate demographic resilience metrics based on a lost Matrix Population Models. It returns a `dataframe` with both time-varying and time-constant approaches when required with the option `time`.
 
 ```{r, resilience metrics}
-#select the first matrix 
-Crane_mat1 <- bluecrane[[1]]
-
 # Create initial vector
 set.seed(1234)
 Crane_vec1 <- runif(5)
