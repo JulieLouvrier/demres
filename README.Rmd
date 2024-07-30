@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 The goal of __{demres}__ is to provide easy functions to calculate different time-varying and time- constant demographic resilience metrics. It also allows plotting the resulting metrics and measuring the discrepancy between the time-varying and the time-constant approach. 
 
 The different metrics provided are:   
-- Convergence time
+- Convergence time 
 - Damping ratio    
 - Inertia  
 - Reactivity   
