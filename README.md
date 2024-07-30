@@ -8,7 +8,7 @@ metrics. It also allows plotting the resulting metrics and measuring the
 discrepancy between the time-varying and the time-constant approach.
 
 The different metrics provided are:  
-- Damping ratio  
+- Convergence time - Damping ratio  
 - Inertia  
 - Reactivity  
 - Maximum amplification  
