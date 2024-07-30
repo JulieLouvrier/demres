@@ -44,144 +44,190 @@ library(demres)
 data(bluecrane)
 ```
 
-### Calculate demographic resilience metrics based on one Matrix
-
-The function `calc_resilience` is made to calculate demographic
-resilience metrics based on one Matrix Population Model. It returns a
-`dataframe`
-
-``` r
-#select the first matrix 
-Crane_mat1 <- bluecrane[[1]]
-
-# Create initial vector
-set.seed(1234)
-Crane_vec1 <- runif(5)
-Crane_vec1 <- Crane_vec1 / sum(Crane_vec1) #scales the vec to sum to 1
-
-#let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-all_BlueCrane1_demres <- calc_resilience(Crane_mat1, metrics = c("all"),
-vector = Crane_vec1, bounds = TRUE, popname = "Blue Crane")
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-
-#let's take a look at what we got
-all_BlueCrane1_demres
-#>      popname       dr  inertia inertia_lwr inertia_upr maxamp maxamp_upr
-#> 1 Blue Crane 1.260737 0.881403   0.3380643    2.453536     NA   3.188589
-#>      maxatt maxatt_lwr     reac  reac_lwr reac_upr
-#> 1 0.5491821  0.1377865 0.729341 0.5324434 2.895077
-```
-
 ### Calculate demographic resilience metrics based on a list of Matrices
 
-The function `demres` is made to calculate demographic resilience
+The function `resilience` is made to calculate demographic resilience
 metrics based on a lost Matrix Population Models. It returns a
 `dataframe` with both time-varying and time-constant approaches when
 required with the option `time`.
 
 ``` r
+# Create initial vector
+set.seed(1234)
+Cranevec1 <- runif(5)
+Cranevec1 <- Cranevec1 / sum(Cranevec1) #scales the vector to sum to 1
+
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-all_BlueCrane_demres <- demres(bluecrane, metrics = c("all"),
-vector = Crane_vec1, bounds = TRUE, popname = "Blue Crane", time = "both")
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
-#> Model does not amplify. Cannot compute maximum amplification, with the stated initial vector, Na is displayed
+BlueCrane_demres <- resilience(
+    listA = bluecrane,
+    metrics = "all",
+    bounds = TRUE,
+    vector = Cranevec1,
+    TDvector = TRUE,
+    popname = "blue crane",
+    time = "both",
+    verbose = TRUE )
+#>                                                                                                           Message for time-varying resilience at time step 1
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#>                                                                                                           Message for time-varying resilience at time step 2
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#>                                                                                                           Message for time-varying resilience at time step 3
+#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
+#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#>                                                                                                           Message for time-varying resilience at time step 4
+#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
+#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#>                                                                                                           Message for time-varying resilience at time step 5
+#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
+#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#>                                                                                                           Message for time-varying resilience at time step 6
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#> 3                                                                                                                                                           
+#>                                                                                                           Message for time-varying resilience at time step 7
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#>                                                                                                           Message for time-varying resilience at time step 8
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#> 3                                                                                                                                                           
+#>                                                                                                           Message for time-varying resilience at time step 9
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#>                                                                                                          Message for time-varying resilience at time step 10
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#> 3                                                                                                                                                           
+#>                                                                                                          Message for time-varying resilience at time step 11
+#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
+#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#>                                                                                                          Message for time-varying resilience at time step 12
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
+#> 3                                                                                                                                                           
+#>                                                                                                                         Message for time-constant resilience
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
+#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
 
 #let's take a look at what we got
-all_BlueCrane_demres
-#>    timestep    popname    dr_TV inertia_TV inertia_lwr_TV inertia_upr_TV
-#> 1         1 Blue Crane 1.260737  0.8814030      0.3380643       2.453536
-#> 2         2 Blue Crane 1.209277  0.8748971      0.3664144       2.764719
-#> 3         3 Blue Crane 1.250912  0.8755326      0.3457900       2.481637
-#> 4         4 Blue Crane 1.222042  0.8743086      0.3601647       2.662348
-#> 5         5 Blue Crane 1.327353  0.8912492      0.3058453       2.216446
-#> 6         6 Blue Crane 1.275744  0.8816853      0.3315223       2.380029
-#> 7         7 Blue Crane 1.288798  0.8815614      0.3262064       2.321470
-#> 8         8 Blue Crane 1.313330  0.8881760      0.3128593       2.252394
-#> 9         9 Blue Crane 1.247210  0.8750568      0.3477418       2.500855
-#> 10       10 Blue Crane 1.214877  0.8736919      0.3642050       2.713575
-#> 11       11 Blue Crane 1.312434  0.8892603      0.3126440       2.259734
-#> 12       12 Blue Crane 1.290253  0.8842358      0.3241436       2.326127
-#>    maxamp_TV maxamp_upr_TV maxatt_TV maxatt_lwr_TV   reac_TV reac_lwr_TV
-#> 1         NA      3.188589 0.5491821     0.1377865 0.7293410   0.5324434
-#> 2         NA      3.722920 0.5559752     0.1325322 0.7445792   0.5723503
-#> 3         NA      3.238037 0.5497432     0.1393395 0.7318383   0.5436130
-#> 4         NA      3.548079 0.5531125     0.1352809 0.7399009   0.5634825
-#> 5         NA      2.770840 0.5508220     0.1379891 0.7182240   0.4907642
-#> 6         NA      3.061100 0.5489686     0.1392934 0.7264232   0.5239987
-#> 7         NA      2.959427 0.5491824     0.1405172 0.7242717   0.5173623
-#> 8         NA      2.835762 0.5500417     0.1389008 0.7202318   0.4997366
-#> 9         NA      3.271153 0.5499945     0.1390491 0.7327335   0.5462951
-#> 10        NA      3.635428 0.5545873     0.1342159 0.7424248   0.5693033
-#> 11        NA      2.848023 0.5499636     0.1383543 0.7202490   0.4992444
-#> 12        NA      2.966458 0.5491461     0.1393490 0.7238222   0.5142661
-#>    reac_upr_TV    dr_TC inertia_TC inertia_lwr_TC inertia_upr_TC maxamp_TC
-#> 1     2.895077 1.260737   0.881403      0.3380642       2.453536        NA
-#> 2     3.382101 1.260737   0.881403      0.3380642       2.453536        NA
-#> 3     2.935359 1.260737   0.881403      0.3380642       2.453536        NA
-#> 4     3.219720 1.260737   0.881403      0.3380642       2.453536        NA
-#> 5     2.518515 1.260737   0.881403      0.3380642       2.453536        NA
-#> 6     2.778008 1.260737   0.881403      0.3380642       2.453536        NA
-#> 7     2.684792 1.260737   0.881403      0.3380642       2.453536        NA
-#> 8     2.576003 1.260737   0.881403      0.3380642       2.453536        NA
-#> 9     2.965338 1.260737   0.881403      0.3380642       2.453536        NA
-#> 10    3.299575 1.260737   0.881403      0.3380642       2.453536        NA
-#> 11    2.587806 1.260737   0.881403      0.3380642       2.453536        NA
-#> 12    2.693034 1.260737   0.881403      0.3380642       2.453536        NA
+BlueCrane_demres
+#>    timestep    popname convt_TV convt_lwr_TV convt_upr_TV    dr_TV inertia_TV
+#> 1         1 blue crane       15           17           21 1.260737  1.5333348
+#> 2         2 blue crane       19           22           26 1.209277  1.2582784
+#> 3         3 blue crane       15           17           21 1.250912  0.8581260
+#> 4         4 blue crane       14           20           24 1.222042  0.9013004
+#> 5         5 blue crane       11           14           18 1.327353  0.8586647
+#> 6         6 blue crane       12           17           21 1.275744  1.1426049
+#> 7         7 blue crane        9           17           21 1.288798  1.1378826
+#> 8         8 blue crane        8           14           18 1.313330  0.9984802
+#> 9         9 blue crane       11           17           21 1.247210  1.0452734
+#> 10       10 blue crane       12           22           26 1.214877  0.9643615
+#> 11       11 blue crane       11           14           18 1.312434  0.8513696
+#> 12       12 blue crane       10           14           18 1.290253  1.0436617
+#>    inertia_lwr_TV inertia_upr_TV maxamp_TV maxamp_upr_TV maxatt_TV
+#> 1       0.3380643       2.453536  1.723496      3.188589        NA
+#> 2       0.3664144       2.764719  1.480409      3.722920        NA
+#> 3       0.3457900       2.481637        NA      3.238037 0.7740310
+#> 4       0.3601647       2.662348        NA      3.548079 0.8186359
+#> 5       0.3058453       2.216446        NA      2.770840 0.7270000
+#> 6       0.3315223       2.380029  1.216825      3.061100 0.9894003
+#> 7       0.3262064       2.321470  1.206248      2.959427        NA
+#> 8       0.3128593       2.252394  1.043203      2.835762 0.9786728
+#> 9       0.3477418       2.500855  1.133028      3.271153        NA
+#> 10      0.3642050       2.713575  1.039046      3.635428 0.9224155
+#> 11      0.3126440       2.259734        NA      2.848023 0.7762351
+#> 12      0.3241436       2.326127  1.090320      2.966458 0.9626888
+#>    maxatt_lwr_TV   reac_TV reac_lwr_TV reac_upr_TV convt_TC convt_lwr_TC
+#> 1      0.1377865 1.3230440   0.5324434    2.895077        6           17
+#> 2      0.1325322 1.3618635   0.5723503    3.382101        6           17
+#> 3      0.1393395 0.9860133   0.5436130    2.935359        6           17
+#> 4      0.1352809 0.9876613   0.5634825    3.219720        6           17
+#> 5      0.1379891 0.7728866   0.4907642    2.518515        6           17
+#> 6      0.1392934 0.9894003   0.5239987    2.778008        6           17
+#> 7      0.1405172 1.1160518   0.5173623    2.684792        6           17
+#> 8      0.1389008 1.0228788   0.4997366    2.576003        6           17
+#> 9      0.1390491 1.1330283   0.5462951    2.965338        6           17
+#> 10     0.1342159 1.0390461   0.5693033    3.299575        6           17
+#> 11     0.1383543 0.8256561   0.4992444    2.587806        6           17
+#> 12     0.1393490 0.9626888   0.5142661    2.693034        6           17
+#>    convt_upr_TC    dr_TC inertia_TC inertia_lwr_TC inertia_upr_TC maxamp_TC
+#> 1            21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 2            21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 3            21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 4            21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 5            21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 6            21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 7            21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 8            21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 9            21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 10           21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 11           21 1.260737   1.048844      0.3380642       2.453536  1.067201
+#> 12           21 1.260737   1.048844      0.3380642       2.453536  1.067201
 #>    maxamp_upr_TC maxatt_TC maxatt_lwr_TC  reac_TC reac_lwr_TC reac_upr_TC
-#> 1       3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 2       3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 3       3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 4       3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 5       3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 6       3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 7       3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 8       3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 9       3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 10      3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 11      3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
-#> 12      3.188589 0.5491821     0.1377865 0.729341   0.5324433    2.895078
+#> 1       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 2       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 3       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 4       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 5       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 6       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 7       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 8       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 9       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 10      3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 11      3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+#> 12      3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
 ```
 
 ### Assessing the distance between the time-varying and the time-constant approaches
 
-The function `demres_dist` calculates the distance between the
-time-varying resilience metric and the time-constant one by measuring
-the RMSE, rRMSE and the MAPE:
+The function `summary` calculates the distance between the time-varying
+resilience metric and the time-constant one by measuring the RMSE, rRMSE
+and the MAPE:
 
-#### RMSE :
+#### RMSE:
 
-(sqrt(mean((TV-TC)^2)) with TV: the time-Varying resilience metric and
-TC the time constant one)
+$$\sqrt{mean((TV-TC)^2)}$$
+  
+with TV - the time-varying resilience metric and TC - the time-constant
+one
 
 #### rRMSE:
 
-(sqrt(mean((TV-TC)^2)) / sd(TV)
+$$\sqrt{mean((TV-TC)^2)} / sd(TV)$$
 
-#### MAPE”:
+#### MAPE:
 
-(mean(abs(TV - TC))
+$$ \frac{(mean(abs(TV - TC))}{100}$$
 
 ``` r
 #let's calculate all measures of distance for inertia
-dist_BC <- demres_dist(table = all_BlueCrane_demres, metric = "inertia", measure = "all")
+dist_BC <- summary(BlueCrane_demres)
 
 #let's take a look at what we got
 dist_BC
-#>                         RMSE     rRMSE        MAPE
-#> inertia_lwr      0.020053213 0.9611536 0.017429949
-#> inertia_vector 0.006052127 0.9604719 0.005106478
-#> inertia_upr      0.178977159 0.9586754 0.151706049
+#>          convt convt_lwr  convt_upr         dr   inertia inertia_lwr
+#> RMSE  6.898067 2.8136572 2.81365717 0.03903875 0.1911224  0.02005321
+#> rRMSE 2.262518 0.9578473 0.95784731 0.97324861 0.9574318  0.96115364
+#> MAPE  1.041667 0.1225490 0.09920635 0.02662846 0.1387432  0.05155810
+#>       inertia_upr    maxamp maxamp_upr maxatt maxatt_lwr      reac   reac_lwr
+#> RMSE   0.17897716 0.2849170 0.31047904    NaN 0.00231687 0.1657916 0.02703314
+#> rRMSE  0.95867538 1.1827921 0.95905906    NaN 0.95785432 0.9575008 0.95866190
+#> MAPE   0.06183159 0.1756083 0.08265399    NaN 0.01320329 0.1210779 0.04415418
+#>         reac_upr
+#> RMSE  0.28129654
+#> rRMSE 0.95920804
+#> MAPE  0.08229525
 ```
 
 ### plotting the results
@@ -190,10 +236,22 @@ dist_BC
 along a time axis
 
 ``` r
-#specifying the metric that we want to visually inspect
-metric = "inertia"
 #plotting
-demres_plot(table = all_BlueCrane_demres, metric = metric, plotname = paste0(getwd(), "/plots/plot_demres_", metric, ".pdf"), RMSE = TRUE)
-#> quartz_off_screen 
-#>                 2
+plot(BlueCrane_demres)
+#>     rect.w     rect.h  rect.left   rect.top    text.x1    text.x2    text.x3 
+#>  3.8075714  3.5840000 13.3844286 14.8000000 14.0632857 14.0632857 14.0632857 
+#>    text.y1    text.y2    text.y3     rect.w     rect.h  rect.left   rect.top 
+#> 13.3664000 12.6496000 11.9328000  3.2897857  0.1087419 13.9022143  1.2919300 
+#>     text.x     text.y     rect.w     rect.h  rect.left   rect.top    text.x1 
+#> 14.5810714  1.2194354  3.8075714  0.4129939 13.3844286  1.4741132 14.0632857 
+#>    text.x2    text.x3    text.y1    text.y2    text.y3     rect.w     rect.h 
+#> 14.0632857 14.0632857  1.3089156  1.2263168  1.1437180  3.8075714  0.5873486 
+#>  rect.left   rect.top    text.x1    text.x2    text.y1    text.y2     rect.w 
+#> 13.3844286  2.9177579 14.0632857 14.0632857  2.6240837  2.4772465  3.8075714 
+#>     rect.h  rect.left   rect.top    text.x1    text.x2    text.y1    text.y2 
+#>  0.1671221 13.3844286  0.7323399 14.0632857 14.0632857  0.6487789  0.6069983 
+#>     rect.w     rect.h  rect.left   rect.top    text.x1    text.x2    text.x3 
+#>  3.8075714  0.4940229 13.3844286  1.8382800 14.0632857 14.0632857 14.0632857 
+#>    text.y1    text.y2    text.y3 
+#>  1.6406708  1.5418662  1.4430617
 ```

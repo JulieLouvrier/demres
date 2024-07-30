@@ -29,12 +29,14 @@ Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
 
 BC_TVTC_demres <-
   resilience(
-    bluecrane,
+    listA = bluecrane,
     metrics = "all",
     bounds = TRUE,
     vector = Cranevec1,
+    TDvector = TRUE,
     popname = "blue crane",
-    time = "both"
+    time = "both",
+    verbose = TRUE
   )
 
 plot(BC_TVTC_demres)

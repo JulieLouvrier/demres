@@ -42,7 +42,6 @@ remotes::install_github("JulieLouvrier/demres")
 ```
 
 ## Basic usage of the package
-
 ### Load the package {demres}
 
 ```{r, loading pkg}
@@ -63,8 +62,8 @@ The function `resilience` is made to calculate demographic resilience metrics ba
 ```{r, resilience metrics}
 # Create initial vector
 set.seed(1234)
-Crane_vec1 <- runif(5)
-Crane_vec1 <- Crane_vec1 / sum(Crane_vec1) #scales the vector to sum to 1
+Cranevec1 <- runif(5)
+Cranevec1 <- Cranevec1 / sum(Cranevec1) #scales the vector to sum to 1
 
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
 BlueCrane_demres <- resilience(
