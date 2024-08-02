@@ -1,0 +1,180 @@
+---
+title: "demres: quantification of demographic resilience over time"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{demres: quantification of demographic resilience over time}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "##  ", collapse = TRUE, fig.align = "center")
+library(demres)
+options(digits = 4)
+```
+
+The goal of __{demres}__ is to provide easy functions to calculate different time-varying and time- constant demographic resilience metrics. It also allows plotting the resulting metrics and measuring the discrepancy between the time-varying and the time-constant approach. 
+
+The different metrics provided are:   
+- Convergence time    
+- Damping ratio    
+- Inertia  
+- Reactivity   
+- Maximum amplification   
+- Maximum attenuation   
+
+It is build around one dependency:
+
+- [__{popdemo}__](https://github.com/r-lib/rlang)
+
+__{demres}__ aims at being compatible with both _tidyverse_ and _base_ R dialects.
+
+***
+# Installing `demres`
+`demres` is available on [GitHub](https://github.com/JulieLouvrier/demres). 
+Vignette description usually requires the latest version of the package 
+
+## Package installation from Github
+
+You can install this package using __{remotes}__ (or __{devtools}__):
+
+```{r, installation, eval = FALSE}
+# Install dependencies from CRAN:
+install.packages(c("devtools", "remotes"))
+
+#Installing from GitHub
+remotes::install_github("JulieLouvrier/demres")
+```
+
+***  
+# Matrix Population Models
+
+## Blue cran models
+
+We will use a list matrix projection models (MPMs) of a blue crane population (*Anthropoides paradiseus*) in the Northern Cape Province, South Africa, from the study by Altweg and Anderson 2009: "Rainfall in arid zones: possible effects of climate change on the population ecology of blue cranes" [^1].
+
+The MPMs were extracted from the COMADRE database (https://compadre-db.org/). The data is a list of 12 matrices of dimension 5 x 5. The 5 stage classes have been defined based on age and are the following:     
+- "1 year"    
+- "2 years"    
+- "3 years"    
+- "4 years"    
+- "5 years"    
+
+[^1]: [Altweg and Anderson (2009) Functional Ecology, 23(5), 1014-1021.](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/j.1365-2435.2009.01563.x)
+
+```{r echo = FALSE}
+cranepic <- magick::image_read("https://upload.wikimedia.org/wikipedia/commons/9/95/Blue_Crane_%28Anthropoides_paradiseus%29_parading_%2832458639642%29.jpg")
+par(mar = c(0, 0, 0, 0))
+plot(as.raster(cranepic))
+text(10, 10, adj = c (0, 0), col = "white",
+     "Blue Crane parading")
+```
+\  
+
+Load in the data:  
+```{r}
+data(bluecrane); bluecrane
+
+```
+
+The numbers in the matrices describe the probability of transitioning from stages in columns to stages in rows, between time intervals that relevant to the species, in the case of the blue crane, years. For blue cranes in our case, the probability to move from a 1 year old to a 2 year old is 61.2% on year 5 of the study (see `bluecrane[[5]]`), while this probability is 88.7% in year 2 of the study period (see `bluecrane[[2]]`). 
+\  
+
+# Assess time-varying demographic resilience 
+The function `resilience` is made to calculate demographic resilience metrics based on a list of Matrix Population Models. It returns a `dataframe` with time-varying demographic resilience metrics with the option `time = "varying`.
+
+The different resilience metrics that are calculated[^2] can be :     
+- _**Convergence time**_ :  time to convergence of a population matrix projection model from the model projection.  
+
+- _**Damping ratio**_ : Dimensionless measure of convergence to stable growth. Smaller numbers represent slower convergence. Damping ratio is calculated using 
+
+$$\textit{damping ratio} = p = \frac{\lambda_1}{||\lambda_2||}$$
+
+- _**Inertia**_ : The long term population density in comparison with a population that reached a stable growth. Inertia is calculated using  
+
+$$\textit{inertia} = P_{\infty} = \frac{\textbf{v}^\text{T}\hat{\textbf{n}}_0||\textbf{w}||_1}{\textbf{v}^\text{T}\textbf{w}}$$  
+**w** and **v** are the right and left eigenvectors. 
+
+- _**Reactivity**_ : The population density that can be reached in the first time step after disturbance. Reactivity is calculated using  
+
+$$\textit{reactivity} = \bar{p_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
+
+- _**Maximum amplification**_ : lThe largest population density that can be reached at any time after disturbance. This metric is calculated using:
+$$maximum\ amplification = \bar{P}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+
+
+- _**Maximum attenuation**_ : The lowest population density that can be reached at any time after disturbance. this metric is calculated using 
+
+$$maximum\ attenuation = \underline{P}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+
+
+Maximum amplification and maximum attenuation can occur at any point along the projection. Some populations only have a maximum amplification due to either their demographic structure or the initial vector (because they never attenuate), some only have a maximum attenuation (because they never amplify), and some have both.
+
+[^2]: [Stott, I., Hodgson, D. J., & Townley, S. (2012) Functional Ecology, Methods in Ecology & Evolution, 3(5).](https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/j.2041-210X.2012.00222.x)
+
+## Calculating one resilience metric 
+The function `demres` can compiles each of the aforementioned metric, calculated for each matrix that was made at each time step of the length of the study.  
+
+In a first time we can look at `inertia`
+```{r echo = -1}
+set.seed(1234)
+Cranevec1 <- runif(5)
+Cranevec1 <- Cranevec1/sum(Cranevec1) 
+
+Bluecrane.inertia <- resilience(
+     listA = bluecrane,
+     metrics = "inertia",
+     bounds = TRUE,
+     vector = Cranevec1,
+     popname = "blue crane",
+     time = "varying")
+
+Bluecrane.inertia
+```
+Here we can see that inertia varies in time, because `bounds`were set to `TRUE`, the values of inertia were calculated also based on the stage biased vector. Stage-biased vectors are biased towards one stage-class, with individuals from this stage-class representing 100% of the whole population. Consequently there are as many stage-biased vectors as there are stage classes in the population. For example, a population with 4 stage classes will have the 4 following stage-biased vectors: [1 0 0 0]; [0 1 0 0]; [0 0 1 0]; [0 0 0 1 ]. These upper and lower bounds therefore provide the extreme best- or worst-case scenarios.
+
+
+The minimum values for inertia calculated either with the vector or with the bounds were all found during the 5th year of the study period. While its maximum was reached on the second year. An inertia of 1.5 means that after the transient period, the population would settle to a size 1.5 times as large as a population that grows with stable rate.
+
+In a second time we can look at `reactvity`
+```{r echo = -1}
+Bluecrane.reac <- resilience(
+     listA = bluecrane,
+     metrics = "reac",
+     bounds = TRUE,
+     vector = Cranevec1,
+     popname = "blue crane",
+     time = "varying")
+
+Bluecrane.reac
+```
+
+A reactivity of 1.32 would mean that in the first timestep, the population grows 1.32 as fast as its stable growth rate.
+
+## several metrics
+
+# Assess time-constant demographic resilience
+## one metric
+
+## several metrics
+
+# Compare time-varying resilience vs time-constant resilience 
+The function `demres` is made to calculate demographic resilience metrics based on a list of Matrix Population Models. It returns a `dataframe` with both time-varying and time-constant approaches when required with the option `time`.
+
+## one metric
+
+## several metrics
+
+# Use a list of initial vectors 
+## one metric
+
+## several metrics
+
+# Assess the distance between the time-varying and the time-constant metrics 
+
+# plot 
+
+## check the extreme years 
+
+## check the stage-biased vectors 
+Transient dynamics vary according to the starting population vector. If there is an overrepresentation of individuals in stages with high survival and/or fertility, then the population will grow faster (or decline slower) than the stable rate (this is called 'amplification'). If there is an overrepresentation of individuals in stages with low survival and zero/low fertility, then the population will grow slower (or decline faster) than the stable rate (this is called 'attenuation'). Indices of amplification are always >1, which means that log-transformed indices of amplification are always >0. Indices of attenuation are always <1 but >0. This means that log-transformed indices of attenuation are always <0.  
