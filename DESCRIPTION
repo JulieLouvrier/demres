@@ -15,5 +15,6 @@ Depends:
 LazyData: true
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown, 
+    magick
 VignetteBuilder: knitr
