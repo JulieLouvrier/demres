@@ -68,7 +68,8 @@ and/or high specified convergence accuracy, this may need to be increased.
 Set to 1e+05 by default.}
 }
 \value{
-A dataframe containing all the resilience metrics
+An object of class "resil", which is a dataframe
+containing all the resilience metrics.
 }
 \description{
 \code{resilience} calculates resilience metrics of a population based
@@ -95,7 +96,7 @@ BC_TVTC_demres <-
     metrics = "all",
     bounds = TRUE,
     vector = Cranevec1,
-    TDvector = TRUE,
+    TDvector = FALSE,
     popname = "blue crane",
     time = "both",
     verbose = TRUE

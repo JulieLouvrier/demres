@@ -4,10 +4,10 @@
 \alias{summary.resil}
 \title{Summary method for objects of class resil}
 \usage{
-\method{summary}{resil}(x, ...)
+\method{summary}{resil}(object, ...)
 }
 \arguments{
-\item{x}{an object used to select a method}
+\item{object}{an object used to select a method}
 
 \item{...}{further arguments passed to or from other methods}
 }

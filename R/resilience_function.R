@@ -68,7 +68,8 @@
 #'     verbose = TRUE
 #'   )
 #'
-#' @return A dataframe containing all the resilience metrics
+#' @return An object of class "resil", which is a dataframe
+#' containing all the resilience metrics.
 #' @export
 #' @name resilience
 
@@ -366,13 +367,13 @@ print.resil <- function(x, ...) {
 
 #' Summary method for objects of class resil
 #'
-#' @param x an object used to select a method
+#' @param object an object used to select a method
 #' @param ... further arguments passed to or from other methods
 #' @return summary statistics
 #' @export
 #'
-summary.resil <- function(x, ...) {
-  demres_dist(x)
+summary.resil <- function(object, ...) {
+  demres_dist(object)
 }
 
 #' Plotting method for objects of class resil
