@@ -28,7 +28,7 @@
 #'     metrics = "all",
 #'     bounds = TRUE,
 #'     vector = Cranevec1,
-#'     TDvector = TRUE,
+#'     TDvector = FALSE,
 #'     popname = "blue crane",
 #'     time = "both",
 #'     verbose = TRUE

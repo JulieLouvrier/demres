@@ -77,7 +77,7 @@ data(bluecrane); bluecrane
 
 ```
 
-The numbers in the matrices describe the probability of transitioning from stages in columns to stages in rows, between time intervals that relevant to the species, in the case of the blue crane, years. For blue cranes in our case, the probability to move from a 1 year old to a 2 year old is 61.2% on year 5 of the study (see `bluecrane[[5]]`), while this probability is 88.7% in year 2 of the study period (see `bluecrane[[2]]`). 
+The numbers in the matrices describe the probability of transitioning from stages described in columns to stages described in rows, between time intervals that are relevant to the species, in the case of the blue crane, years. For blue cranes, the probability to move from a 1 year old to a 2 year old is 61.2% on year 5 of the study (see `bluecrane[[5]]`), while this probability is 88.7% in year 2 of the study period (see `bluecrane[[2]]`). 
 \  
 
 # Assess time-varying demographic resilience 
@@ -88,32 +88,39 @@ The different resilience metrics that are calculated[^2] can be :
 
 - _**Damping ratio**_ : Dimensionless measure of convergence to stable growth. Smaller numbers represent slower convergence. Damping ratio is calculated using 
 
-$$\textit{damping ratio} = p = \frac{\lambda_1}{||\lambda_2||}$$
+$$\textit{damping ratio} = {\rho} = \frac{\lambda_1}{||\lambda_2||}$$
+With $\lambda_1$ the dominant eigenvalue and $\lambda_2$ the largest subdominant eigenvalue.
 
 - _**Inertia**_ : The long term population density in comparison with a population that reached a stable growth. Inertia is calculated using  
 
-$$\textit{inertia} = P_{\infty} = \frac{\textbf{v}^\text{T}\hat{\textbf{n}}_0||\textbf{w}||_1}{\textbf{v}^\text{T}\textbf{w}}$$  
-**w** and **v** are the right and left eigenvectors. 
+$$\textit{inertia} = {\rho}_{\infty} = \frac{\textbf{v}_{max}||\textbf{w}||_1}{\textbf{v}^\text{T}\textbf{w}}$$ 
+
+in case of an amplifying population and 
+
+$$\textit{inertia} = {\rho}_{\infty} = \frac{\textbf{v}_{min}||\textbf{w}||_1}{\textbf{v}^\text{T}\textbf{w}}$$ 
+in case of an attenuating population. 
+
+With **w** and **v** are right and left eigenvectors respectively. $\textbf{v}_{min}$ and $\textbf{v}_{max}$ represent the smallest and largest entries of **v**. $||\textbf{w}||_1$ represents the one-norm of **w** (equals to the sum of its entries). 
 
 - _**Reactivity**_ : The population density that can be reached in the first time step after disturbance. Reactivity is calculated using  
 
-$$\textit{reactivity} = \bar{p_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
+$$\textit{reactivity} = \bar{\rho_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
+With **A** the matrix population model and $\hat{\textbf{A}}$ the standardized population model which is calculated as $\hat{\textbf{A}} = \frac{A}{\lambda_{1}}$. The vector $\hat{\textbf{n}}_0$ represents the initial demographic distribution, standardized to sum to 1 and is calculated as $\hat{\textbf{n}}_0 = \frac{{\textbf{n}}_0}{||\textbf{n}_0||_1}$. 
 
-- _**Maximum amplification**_ : lThe largest population density that can be reached at any time after disturbance. This metric is calculated using:
-$$maximum\ amplification = \bar{P}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
-
+- _**Maximum amplification**_ : The largest population density that can be reached at any time after disturbance. This metric is calculated using:
+$$maximum\ amplification = \bar{\rho}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
 
 - _**Maximum attenuation**_ : The lowest population density that can be reached at any time after disturbance. this metric is calculated using 
 
-$$maximum\ attenuation = \underline{P}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
-
-
+$$maximum\ attenuation = \underline{\rho}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
 Maximum amplification and maximum attenuation can occur at any point along the projection. Some populations only have a maximum amplification due to either their demographic structure or the initial vector (because they never attenuate), some only have a maximum attenuation (because they never amplify), and some have both.
 
 [^2]: [Stott, I., Hodgson, D. J., & Townley, S. (2012) Functional Ecology, Methods in Ecology & Evolution, 3(5).](https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/j.2041-210X.2012.00222.x)
 
 ## Calculating one resilience metric 
 The function `demres` can compiles each of the aforementioned metric, calculated for each matrix that was made at each time step of the length of the study.  
+
+
 
 In a first time we can look at `inertia`
 ```{r echo = -1}
@@ -152,6 +159,24 @@ Bluecrane.reac
 A reactivity of 1.32 would mean that in the first timestep, the population grows 1.32 as fast as its stable growth rate.
 
 ## several metrics
+
+Now let's look at all the metrics possible 
+```{r echo = -1}
+Bluecrane.all <- resilience(
+     listA = bluecrane,
+     metrics = "all",
+     bounds = TRUE,
+     vector = Cranevec1,
+     popname = "blue crane",
+     time = "varying")
+
+Bluecrane.all
+```
+This time we have an objetc of type "resil" that is a dataframe, of 16 columns. 
+
+```{r echo = -1}
+colnames(Bluecrane.all)
+```
 
 # Assess time-constant demographic resilience
 ## one metric
