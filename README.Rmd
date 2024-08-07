@@ -93,7 +93,7 @@ with TV - the time-varying resilience metric and TC - the time-constant one
 $$\sqrt{mean((TV-TC)^2)} / sd(TV)$$   
 
 #### MAPE: 
-$$ \frac{(mean(abs(TV - TC))}{100}$$ 
+$$\frac{mean(abs(TV-TC))}{TC}$$ 
 
 ```{r, distance}
 #let's calculate all measures of distance for inertia

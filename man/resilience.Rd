@@ -98,7 +98,7 @@ BC_TVTC_demres <-
     vector = Cranevec1,
     TDvector = FALSE,
     popname = "blue crane",
-    time = "both",
+    time = "varying",
     verbose = TRUE
   )
 

@@ -48,7 +48,6 @@ remotes::install_github("JulieLouvrier/demres")
 
 ***  
 # Matrix Population Models
-
 ## Blue cran models
 
 We will use a list matrix projection models (MPMs) of a blue crane population (*Anthropoides paradiseus*) in the Northern Cape Province, South Africa, from the study by Altweg and Anderson 2009: "Rainfall in arid zones: possible effects of climate change on the population ecology of blue cranes" [^1].
@@ -83,7 +82,8 @@ The numbers in the matrices describe the probability of transitioning from stage
 # Assess time-varying demographic resilience 
 The function `resilience` is made to calculate demographic resilience metrics based on a list of Matrix Population Models. It returns a `dataframe` with time-varying demographic resilience metrics with the option `time = "varying`.
 
-The different resilience metrics that are calculated[^2] can be :     
+The different resilience metrics that are calculated[^2] can be :         
+
 - _**Convergence time**_ :  time to convergence of a population matrix projection model from the model projection.         
 
 - _**Damping ratio**_ : Dimensionless measure of convergence to stable growth. Smaller numbers represent slower convergence. Damping ratio is calculated using 
@@ -121,14 +121,23 @@ The function `resilience` can compiles each of the aforementioned metric, calcul
 
 The parameters to specify are: 
 •	`listA`: a list of square, primitive, irreducible, non-negative numeric matrices of any dimension       
+
 •	`metrics`: Character string. The user can specify either one or several resilience metrics of their choice, The metrics have to be specified as either “`convt`” (for convergence time), "`reac`" (for reactivity); “`inertia`”, “`dr`” (for damping ratio); “`maxamp`” (for maximum amplification); “`maxatt`” (for maximum attenuation); or “`all`” to compute all of the aforementioned metrics. By default set to “`all`”.             
+
 •	`bounds`: Boolean. optional parameter if the user wants to calculate the upper and lower bounds calculated from the stage-biased vectors. By default set to `TRUE`.         
+
 •	`vector`: Numeric. can be a numeric vector or a list of numeric vectors describing the age/stage distribution ('demographic structure') used to calculate a 'case-specific', stage age structure metric.       
+
 •	`TDvector`: Boolean. Specifies whether or not the user wants to get a Time-Dependent list of initial vectors, corresponding to the population stage distribution projection for each year with each matrix of each year. The result is a list of X initial vectors with X the number of matrices that are in the list. By default set to `FALSE`.        
+
 •	`popname`: Character string describing the name of the population.       
+
 •	`time`: Character string: "`constant`" (if the metrics are to be calculated over the whole study period); "`varying`" (if the metrics are to be calculated for each time step) or "`both`”.          
+
 •	`accuracy`: Numeric. This is an option taken from the function convt from popdemo to use when calculating the convergence time. It is a numeric value between 0  and 1 representing the  accuracy with which to determine convergence on asymptotic growth, expressed as a proportion. By default set to 0.01.         
+
 •	`iterations`: This is an option taken from the function `convt` from `popdemo` to use when calculating the convergence time. It represents the maximum number of iterations of the model before the code breaks. By default set to 1e+05. 
+
 •	`verbose`: Boolean. If set to `TRUE` it will display the warning messages that are produced when assessing the demographic resilience metrics. By default set to `TRUE.`        
 
 If bounds = `TRUE` but no vector is specified, the function provides metrics in their upper and lower bound, calculated based on the stage-biased vector. If vector is specified, the function additionnally provides the metrics calculated based on the provided initial vector.
@@ -169,7 +178,7 @@ Bluecrane.reac.tv <- resilience(
 Bluecrane.reac.tv
 ```
 
-A reactivity of 1.32 would mean that in the first timestep, the population grows 1.32 as fast as its stable growth rate.
+A reactivity of 1.32 would mean that in the first timestep, the population grows 1.32 as fast as its stable growth rate.It is therefore amplifying. 
 
 ## several metrics
 Now let's look at all the metrics possible with the option `metrics = "all"`
@@ -185,6 +194,7 @@ Bluecrane.all.tv <- resilience(
 
 Bluecrane.all.tv
 ```
+
 This time we have an objetc of type "resil" that is a dataframe, of 16 columns. 
 
 ```{r echo = -1}
@@ -194,6 +204,8 @@ colnames(Bluecrane.all.tv)
 All 6 metrics are given with their upper and lower bound when possible. Error messages were displayed due to the fact that the bounds were requested for maximum amplification and maximum attenuation, but the lower bound cannot be calculated for maximum amplification and the upper bound cannot be calculated for maximum attenuation. 
 
 The lower and upper bounds are calculated based on the stage-biased vector, therefore we warn the users to interpret the results with caution when looking at the lower and upper bounds of convergence time. Convergence time represents the number of time-steps it will take for the population to reach asymptotic growth rate. Therefore, the stage-biased vectors might lead to longer convergence time than when calculated with an initial vector representeing more realistic demographic structure. 
+
+Given the population demographic structure given in $\hat{\textbf{n}}_0$ it appears that for none of the years the population would attenuate, and rather amplifies.
 
 ## Time-dependant initial vector
 It is also possible to derive a list of initial vectors starting with one vector representing the demographic structure of the first time-step (option `TDvector = TRUE` for Time-Dependent vector).
@@ -216,6 +228,10 @@ Bluecrane.all.tv.TD <- resilience(
 Bluecrane.all.tv.TD
 ```
 Here in that case, we can see that values differ from the previous `Bluecrane.all.tv` as we can see that inertia and reactivity have values that are below 1 when the vector provided is time-dependant, meaning that the population is attenuating rather than amplifying during these years.  
+
+In comparison with the previous table, one can see that the values of inertia and reactivity converge towards 1 over time. As we are projecting the population over time, it is expected to have the population approaching asymptotic growth, however the variations around 1 are showing the temporal variations of the demographic rates.
+
+The values of inertia and reactivity calculated with the time-constant approach are also much closer to 1 than when the time-dependant vector is not used because the initial vector is averaged over the years of projection, getting clsoer to the stable stage structure of the population. If we were to compare the time-varying approach with a time-dependant initial vector to the time-constant approach with the initial vector equal to the first entry of the time-dependant series of vector, the differences between the time-varying and the time-constant approach would be even greater. 
 
 Note that it is also possible to provide a list of initial vectors, of length the number of MPMS that are in ListA. This can be used when users have information about the actual demographic strucure of their study population over time. 
 
@@ -315,7 +331,7 @@ table.bc.all <- summary(Bluecrane.all.tvtc)
 
 table.bc.all
 ```
-First, we can notive that the distance measures for maximum attenuation cannot be computed because the population did not attenuate according to the time-constant approach. 
+First, we can notice that the distance measures for maximum attenuation cannot be computed because the population did not attenuate according to the time-constant approach. 
 Looking at the RMSE, convergence time is the metric with the largest values. This is due to the the fact that convergence time is expressed in number of time steps, therefore the values can greatly vary, and are much larger than the values of the other metrics that are around 1. Secondly, when looking at the rRMSE, all values seem to be below 1, expressing a dispersion that is acceptable. However when looking at the MAPE, convergence time calculated based on an initial vector and its bounds, the upper bound of inertia, the upper bound of maximum amplification, and the upper bound of reactivity are metrics for which the MAPE is above 5%. For these metrics, we can consider that the time-varying is more sensible thant the time-constant approach.
 
 It is now worth investigating the reasons behind the fact that the upper bound appears to be the metric that varies the most in time. 
@@ -356,12 +372,14 @@ list.demres <- lapply(X = list.initvec,
 list.demres
 ```
 
-If there is an overrepresentation of individuals in stages with low survival and zero/low fertility, then the population will grow slower (or decline faster) than the stable rate (i.e. attenuates). In our case, a bias towards year 1 seems to be the one that leads to the lower bound, which means that if only juveniles: the population attenuates the most. A bias towards year 2 also seems to make the population attenuate.   
+If there is an over-representation of individuals in stages with low survival and zero/low fertility, then the population will grow slower (or decline faster) than the stable rate (i.e. attenuates). In our case, a bias towards year 1 seems to be the one that leads to the lower bound, which means that if only juveniles: the population attenuates the most. A bias towards year 2 also seems to make the population attenuate.   
 
-If there is an overrepresentation of individuals in stages with high survival and/or fertility, then the population will grow faster (or decline slower) than the stable rate (i.e. amplifies). In our case, a bias towards year 5 seems to be the one that leads to the upper bound, which means that if only adults: the population amplifies. 
+If there is an over-representation of individuals in stages with high survival and/or fertility, then the population will grow faster (or decline slower) than the stable rate (i.e. amplifies). In our case, a bias towards year 5 seems to be the one that leads to the upper bound, which means that if only adults: the population amplifies. 
 
+Therefore the maximum amplification in that case represents how the population would evolve if adults only would constitute the population, representing the temporal variation in their survival and fertility. This parameter appeared to be influence by the years, however showing little variation over time in comparison with the variation in survival of other age classes. This demonstrates the fact that little variations in adult survival lead to large differences of output in terms of demographic resilience.
 
 ## What happens when we use a time-dependant initial vector? 
+In that case, if `time = "both"`the time-constant demographic resilience metrics are calculated based on the average vector over the years. 
 
 ```{r echo = -1}
 Bluecrane.all.tvtc.TD <- resilience(
@@ -379,19 +397,57 @@ table.bc.all.TD <- summary(Bluecrane.all.tvtc.TD)
 table.bc.all.TD
 
 ```
-In this case, the distance measures are much more different. 
+In this case, the distance measures are very different. Convergence time is still the metric that shows the highest values of RMSE, however the rRMSE values show this time that the convergence time and maxamp both have a RMSE wider than the sd,highlighting a broad dispersion around the time-constant value. 
+Finally, when looking at the MAPE, almost all metrics this time show a MAPE above 5% except for damping ratio, the lower bound of maximum attenuation and the lower bound of reactivity. 
+Values of damping ratio are not changing in that case becase it is calculated based on the properties of the matrix and does not depend on the initial vector. 
 
+When initial vectors also depend on time, we can conclude that the time-varying approach is even more sensible in that case than when using only one initial vector. 
+
+# Check extreme years 
+
+We have seen already that the year 2 was the best in terms of highest values of demographic rates, while the year 5 was the year during which the demographic rates were at their lowest. 
+
+Let's see how this translates in terms of demographic resilience metrics 
+
+### Maximum values 
+```{r echo = -1}
+#maximum values 
+apply(Bluecrane.all.tv[-c(1:2)],2,which.max)
+
+```
+The second year is the year during which most of the demographic resilience metrics are at their maximum value. The population amplifies, given the initial vector that was provided, however the extent of the amplification remains close to 1, with inertia of 1.6, a maximum amplification of 1.9 and a reactivity close to 1.4. the maximum the population amplifies is around 3.7, which remains reasonable. However, during the second year is also the highest value of convergence time and the lowest value of damping ratio. Given that the closer to 1 the damping ratio is, the slower the population converges, we can conclude that during the second year, the population reaches maximum values of amplification but converges the slowest. 
+
+
+### Minimum values 
+```{r echo = -1}
+#minimum values 
+apply(Bluecrane.all.tv[-c(1:2)],2,which.min)
+
+```
+
+Now looking at the minimum values, we can observe that the 5th year was the year during which the demographic resilience metrics were at their lowest, however with convergence time at its lowest value and damping ratio at its highest value, displaying a trade-off between amplification and convergence. 
 
 # Plot 
+The function `plot` provides a visual representation of the time-varying and time-constant metrics that are present in the dataframe returned by the function `resilience`. Depending on what the user specified as demographic distribution, the plot shows the resilience metrics computed by using  the lower bound, the upper bound, or  the initial distribution vector. 
+
 ```{r echo = -1}
 plot(Bluecrane.all.tvtc)
 
-plot(Bluecrane.all.tvtc.TD)
-
 ```
+
+![convergence time](C:/Users/louvrier/Documents/demres/man/figures/convt.bc.tvtc.png)
+
+![damping ratio](C:/Users/louvrier/Documents/demres/man/figures/dr.bc.tvtc.png)
+
+![Inertia](C:/Users/louvrier/Documents/demres/man/figures/inertia.bc.tvtc.png)
+
+![Maximum amplification](C:/Users/louvrier/Documents/demres/man/figures/maxamp.bc.tvtc.png)
+
+![Maximum attenuation](C:/Users/louvrier/Documents/demres/man/figures/maxatt.bc.tvtc.png)
+
+![Reactivity](C:/Users/louvrier/Documents/demres/man/figures/reac.bc.tvtc.png)
 
 R opened as many windows as there are metrics in the table provided. In each window is a visual representation of the demographic resilience metrics over time. 
 
 
-# Check the extreme years 
 
