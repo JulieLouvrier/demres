@@ -64,7 +64,7 @@
 #'     vector = Cranevec1,
 #'     TDvector = FALSE,
 #'     popname = "blue crane",
-#'     time = "both",
+#'     time = "varying",
 #'     verbose = TRUE
 #'   )
 #'
@@ -197,10 +197,11 @@ resilience <- function(listA,
             }, A = listA, X = vector, SIMPLIFY = FALSE)
 
           message_varying_temp <- sapply(temp_list, function(e) attr(e, "msg"))
-          if(length(do.call(rbind, message_varying_temp))>0){
 
-            n.obs <- sapply(message_varying_temp, length)
-            seq.max <- seq_len(max(n.obs))
+          n.obs <- sapply(message_varying_temp, length)
+          seq.max <- seq_len(max(n.obs))
+          if(length(seq.max)>0){
+
             message_varying <- data.frame(sapply(message_varying_temp, "[", i = seq.max))
             message_varying[is.na(message_varying)] <- ""
             colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
