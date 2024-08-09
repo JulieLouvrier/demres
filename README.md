@@ -209,7 +209,7 @@ $$\sqrt{mean((TV-TC)^2)} / sd(TV)$$
 
 #### MAPE:
 
-$$ \frac{(mean(abs(TV - TC))}{100}$$
+$$\frac{mean(abs(TV-TC))}{TC}$$
 
 ``` r
 #let's calculate all measures of distance for inertia
@@ -256,3 +256,45 @@ plot(BlueCrane_demres)
 #>    text.y1    text.y2    text.y3 
 #>  1.6406708  1.5418662  1.4430617
 ```
+
+<figure>
+<img
+src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/convt.bc.tvtc.png"
+alt="convergence time" />
+<figcaption aria-hidden="true">convergence time</figcaption>
+</figure>
+
+<figure>
+<img
+src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/dr.bc.tvtc.png"
+alt="damping ratio" />
+<figcaption aria-hidden="true">damping ratio</figcaption>
+</figure>
+
+<figure>
+<img
+src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/inertia.bc.tvtc.png"
+alt="Inertia" />
+<figcaption aria-hidden="true">Inertia</figcaption>
+</figure>
+
+<figure>
+<img
+src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/maxamp.bc.tvtc.png"
+alt="Maximum amplification" />
+<figcaption aria-hidden="true">Maximum amplification</figcaption>
+</figure>
+
+<figure>
+<img
+src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/maxatt.bc.tvtc.png"
+alt="Maximum attenuation" />
+<figcaption aria-hidden="true">Maximum attenuation</figcaption>
+</figure>
+
+<figure>
+<img
+src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/reac.bc.tvtc.png"
+alt="Reactivity" />
+<figcaption aria-hidden="true">Reactivity</figcaption>
+</figure>
