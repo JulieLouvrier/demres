@@ -111,3 +111,15 @@ dist_BC
 #plotting
 plot(BlueCrane_demres)
 ```
+
+![convergence time](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/convt.bc.tvtc.png)
+
+![damping ratio](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/dr.bc.tvtc.png)
+
+![Inertia](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/inertia.bc.tvtc.png)
+
+![Maximum amplification](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/maxamp.bc.tvtc.png)
+
+![Maximum attenuation](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/maxatt.bc.tvtc.png)
+
+![Reactivity](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/reac.bc.tvtc.png)
