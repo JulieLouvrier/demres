@@ -42,6 +42,9 @@
 #'            "varying": if the metrics are to be calculated for each time step.
 #' @param accuracy the accuracy with which to determine convergence to asymptotic growth,
 #' expressed as a proportion. Set to 0.01 by default.
+#' @param f A character specifying whether the output should be shown in
+#' "long" (demographic resilience metrics as row names) or in "wide" (demographic
+#' resilience metrics as column names) format. Defaults to "wide".
 #' @param iterations the maximum number of iterations of the model before the code breaks. For slowly-converging models
 #' and/or high specified convergence accuracy, this may need to be increased.
 #' Set to 1e+05 by default.
@@ -85,7 +88,8 @@ resilience <- function(listA,
                    time = "both",
                    verbose = TRUE,
                    accuracy = 0.01,
-                   iterations = 1e+05) {
+                   iterations = 1e+05,
+                   f = 'wide') {
 
   message_varying <- character(0)
   message_constant <- character(0)
@@ -373,8 +377,8 @@ print.resil <- function(x, ...) {
 #' @return summary statistics
 #' @export
 #'
-summary.resil <- function(object, ...) {
-  demres_dist(object)
+summary.resil <- function(object, f = 'wide', ...) {
+  demres_dist(object, f)
 }
 
 #' Plotting method for objects of class resil

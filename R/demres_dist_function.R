@@ -12,6 +12,9 @@
 #' and TC - using the time-constant approach.
 #' @param table A data frame containing all the resilience metrics calculated
 #' with the resilience function
+#' @param f A character specifying whether the output should be shown in
+#' "long" (demographic resilience metrics as row names) or in "wide" (demographic
+#' resilience metrics as column names) format. Defaults to "wide".
 #' @name demres_dist
 #'
 #' @examples
@@ -40,7 +43,7 @@
 #' @return A data frame displaying the distance measures for the metrics that are present in the table
 #' @export
 
-demres_dist <- function(table) {
+demres_dist <- function(table, f = 'wide') {
 
     if(length(grep("_TV", names(table))) == 0 || length(grep("_TC", names(table))) == 0){
     stop("To calculte the distance metrics, both time-varying and time-constant approaches are necessary")
@@ -69,7 +72,17 @@ demres_dist <- function(table) {
 
     colnames(distance_demres) <- unique_combis
 
-  return(distance_demres)
+    if(f == 'wide'){
+      return(distance_demres)
+    }
+    if(f == 'long'){
+      return(t(distance_demres))
+    }
+    if(! f %in% c('wide', 'long')){
+      message("Warning: a function only takes two
+              possible values for 'f': either 'long' or 'wide'")
+    }
+
 
   }
 }
