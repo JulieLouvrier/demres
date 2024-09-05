@@ -373,6 +373,9 @@ print.resil <- function(x, ...) {
 #' Summary method for objects of class resil
 #'
 #' @param object an object used to select a method
+#' @param f A character specifying whether the output should be shown in
+#' "long" (demographic resilience metrics as row names) or in "wide" (demographic
+#' resilience metrics as column names) format. Defaults to "wide".
 #' @param ... further arguments passed to or from other methods
 #' @return summary statistics
 #' @export

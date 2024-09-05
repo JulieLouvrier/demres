@@ -5,11 +5,15 @@
 \title{Calculates the distance between resilience metrics calculated with time-varying
 and time-constant approaches}
 \usage{
-demres_dist(table)
+demres_dist(table, f = "wide")
 }
 \arguments{
 \item{table}{A data frame containing all the resilience metrics calculated
 with the resilience function}
+
+\item{f}{A character specifying whether the output should be shown in
+"long" (demographic resilience metrics as row names) or in "wide" (demographic
+resilience metrics as column names) format. Defaults to "wide".}
 }
 \value{
 A data frame displaying the distance measures for the metrics that are present in the table

@@ -15,7 +15,8 @@ resilience(
   time = "both",
   verbose = TRUE,
   accuracy = 0.01,
-  iterations = 1e+05
+  iterations = 1e+05,
+  f = "wide"
 )
 }
 \arguments{
@@ -68,6 +69,10 @@ expressed as a proportion. Set to 0.01 by default.}
 and/or high specified convergence accuracy, this may need to be increased.
 Set to 1e+05 by default.
 \strong{Vik}: the option above (iterations) is used for convergence time only, right? Should be mentioned then}
+
+\item{f}{A character specifying whether the output should be shown in
+"long" (demographic resilience metrics as row names) or in "wide" (demographic
+resilience metrics as column names) format. Defaults to "wide".}
 }
 \value{
 An object of class "resil", which is a dataframe

@@ -4,10 +4,14 @@
 \alias{summary.resil}
 \title{Summary method for objects of class resil}
 \usage{
-\method{summary}{resil}(object, ...)
+\method{summary}{resil}(object, f = "wide", ...)
 }
 \arguments{
 \item{object}{an object used to select a method}
+
+\item{f}{A character specifying whether the output should be shown in
+"long" (demographic resilience metrics as row names) or in "wide" (demographic
+resilience metrics as column names) format. Defaults to "wide".}
 
 \item{...}{further arguments passed to or from other methods}
 }
