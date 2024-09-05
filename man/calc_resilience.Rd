@@ -65,8 +65,8 @@ A vector containing all the resilience metrics
 on a matrix population model
 }
 \details{
-This function compiles different metrics of resilience, given by the popdemo
-package based on a population matrix projection model.
+This function computes different metrics of resilience, given by the \emph{{popdemo}}
+package based on a matrix projection model.
 }
 \examples{
 data(bluecrane)
