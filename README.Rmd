@@ -56,9 +56,9 @@ data(bluecrane)
 
 ```
 
-### Calculate demographic resilience metrics based on a list of Matrices
+### Calculate demographic resilience metrics based on a list of population matrices
 
-The function `resilience` is made to calculate demographic resilience metrics based on a lost Matrix Population Models. It returns a `dataframe` with both time-varying and time-constant approaches when required with the option `time`.
+The function `resilience` is made to calculate demographic resilience metrics based on a list of matrix projection models. It returns a `dataframe` with both time-varying and time-constant approaches when required with the option `time`.
 
 ```{r, resilience metrics}
 # Create initial vector
@@ -81,9 +81,9 @@ BlueCrane_demres <- resilience(
 BlueCrane_demres
 ```
 
-### Assessing the distance between the time-varying and the time-constant approaches
+### Assess the distance between the time-varying and the time-constant approaches
 
-The function `summary` calculates the distance between the time-varying resilience metric and the time-constant one by measuring the RMSE, rRMSE and the MAPE: 
+The function `summary` calculates the distance between the time-varying and the time-constant approaches by using the RMSE, rRMSE or the MAPE: 
 
 #### RMSE: 
 $$\sqrt{mean((TV-TC)^2)}$$   
@@ -103,15 +103,16 @@ dist_BC <- summary(BlueCrane_demres)
 dist_BC
 ```
 
-### plotting the results
+### Plot the results
 
-`demres_plot` provides a plot to visually inspect the resilience metric along a time axis
+Function `plot` provides a plot to visually inspect the resilience metric along a time axis
 
 ```{r, plotting}
-#plotting
 plot(BlueCrane_demres)
 ```
 
+**Vik**: these links point to locations on your personal PC and are broken if someone uses them from outside your PC (e.g. they do not
+work for me). Consider adding these plots to a folder "plots" (or so) on the package, so that they will be directly available. And why can't you directly visualise them using that plot() function? (I guess because it needs the user to switch the window...)
 ![convergence time](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/convt.bc.tvtc.png)
 
 ![damping ratio](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/dr.bc.tvtc.png)
