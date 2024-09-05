@@ -1,15 +1,16 @@
-#' Calculates distance between the time-varying resilience metric and the time-
-#' constant one
+#' Calculates the distance between resilience metrics calculated with time-varying
+#' and time-constant approaches
 #'
-#' `summary` Calculates distance between the time-varying resilience
-#' metric and the time-constant one:
+#' `summary` Calculates distance between resilience metrics calculated with
+#' time-varying and time-constant approaches:
 #' "RMSE": sqrt(mean((TV-TC)^2))
 #' with TV: the time-Varying resilience metric and TC the time constant one
 #' "rRMSE": sqrt(mean((TV-TC)^2)) / sd(TV)
 #' with TV: the time-Varying resilience metric and TC the time constant
-#' "MAPE": mean(abs(TV - TC))
-#' with TV: the time-Varying resilience metric and TC the time constant
-#' @param table A dataframe containing all the resilience metrics calculated
+#' "MAPE": mean(abs(TV - TC))/TC
+#' with TV: the resilience metric calculated using the time-varying approach
+#' and TC - using the time-constant approach.
+#' @param table A data frame containing all the resilience metrics calculated
 #' with the resilience function
 #' @name demres_dist
 #'
@@ -36,7 +37,7 @@
 #'
 #' dist_BC <- summary(BC_TVTC_demres)
 #'
-#' @return A dataframe displaying the distance measures for the metrics that are present in the table
+#' @return A data frame displaying the distance measures for the metrics that are present in the table
 #' @export
 
 demres_dist <- function(table) {

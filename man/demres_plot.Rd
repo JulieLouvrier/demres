@@ -8,7 +8,7 @@ demres_plot(table)
 }
 \arguments{
 \item{table}{A dataframe containing all the resilience metrics calculated
-with the resilience function}
+with the \code{resilience} function}
 }
 \value{
 A plot displaying the chosen metric along a time axis

@@ -2,27 +2,28 @@
 % Please edit documentation in R/demres_dist_function.R
 \name{demres_dist}
 \alias{demres_dist}
-\title{Calculates distance between the time-varying resilience metric and the time-
-constant one}
+\title{Calculates the distance between resilience metrics calculated with time-varying
+and time-constant approaches}
 \usage{
 demres_dist(table)
 }
 \arguments{
-\item{table}{A dataframe containing all the resilience metrics calculated
+\item{table}{A data frame containing all the resilience metrics calculated
 with the resilience function}
 }
 \value{
-A dataframe displaying the distance measures for the metrics that are present in the table
+A data frame displaying the distance measures for the metrics that are present in the table
 }
 \description{
-\code{summary} Calculates distance between the time-varying resilience
-metric and the time-constant one:
+\code{summary} Calculates distance between resilience metrics calculated with
+time-varying and time-constant approaches:
 "RMSE": sqrt(mean((TV-TC)^2))
 with TV: the time-Varying resilience metric and TC the time constant one
 "rRMSE": sqrt(mean((TV-TC)^2)) / sd(TV)
 with TV: the time-Varying resilience metric and TC the time constant
-"MAPE": mean(abs(TV - TC))
-with TV: the time-Varying resilience metric and TC the time constant
+"MAPE": mean(abs(TV - TC))/TC
+with TV: the resilience metric calculated using the time-varying approach
+and TC - using the time-constant approach.
 }
 \examples{
 # load data

@@ -1,12 +1,13 @@
-#' Helper function for setting up a list of time dependant initial vectors,
-#' starting with one initial vector
+#' Helper function for setting up a list of time-dependent initial vectors,
+#' starting with the first initial vector
 #'
-#' `get_TD_vector` provides a list of initial vectors that are projected for
-#' each year with each time-varying Matrix, starting with one initial vector
+#' `get_TD_vector` provides a list of initial vectors that are used for each time
+#' step together with each time-varying population matrix to project population
+#' dynamics over time.
 #'
 #' @param IV a one-column matrix describing the age/stage distribution
 #'  ('demographic structure') used to calculate a 'case-specific',
-#'  stage age structure for the first year. The other initial vectors will be
+#'  stage/ age structure for the first year. The other initial vectors will be
 #'  calculated from this first initial vector.
 #' @param listA a list of square, primitive, irreducible, non-negative numeric
 #' matrices of any dimension
