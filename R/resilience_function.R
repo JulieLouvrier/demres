@@ -1,50 +1,53 @@
-#' Provides time-varying and time-constant resilience metrics for animal
+#' Provides time-varying and time-constant resilience metrics for
 #' populations based on a list of matrix population models
 #'
 #' `resilience` calculates resilience metrics of a population based
 #' on a list of matrix population models
 #'
-#' This function works with to a list of matrices or just one matrix
-#' and returns either time-varying metrics or time-constant metrics
+#' This function works with a list of matrices or just one matrix
+#' and returns either time-varying metrics or time-constant metrics, depending
+#' on what is requested by the user (option `time`).
 #'
 #' @param listA a list of square, primitive, irreducible, non-negative numeric
 #' matrices of any dimension
 #' @param metrics "reac": Calculates reactivity: first-timestep amplification
-#'                 and first-timestep attenuation for a population matrix
-#'                 projection model.
-#'                 "inertia": Calculates population inertia for a population
-#'                 matrix projection model.
-#'                 "dr": Calculate the damping ratio of a given population
-#'                 matrix projection model.
-#'                 "maxamp": Calculate maximal amplification for a population
-#'                 matrix projection model.
-#'                 "maxatt": Calculate maximal attenuation for a population
-#'                 matrix projection model.
-#'                 "convt": Calculate the time to convergence of a population
-#'                 matrix projection model from the model projection
-#'                 "all": all of the above metrics are provided
-#' @param bounds (optional) set to FALSE as default. If TRUE, specifies whether the upper and  lower
-#' bound should be calculated
-#' if vector is not specified, the function provides metrics in their upper and
-#' lower bound, calculated based on the stage-biased vector
-#' if vector is specified, the function provides also the metrics calculated
-#' based on the inital vector
+#'                 and first-timestep attenuation for a matrix
+#'                 projection model. \cr
+#'                 "inertia": Calculates population inertia for a
+#'                 matrix projection model.\cr
+#'                 "dr": Calculates the damping ratio of a given
+#'                 matrix projection model.\cr
+#'                 "maxamp": Calculates maximal amplification for a
+#'                 matrix projection model.\cr
+#'                 "maxatt": Calculates maximal attenuation for a
+#'                 matrix projection model.\cr
+#'                 "convt": Calculates the time to convergence of a
+#'                 matrix projection model.\cr
+#'                 "all": all of the above metrics are provided.
+#' @param bounds (optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
+#' bound should be calculated. If initial vector is not specified, the function
+#' provides metrics at their upper and lower bounds, calculated based on the stage-biased vector.
+#' If vector is specified, the function provides also the metrics calculated
+#' based on the initial vector.
 #' @param vector a list of numeric vectors or one-column matrices describing the age/stage
-#' distribution ('demographic structure') used to calculate a 'case-specific', stage age structure
-#' metric
-#' @param TDvector set to FALSE as default. Specifies whether or not the user wants to get a Time-Dependant list of initial vectors,
-#' corresponding to the population stage distribution projection for each year with each matrix of each year.
-#' @param popname a character string describing the name of the population
-#' @param time set to "both" as default. A character string: "constant", "varying" or "both"
-#'            "constant" : if the metrics are to be calculated over the whole
-#'            study period
-#'            "varying": if the metrics are to be calculated for each time step
-#' @param accuracy the accuracy with which to determine convergence on asymptotic growth,
+#' distribution ('demographic structure') used to calculate a 'case-specific' resilience metric,
+#' based on the stage or age-structure.
+#' @param TDvector Boolean. Set to FALSE as default. Specifies whether or not the
+#' user wants to obtain a time-dependent list of initial vectors. This vector
+#' corresponds to the population stage distribution that is obtained from the projection
+#' of the population to the current time step using the specified matrix for each time step.
+#' @param popname a character string describing the name of the population.
+#' @param time set to "both" as default. A character string: "constant", "varying" or "both" \cr
+#'            "constant": if the metrics are to be calculated over the whole study period; \cr
+#'            "varying": if the metrics are to be calculated for each time step.
+#' @param accuracy the accuracy with which to determine convergence to asymptotic growth,
 #' expressed as a proportion. Set to 0.01 by default.
 #' @param iterations the maximum number of iterations of the model before the code breaks. For slowly-converging models
 #' and/or high specified convergence accuracy, this may need to be increased.
 #' Set to 1e+05 by default.
-#' @param verbose set to TRUE as default a boolean indicating if messages about failure to compute particular metrics should be displayed or not (default = TRUE)
+#' **Vik**: the option above (iterations) is used for convergence time only, right? Should be mentioned then
+#' @param verbose Boolean. Set to TRUE as default. Indicates whether the messages about failure
+#' to compute particular metric should be displayed or not (default = TRUE)
 #' @examples
 #'
 #' # load data
@@ -69,7 +72,7 @@
 #'   )
 #'
 #' @return An object of class "resil", which is a dataframe
-#' containing all the resilience metrics.
+#' containing the requested resilience metrics.
 #' @export
 #' @name resilience
 

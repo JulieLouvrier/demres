@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_resilience_function.R
 \name{calc_resilience}
 \alias{calc_resilience}
-\title{Provides resilience metrics from the package popdemo for one matrix}
+\title{Provides resilience metrics from the package \emph{{popdemo}} for one matrix}
 \usage{
 calc_resilience(
   A,
@@ -20,39 +20,42 @@ calc_resilience(
 dimension}
 
 \item{metrics}{"reac": Calculates reactivity: first-timestep amplification
-and first-timestep attenuation for a population matrix
-projection model.
-"inertia": Calculates population inertia for a population
-matrix projection model.
-"dr": Calculate the damping ratio of a given population
-matrix projection model.
-"maxamp": Calculate maximal amplification for a population
-matrix projection model.
-"maxatt": Calculate maximal attenuation for a population
-matrix projection model.
-"convt": Calculate the time to convergence of a population
-matrix projection model from the model projection
-"all": all of the above metrics are provided}
+and first-timestep attenuation for a matrix
+projection model. \cr
+"inertia": Calculates population inertia for a
+matrix projection model.\cr
+"dr": Calculates the damping ratio of a given
+matrix projection model.\cr
+"maxamp": Calculates maximal amplification for a
+matrix projection model.\cr
+"maxatt": Calculates maximal attenuation for a
+matrix projection model.\cr
+"convt": Calculates the time to convergence of a
+matrix projection model.\cr
+"all": all of the above metrics are provided.}
 
-\item{bounds}{(optional) if TRUE, specifies whether the upper and  lower bound
-should be calculated
-if vector is not specified, the function provides metrics in their upper and
-lower bound, calculated based on the stage-biased vector
-if vector is specified, the function provides also the metrics calculated based
-on the inital vector}
+\item{bounds}{(optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
+bound should be calculated. If initial vector is not specified, the function
+provides metrics at their upper and lower bounds, calculated based on the stage-biased vector.
+If vector is specified, the function provides also the metrics calculated
+based on the initial vector.}
 
 \item{vector}{a numeric vector or one-column matrix describing the age/stage
 distribution ('demographic structure') used to calculate a 'case-specific'
-maximal amplification}
+resilience metric}
 
-\item{popname}{a character string describing the name of the population}
+\item{popname}{a character string describing the name of the population.}
 
-\item{verbose}{a boolean indicating if messages about failure to compute particular metrics should be displayed or not (default = TRUE)}
+\item{verbose}{Boolean. Set to TRUE as default. Indicates whether the messages about failure
+to compute particular metric should be displayed or not (default = TRUE)}
 
-\item{accuracy}{the accuracy with which to determine convergence on asymptotic growth, expressed as a proportion}
+\item{accuracy}{the accuracy with which to determine convergence to asymptotic growth,
+expressed as a proportion. Set to 0.01 by default.}
 
 \item{iterations}{the maximum number of iterations of the model before the code breaks. For slowly-converging models
-and/or high specified convergence accuracy, this may need to be increased.}
+and/or high specified convergence accuracy, this may need to be increased.
+Set to 1e+05 by default.
+\strong{Vik}: the option above (iterations) is used for convergence time only, right? Should be mentioned then}
 }
 \value{
 A vector containing all the resilience metrics

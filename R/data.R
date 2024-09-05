@@ -2,8 +2,7 @@
 #'
 #' List of Matrix Projection Models for the blue crane \emph{Gopherus agassizii}
 #' based on 5 age classes. The matrices are based on a population centred on
-#' South Africa's grassland, eastern Nama Karoo and Overberg regions.
-#' The matrices are based on age:
+#' South Africa's grassland, eastern Nama Karoo and Overberg regions. The matrices are based on age: \cr
 #' Age 1: Year 1\cr
 #' Age 2: Year 2\cr
 #' Age 4: Year 4\cr
