@@ -7,19 +7,19 @@
 calc_convt(metrics, vector, A, bounds, accuracy, iterations)
 }
 \arguments{
-\item{metrics}{"reac": Calculates reactivity: first-timestep amplification
-and first-timestep attenuation for a matrix
-projection model. \cr
-"inertia": Calculates population inertia for a
+\item{metrics}{"convt": Calculates the time to convergence of a
 matrix projection model.\cr
 "dr": Calculates the damping ratio of a given
+matrix projection model.\cr
+"inertia": Calculates population inertia for a
 matrix projection model.\cr
 "maxamp": Calculates maximal amplification for a
 matrix projection model.\cr
 "maxatt": Calculates maximal attenuation for a
 matrix projection model.\cr
-"convt": Calculates the time to convergence of a
-matrix projection model.\cr
+"reac": Calculates reactivity: first-timestep amplification
+and first-timestep attenuation for a matrix
+projection model. \cr
 "all": all of the above metrics are provided.}
 
 \item{vector}{a numeric vector or one-column matrix describing the age/stage
@@ -35,13 +35,12 @@ provides metrics at their upper and lower bounds, calculated based on the stage-
 If vector is specified, the function provides also the metrics calculated
 based on the initial vector.}
 
-\item{accuracy}{the accuracy with which to determine convergence to asymptotic growth,
+\item{accuracy}{option for calculating convergence time: the accuracy with which to determine convergence to asymptotic growth,
 expressed as a proportion. Set to 0.01 by default.}
 
-\item{iterations}{the maximum number of iterations of the model before the code breaks. For slowly-converging models
+\item{iterations}{option for calculating convergence time: the maximum number of iterations of the model before the code breaks. For slowly-converging models
 and/or high specified convergence accuracy, this may need to be increased.
-Set to 1e+05 by default.
-\strong{Vik}: the option above (iterations) is used for convergence time only, right? Should be mentioned then}
+Set to 1e+05 by default.}
 }
 \description{
 Internal functions used by \code{\link[=calc_resilience]{calc_resilience()}}.

@@ -7,19 +7,19 @@
 calc_maxamp_or_maxatt(metrics, vector, A, bounds)
 }
 \arguments{
-\item{metrics}{"reac": Calculates reactivity: first-timestep amplification
-and first-timestep attenuation for a matrix
-projection model. \cr
-"inertia": Calculates population inertia for a
+\item{metrics}{"convt": Calculates the time to convergence of a
 matrix projection model.\cr
 "dr": Calculates the damping ratio of a given
+matrix projection model.\cr
+"inertia": Calculates population inertia for a
 matrix projection model.\cr
 "maxamp": Calculates maximal amplification for a
 matrix projection model.\cr
 "maxatt": Calculates maximal attenuation for a
 matrix projection model.\cr
-"convt": Calculates the time to convergence of a
-matrix projection model.\cr
+"reac": Calculates reactivity: first-timestep amplification
+and first-timestep attenuation for a matrix
+projection model. \cr
 "all": all of the above metrics are provided.}
 
 \item{vector}{a numeric vector or one-column matrix describing the age/stage

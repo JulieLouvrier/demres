@@ -10,19 +10,19 @@
 #'
 #' @param listA a list of square, primitive, irreducible, non-negative numeric
 #' matrices of any dimension
-#' @param metrics "reac": Calculates reactivity: first-timestep amplification
-#'                 and first-timestep attenuation for a matrix
-#'                 projection model. \cr
-#'                 "inertia": Calculates population inertia for a
+#' @param metrics "convt": Calculates the time to convergence of a
 #'                 matrix projection model.\cr
 #'                 "dr": Calculates the damping ratio of a given
+#'                 matrix projection model.\cr
+#'                 "inertia": Calculates population inertia for a
 #'                 matrix projection model.\cr
 #'                 "maxamp": Calculates maximal amplification for a
 #'                 matrix projection model.\cr
 #'                 "maxatt": Calculates maximal attenuation for a
 #'                 matrix projection model.\cr
-#'                 "convt": Calculates the time to convergence of a
-#'                 matrix projection model.\cr
+#'                 "reac": Calculates reactivity: first-timestep amplification
+#'                 and first-timestep attenuation for a matrix
+#'                 projection model. \cr
 #'                 "all": all of the above metrics are provided.
 #' @param bounds (optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
 #' bound should be calculated. If initial vector is not specified, the function
@@ -40,15 +40,14 @@
 #' @param time set to "both" as default. A character string: "constant", "varying" or "both" \cr
 #'            "constant": if the metrics are to be calculated over the whole study period; \cr
 #'            "varying": if the metrics are to be calculated for each time step.
-#' @param accuracy the accuracy with which to determine convergence to asymptotic growth,
+#' @param accuracy  option for calculating convergence time: the accuracy with which to determine convergence to asymptotic growth,
 #' expressed as a proportion. Set to 0.01 by default.
+#' @param iterations option for calculating convergence time: the maximum number of iterations of the model before the code breaks. For slowly-converging models
+#' and/or high specified convergence accuracy, this may need to be increased.
+#' Set to 1e+05 by default.
 #' @param f A character specifying whether the output should be shown in
 #' "long" (demographic resilience metrics as row names) or in "wide" (demographic
 #' resilience metrics as column names) format. Defaults to "wide".
-#' @param iterations the maximum number of iterations of the model before the code breaks. For slowly-converging models
-#' and/or high specified convergence accuracy, this may need to be increased.
-#' Set to 1e+05 by default.
-#' **Vik**: the option above (iterations) is used for convergence time only, right? Should be mentioned then
 #' @param verbose Boolean. Set to TRUE as default. Indicates whether the messages about failure
 #' to compute particular metric should be displayed or not (default = TRUE)
 #' @examples
