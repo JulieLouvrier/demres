@@ -111,16 +111,14 @@ Function `plot` provides a plot to visually inspect the resilience metric along 
 plot(BlueCrane_demres)
 ```
 
-**Vik**: these links point to locations on your personal PC and are broken if someone uses them from outside your PC (e.g. they do not
-work for me). Consider adding these plots to a folder "plots" (or so) on the package, so that they will be directly available. And why can't you directly visualise them using that plot() function? (I guess because it needs the user to switch the window...)
-![convergence time](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/convt.bc.tvtc.png)
+![convergence time](./man/figures/convt.bc.tvtc.png)
 
-![damping ratio](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/dr.bc.tvtc.png)
+![damping ratio](./man/figures/dr.bc.tvtc.png)
 
-![Inertia](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/inertia.bc.tvtc.png)
+![Inertia](./man/figures/inertia.bc.tvtc.png)
 
-![Maximum amplification](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/maxamp.bc.tvtc.png)
+![Maximum amplification](./man/figures/maxamp.bc.tvtc.png)
 
-![Maximum attenuation](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/maxatt.bc.tvtc.png)
+![Maximum attenuation](./man/figures/maxatt.bc.tvtc.png)
 
-![Reactivity](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/reac.bc.tvtc.png)
+![Reactivity](./man/figures/reac.bc.tvtc.png)

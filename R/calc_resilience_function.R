@@ -89,7 +89,7 @@ calc_resilience <-
 
     if(is.null(popname)) {
       message("no population name given, perhaps you want to specify one?")
-      popname <- "pop1"
+      popname <- "pop"
     }
 
     else{

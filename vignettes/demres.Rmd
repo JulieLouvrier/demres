@@ -46,10 +46,10 @@ install.packages(c("devtools", "remotes"))
 remotes::install_github("JulieLouvrier/demres")
 
 # libraries
-library(ggplot2)
-library(dplyr)
-library(hrbrthemes)
-library(tidyverse)
+# library(ggplot2)
+# library(dplyr)
+# library(hrbrthemes)
+# library(tidyverse)
 ```
 ***  
 # Matrix Population Models
@@ -73,7 +73,6 @@ plot(as.raster(cranepic))
 text(10, 10, adj = c (0, 0), col = "white",
      "Blue Crane parading")
 ```
-  
 
 Load in the data:  
 ```{r}
@@ -246,44 +245,35 @@ Bluecrane.all.tv.TD$inertia_TV
 Let's take a look at what inertia looks like when using a time-dependant initial vector in comparison with one non-changing value of initial vector. 
 
 ```{r echo = -1}
-#adding an extra column to specify whether the initial vector is time-dependant or not
-BC.TD <- Bluecrane.all.tv.TD %>% 
-  mutate(Time.Dependant = "yes")
-#here not
-BC.NTD <- Bluecrane.all.tv %>% 
-  mutate(Time.Dependant = "no")
+Bluecrane.all.tv$timestep <- factor(Bluecrane.all.tv$timestep) 
+                                    
+plot(Bluecrane.all.tv$inertia_TV, ylim = c(0,1.6), type = "l", 
+     xlab = "Time-step",
+     ylab = "Inertia of blue cranes")
+lines(Bluecrane.all.tv.TD$inertia_TV, col = "red")
+legend(1.5, 0.5, legend=c("Time dependant", "No time dependant"),
+            col=c("red", "black"), cex = 0.6, lty =c(1,1), box.lty=0)
+abline(h = 1, col = "blue", lty = 2)
 
-#combining both tables for the plot
-BC.plot.TD <- rbind(BC.TD, BC.NTD)
-
-#changing the time steps in factors for better aesthetic
-BC.plot.TD$timestep <- factor(BC.plot.TD$timestep)
-
-inertia.BC.plot <- ggplot(
-  BC.plot.TD, aes(x= timestep,y = inertia_TV, group = Time.Dependant, color = Time.Dependant)) +
-  geom_line() +
-  theme_ipsum() +
-  geom_hline(yintercept=1, linetype="dashed", color = "red") +
-  ylab("Inertia of blue cranes") +
-  xlab("Time steps")
-
-inertia.BC.plot
 
 ```
 
 Let's look now at reactivity 
-```{r echo = -1}
-reac.BC.plot <- ggplot(
-  BC.plot.TD, aes(x= timestep,y = reac_TV, group = Time.Dependant, color = Time.Dependant)) +
-  geom_line() +
-  theme_ipsum() +
-  geom_hline(yintercept=1, linetype="dashed", color = "red") +
-  ylab("Reactivity of blue cranes") +
-  xlab("Time steps")
 
-reac.BC.plot
+```{r echo = -1}
+Bluecrane.all.tv$timestep <- factor(Bluecrane.all.tv$timestep) 
+                                    
+plot(Bluecrane.all.tv$reac_TV, ylim = c(0,1.6), type = "l", 
+     xlab = "Time-step",
+     ylab = "Reac of blue cranes")
+lines(Bluecrane.all.tv.TD$reac_TV, col = "red")
+legend(1.5, 0.5, legend=c("Time dependant", "No time dependant"),
+            col=c("red", "black"),  cex = 0.6, lty =c(1,1), box.lty=0)
+abline(h = 1, col = "blue", lty = 2)
+
 
 ```
+
 
 When using the option `TDvector = TRUE`, the function projects the population structure for each time-step using the MPM of each time-step, which can be similar to projecting a population over time with one MPM except that here the function does it with a different matrix for each time-step. It is therefore expected that the population will approach asymptotic growth over time as the function projects the population over each time step, which are translated with demographic resilience metrics getting closer to 1. The variations that we can see therefore represent the variation in the demographic rates in the MPM in comparison with a projection over time with only one matrix. 
 
@@ -493,21 +483,17 @@ plot(Bluecrane.all.tvtc)
 
 ```
 
-## change here !!
+![convergence time](./figures/convt.bc.tvtc.png)
 
-**Vik**: As in the comment to the Readme: these links point to locations on your personal PC and are broken if someone uses them from outside your PC (e.g. they do not work for me). Consider adding these plots to a folder "plots" (or so) on the package, so that they will be directly available. And why can't you directly visualise them using that plot() function? (I guess because it needs the user to switch the window...)
+![damping ratio](./figures/dr.bc.tvtc.png)
 
-![convergence time](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/convt.bc.tvtc.png)
+![Inertia](./figures/inertia.bc.tvtc.png)
 
-![damping ratio](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/dr.bc.tvtc.png)
+![Maximum amplification](./figures/maxamp.bc.tvtc.png)
 
-![Inertia](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/inertia.bc.tvtc.png)
+![Maximum attenuation](./figures/maxatt.bc.tvtc.png)
 
-![Maximum amplification](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/maxamp.bc.tvtc.png)
-
-![Maximum attenuation](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/maxatt.bc.tvtc.png)
-
-![Reactivity](C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/reac.bc.tvtc.png)
+![Reactivity](./figures/reac.bc.tvtc.png)
 
 R opened as many windows as there are metrics in the table provided. In each window is a visual representation of the demographic resilience metrics over time. 
 
