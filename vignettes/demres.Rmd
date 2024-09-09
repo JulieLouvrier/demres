@@ -425,8 +425,6 @@ If there is an over-representation of individuals in stages with high survival a
 In that case, if `time = "both"` the time-constant demographic resilience metrics are calculated based on the average vector over the years. And the time-varying demographic resilience metrics are calculated, as explained above, by projecting the population structure to each new step based on the supplied initial vector for the first time step (and the population matrices for each time step).
 
 As we previously saw before, the upper bound is the one with the largest values of distance between the time-varying and the time-constant approach. This means that the upper bound seems to vary the most in time in comparison to the other demographic resilience metrics. We saw that the upper bound of the demographic resilience metrics (except convergence time) can be obtained when the initial vector is biased towards adults only. The high variation in the upper bounds are therefore a representation of the variation in time of the demographic rates of the adults. 
-##CHECK SENSITIVITY ANALYSES LAMBDA !!
-
 ```{r echo = -1}
 Bluecrane.all.tvtc.TD <- resilience(
      listA = bluecrane,
