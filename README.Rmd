@@ -58,7 +58,7 @@ data(bluecrane)
 
 ### Calculate demographic resilience metrics based on a list of population matrices
 
-The function `resilience` is made to calculate demographic resilience metrics based on a list of matrix projection models. It returns a `dataframe` with both time-varying and time-constant approaches when required with the option `time`.
+The function `resilience` is made to calculate demographic resilience metrics based on a list of matrix projection models. It returns a `dataframe` with both time-varying and time-constant approaches when requested using the argument `time`.
 
 ```{r, resilience metrics}
 # Create initial vector
@@ -75,7 +75,7 @@ BlueCrane_demres <- resilience(
     TDvector = TRUE,
     popname = "blue crane",
     time = "both",
-    verbose = TRUE )
+    verbose = TRUE)
 
 #let's take a look at what we got
 BlueCrane_demres

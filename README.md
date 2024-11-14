@@ -50,7 +50,7 @@ data(bluecrane)
 The function `resilience` is made to calculate demographic resilience
 metrics based on a list of matrix projection models. It returns a
 `dataframe` with both time-varying and time-constant approaches when
-required with the option `time`.
+requested using the argument `time`.
 
 ``` r
 # Create initial vector
@@ -67,7 +67,7 @@ BlueCrane_demres <- resilience(
     TDvector = TRUE,
     popname = "blue crane",
     time = "both",
-    verbose = TRUE )
+    verbose = TRUE)
 #>                                                                                                           Message for time-varying resilience at time step 1
 #> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
 #> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
