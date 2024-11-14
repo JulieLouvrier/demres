@@ -18,9 +18,16 @@
 get_TD_vector <- function(IV, listA) {
   vectorTD <- list()
   vectorTD[[1]] <- IV
-  for (i in 1:(length(listA)-1)) {
-    temp <- popdemo::project(listA[[i]], vector = vectorTD[[i]], time = 1)
-    vectorTD[[i + 1]] <- as.numeric(((temp@vec)[2, ]) / sum(temp@vec[2, ]))
+  lengthA <- length(listA)
+  if (lengthA == 0) {
+    stop("listA has length 0")
+  } else if (lengthA == 1) {
+    return(vectorTD)
+  } else {
+    for (i in seq_len(lengthA - 1)) {
+      temp <- popdemo::project(listA[[i]], vector = vectorTD[[i]], time = 1)
+      vectorTD[[i + 1]] <- as.numeric(((temp@vec)[2, ]) / sum(temp@vec[2, ]))
+    }
   }
   return(vectorTD)
 }
