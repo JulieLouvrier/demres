@@ -1,9 +1,9 @@
-#' Helper functions for demres_dist function from the package __{demres}__
+#' Helper functions for demres_dist function
 #'
 #' @param TV A vector containing values of time-varying demographic resilience
-#' for one specific  metric, calculated with demres
+#' for one specific metric
 #' @param TC A vector containing the value of the time-constant demographic
-#'  resilience for the same one specific  metric as for TV, calculated with demres
+#'  resilience for the same one specific metric as for TV
 #' @return Values of the distance measure
 #' @name helper_functions
 #' @keywords internal
