@@ -1,11 +1,11 @@
 #' Plot the resulting demographic resilience metrics
 #'
-#' `demres_plot` provides a plot to visually inspect the resilience metric
+#' The function `plot` calls `demres_plot` to visually inspect the resilience metric(s)
 #' along a time axis
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the `resilience` function
 #' @name demres_plot
-#' @return A plot displaying the chosen metric along a time axis
+#' @return A plot displaying the chosen metric(s) along a time axis
 #' @export
 #' @examples
 #' # load data
@@ -50,28 +50,12 @@ demres_plot <- function(table) {
 #' `help_plot` provides a plot to visually inspect the resilience metric
 #' along a time axis
 #'
-#' @param table A dataframe containing all the resilience metrics calculated
-#' with the resilience function
-#' @param metric "reac": Calculates reactivity: first-timestep amplification
-#'                 and first-timestep attenuation for a matrix
-#'                 projection model. \cr
-#'                 "inertia": Calculates population inertia for a
-#'                 matrix projection model.\cr
-#'                 "dr": Calculates the damping ratio of a given
-#'                 matrix projection model.\cr
-#'                 "maxamp": Calculates maximal amplification for a
-#'                 matrix projection model.\cr
-#'                 "maxatt": Calculates maximal attenuation for a
-#'                 matrix projection model.\cr
-#'                 "convt": Calculates the time to convergence of a
-#'                 matrix projection model.\cr
-#'                 "all": all of the above metrics are provided.
+#' @inheritParams plot_general
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
 #' @keywords internal
 
-help_plot <- function(metric,
-                        table) {
+help_plot <- function(metric, table) {
 
   popname = table$popname
   speciesName <- unique(table$popname)

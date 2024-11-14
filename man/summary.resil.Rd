@@ -21,3 +21,6 @@ summary statistics
 \description{
 Summary method for objects of class resil
 }
+\seealso{
+\code{\link[=demres_dist]{demres_dist()}} for details
+}

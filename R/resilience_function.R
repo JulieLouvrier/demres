@@ -1,34 +1,16 @@
 #' Provides time-varying and time-constant resilience metrics for
 #' populations based on a list of matrix population models
 #'
-#' `resilience` calculates resilience metrics of a population based
-#' on a list of matrix population models
+#' The function `resilience` calculates resilience metrics of a population based
+#' on a list of matrix population models.
 #'
-#' This function works with a list of matrices or just one matrix
+#' This function works with a list of matrices or just with one matrix
 #' and returns either time-varying metrics or time-constant metrics, depending
-#' on what is requested by the user (option `time`).
+#' on what is requested by the user (argument `time`).
 #'
+#' @inheritParams calc_resilience
 #' @param listA a list of square, primitive, irreducible, non-negative numeric
 #' matrices of any dimension
-#' @param metrics "convt": Calculates the time to convergence of a
-#'                 matrix projection model.\cr
-#'                 "dr": Calculates the damping ratio of a given
-#'                 matrix projection model.\cr
-#'                 "inertia": Calculates population inertia for a
-#'                 matrix projection model.\cr
-#'                 "maxamp": Calculates maximal amplification for a
-#'                 matrix projection model.\cr
-#'                 "maxatt": Calculates maximal attenuation for a
-#'                 matrix projection model.\cr
-#'                 "reac": Calculates reactivity: first-timestep amplification
-#'                 and first-timestep attenuation for a matrix
-#'                 projection model. \cr
-#'                 "all": all of the above metrics are provided.
-#' @param bounds (optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
-#' bound should be calculated. If initial vector is not specified, the function
-#' provides metrics at their upper and lower bounds, calculated based on the stage-biased vector.
-#' If vector is specified, the function provides also the metrics calculated
-#' based on the initial vector.
 #' @param vector a list of numeric vectors or one-column matrices describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific' resilience metric,
 #' based on the stage or age-structure.
@@ -36,20 +18,12 @@
 #' user wants to obtain a time-dependent list of initial vectors. This vector
 #' corresponds to the population stage distribution that is obtained from the projection
 #' of the population to the current time step using the specified matrix for each time step.
-#' @param popname a character string describing the name of the population.
 #' @param time set to "both" as default. A character string: "constant", "varying" or "both" \cr
 #'            "constant": if the metrics are to be calculated over the whole study period; \cr
 #'            "varying": if the metrics are to be calculated for each time step.
-#' @param accuracy  option for calculating convergence time: the accuracy with which to determine convergence to asymptotic growth,
-#' expressed as a proportion. Set to 0.01 by default.
-#' @param iterations option for calculating convergence time: the maximum number of iterations of the model before the code breaks. For slowly-converging models
-#' and/or high specified convergence accuracy, this may need to be increased.
-#' Set to 1e+05 by default.
 #' @param f A character specifying whether the output should be shown in
 #' "long" (demographic resilience metrics as row names) or in "wide" (demographic
 #' resilience metrics as column names) format. Defaults to "wide".
-#' @param verbose Boolean. Set to TRUE as default. Indicates whether the messages about failure
-#' to compute particular metric should be displayed or not (default = TRUE)
 #' @examples
 #'
 #' # load data
@@ -58,7 +32,7 @@
 #' # simulate an initial vector
 #' set.seed(1234)
 #' Cranevec1 <- runif(5)
-#' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
+#' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vector to sum up to 1
 #'
 #'
 #' BC_TVTC_demres <-
@@ -94,14 +68,14 @@ resilience <- function(listA,
   message_constant <- character(0)
 
   if(is.list(listA) && length(listA) == 1){
-    message("Warning: you provided a list of one matrix.
+    warning("You provided a list of one matrix.
     A list of several matrices should be provided.
     Resilience is nevertheless calculated for this one matrix")
     listA <- listA[[1]]
   }
 
   if(!is.list(listA)) {
-    message("Warning: a list of several matrices should be provided.
+    warning("A list of several matrices should be provided.
             Resilience is nevertheless calculated for this one matrix")
     met <- calc_resilience(A = listA,
                            metrics = metrics,
@@ -135,7 +109,7 @@ resilience <- function(listA,
       }
       if(time == "both") {
         temp_list <-
-          mapply(function(A,X) {
+          mapply(function(A, X) {
             calc_resilience(A,
                             metrics = metrics,
                             bounds = bounds,
@@ -150,16 +124,16 @@ resilience <- function(listA,
 
           n.obs <- sapply(message_varying_temp, length)
           seq.max <- seq_len(max(n.obs))
-          if(length(seq.max)>0){
-          message_varying <- data.frame(sapply(message_varying_temp, "[", i = seq.max))
-          message_varying[is.na(message_varying)] <- ""
-          colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
-        }
+          if(length(seq.max) > 0){
+            message_varying <- data.frame(sapply(message_varying_temp, "[", i = seq.max))
+            message_varying[is.na(message_varying)] <- ""
+            colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq_len(length(listA)))
+          }
 
         metres <- do.call("rbind", temp_list)
 
         colnames(metres)[-1] <- paste0(colnames(metres)[-1], "_TV")
-        metres <- cbind(timestep = c(1:nrow(metres)), metres)
+        metres <- cbind(timestep = c(seq_len(nrow(metres))), metres)
 
         meanA <- apply(simplify2array(listA), 1:2, mean)
         meanvec <- apply(simplify2array(vector), 1, mean)
@@ -174,7 +148,7 @@ resilience <- function(listA,
 
          if(!is.null(attr(res, "msg"))){
           message_constant <- data.frame(t(attr(res, "msg")))
-          if(length(message_constant)>0){
+          if(length(message_constant) > 0){
             rownames(message_constant) <- NULL
             colnames(message_constant) <- "Message for time-constant resilience"
           }
@@ -183,7 +157,7 @@ resilience <- function(listA,
         names(res)[-1] <- paste0(names(res)[-1], "_TC")
         met <- cbind(metres, res)
 
-        if(length(which(duplicated(names(met))))>0) {
+        if(length(which(duplicated(names(met)))) > 0) {
           met <- met[,-which(duplicated(names(met)))]
         }
         else{met <- met}
@@ -206,16 +180,16 @@ resilience <- function(listA,
 
           n.obs <- sapply(message_varying_temp, length)
           seq.max <- seq_len(max(n.obs))
-          if(length(seq.max)>0){
+          if(length(seq.max) > 0){
 
             message_varying <- data.frame(sapply(message_varying_temp, "[", i = seq.max))
             message_varying[is.na(message_varying)] <- ""
-            colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
+            colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq_len(length(listA)))
           }
 
           met <- do.call("rbind", temp_list)
           colnames(met)[-1] <- paste0(colnames(met)[-1], "_TV")
-          met <- cbind(timestep = c(1:nrow(met)), met)
+          met <- cbind(timestep = c(seq_len(nrow(met))), met)
 
         }
         if(time == "constant") {
@@ -232,7 +206,7 @@ resilience <- function(listA,
 
           if(!is.null(attr(res, "msg"))){
             message_constant <- data.frame(t(attr(res, "msg")))
-            if(length(message_constant)>0){
+            if(length(message_constant) > 0){
               rownames(message_constant) <- NULL
               colnames(message_constant) <- "Message for time-constant resilience"
             }
@@ -261,12 +235,12 @@ resilience <- function(listA,
           )
 
         message_varying <- data.frame(sapply(temp_list, function(e) attr(e, "msg")))
-        if(length(message_varying)>0){
-        colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
+        if(length(message_varying) > 0){
+        colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq_len(length(listA)))
         }
         metres <- do.call(rbind.data.frame, temp_list)
         names(metres)[-1] <- paste0(names(metres)[-1], "_TV")
-        metres <- cbind(timestep = c(1:nrow(metres)), metres)
+        metres <- cbind(timestep = c(seq_len(nrow(metres))), metres)
 
         meanA <- apply(simplify2array(listA), 1:2, mean)
                  res <- calc_resilience(A = meanA,
@@ -279,7 +253,7 @@ resilience <- function(listA,
                                         iterations = iterations)
                  if(!is.null(attr(res, "msg"))){
         message_constant <- data.frame(t(attr(res, "msg")))
-        if(length(message_constant)>0){
+        if(length(message_constant) > 0){
         rownames(message_constant) <- NULL
         colnames(message_constant) <- "Message for time-constant resilience"
         }
@@ -288,7 +262,7 @@ resilience <- function(listA,
         names(res)[-1] <- paste0(names(res)[-1], "_TC")
         met <- cbind(metres, res)
 
-        if(length(which(duplicated(names(met))))>0) {
+        if(length(which(duplicated(names(met)))) > 0) {
           met <- met[,-which(duplicated(names(met)))]
         }
         else{met <- met}
@@ -309,12 +283,12 @@ resilience <- function(listA,
             )
 
           message_varying <- data.frame(sapply(temp_list, function(e) attr(e, "msg")))
-          if(length(message_varying)>0){
-          colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq (1:length(listA)))
+          if(length(message_varying) > 0){
+          colnames(message_varying) <- paste0("Message for time-varying resilience at time step ", seq_len(length(listA)))
           }
           met <- do.call(rbind.data.frame, temp_list)
           names(met)[-1] <- paste0(names(met)[-1], "_TV")
-          met <- cbind( timestep = c(1:nrow(met)), met)
+          met <- cbind( timestep = c(seq_len(nrow(met))), met)
 
 
         }
@@ -330,7 +304,7 @@ resilience <- function(listA,
                                  iterations = iterations)
           if(!is.null(attr(res, "msg"))){
           message_constant <- data.frame(t(attr(res, "msg")))
-          if(length(message_constant)>0){
+          if(length(message_constant) > 0){
           rownames(message_constant) <- NULL
           colnames(message_constant) <- "Message for time-constant resilience"
           }
@@ -378,6 +352,7 @@ print.resil <- function(x, ...) {
 #' @param ... further arguments passed to or from other methods
 #' @return summary statistics
 #' @export
+#' @seealso [demres_dist()] for details
 #'
 summary.resil <- function(object, f = 'wide', ...) {
   demres_dist(object, f)
@@ -389,6 +364,7 @@ summary.resil <- function(object, f = 'wide', ...) {
 #' @param ... further arguments passed to or from other methods
 #' @return plots
 #' @export
+#' @seealso [demres_plot()] for details
 #'
 plot.resil <- function(x,...) {
   demres_plot(x)

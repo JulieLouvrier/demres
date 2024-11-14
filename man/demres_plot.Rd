@@ -11,10 +11,10 @@ demres_plot(table)
 with the \code{resilience} function}
 }
 \value{
-A plot displaying the chosen metric along a time axis
+A plot displaying the chosen metric(s) along a time axis
 }
 \description{
-\code{demres_plot} provides a plot to visually inspect the resilience metric
+The function \code{plot} calls \code{demres_plot} to visually inspect the resilience metric(s)
 along a time axis
 }
 \examples{

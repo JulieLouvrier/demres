@@ -19,9 +19,9 @@
 #'                 matrix projection model.\cr
 #'                 "maxatt": Calculates maximal attenuation for a
 #'                 matrix projection model.\cr
-#'                 "reac": Calculates reactivity: first-timestep amplification
-#'                 and first-timestep attenuation for a matrix
-#'                 projection model. \cr
+#'                 "reac": Calculates reactivity: first time step amplification
+#'                 and first time step attenuation for a matrix
+#'                 projection model.\cr
 #'                 "all": all of the above metrics are provided.
 #' @param bounds (optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
 #' bound should be calculated. If initial vector is not specified, the function
@@ -34,9 +34,8 @@
 #' @param popname a character string describing the name of the population.
 #' @param accuracy option for calculating convergence time: the accuracy with which to determine convergence to asymptotic growth,
 #' expressed as a proportion. Set to 0.01 by default.
-#' @param iterations option for calculating convergence time: the maximum number of iterations of the model before the code breaks. For slowly-converging models
+#' @param iterations option for calculating convergence time: the maximum number of iterations of the model. Set to 1e+05 by default. For slowly-converging models
 #' and/or high specified convergence accuracy, this may need to be increased.
-#' Set to 1e+05 by default.
 #' @param verbose Boolean. Set to TRUE as default. Indicates whether the messages about failure
 #' to compute particular metric should be displayed or not (default = TRUE)
 #' @export
@@ -86,15 +85,14 @@ calc_resilience <-
     if (!popdemo::isPrimitive(A)) {
       stop("Warning: Matrix is imprimitive")
     }
-
-    if(is.null(popname)) {
+    if (is.null(popname)) {
       message("no population name given, perhaps you want to specify one?")
       popname <- "pop"
     }
 
-    else{
-    popname = popname
-    }
+    #else{ # I commented that (Alex) since it seems useless, but perhaps you were enforcing evaluation to bypass lazy evaluation?
+    #popname = popname
+    #}
 
     msg <- character(0)
 
@@ -172,10 +170,10 @@ calc_resilience <-
       dat$convt_upr <- convt_res$upr
     }
 
-    if ("TRUE" %in% is.na(dat)){
-    dat <- dat[,-which(is.na(dat))] #taking out columns with NAs in them
+    if (any(is.na(dat))){
+    dat <- dat[, -which(is.na(dat))] #taking out columns with NAs in them
      }
-    dat[,which(dat == 999)] <- NA
+    dat[, which(dat == 999)] <- NA
 
     if (verbose && length(msg) > 0) {
       #message(msg)
@@ -247,14 +245,13 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
     tt.error.maxa <-
       tryCatch(
         maxa <- fn(A, vector = vector),
-        error = function(e)
-          e
+        error = function(e) e
       )
     if (methods::is(tt.error.maxa, "error")) {
-      msg <- cbind(msg,(paste0(tt.error.maxa[1]$message, " with the stated initial vector, Na is displayed ")))
+      msg <- cbind(msg, (paste0(tt.error.maxa[1]$message, " with the stated initial vector, Na is displayed ")))
       list_res$value <- 999
     }
-    else{
+    else {
       list_res$value <- fn(A, vector = vector)
     }
   } else {
@@ -266,12 +263,12 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
     list_res$lwr <- fn(A)
     list_res$upr <- fn(A)
     if(metrics == "maxamp") {
-      message_maxamp<- c("The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector ")
+      message_maxamp <- c("The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector")
       msg <- cbind(msg, message_maxamp)
     }
 
     if(metrics == "maxatt") {
-      message_maxatt <- c("The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector ")
+      message_maxatt <- c("The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector")
       msg <- cbind(msg, message_maxatt)
     }
   }

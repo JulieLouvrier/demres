@@ -5,24 +5,25 @@
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the resilience function
-#' @param metric "reac": Reactivity: first-timestep amplification
-#'                 and first-timestep attenuation for a population matrix
-#'                 projection model.
-#'                 "inertia": Population inertia for a population
-#'                 matrix projection model.
-#'                 "dr": Damping ratio of a given population
-#'                 matrix projection model.
-#'                 "maxamp": Maximal amplification for a population
-#'                 matrix projection model.
-#'                 "maxatt": Maximal attenuation for a population
-#'                 matrix projection model.
+#' @param metric "convt": the time to convergence of a
+#'                 matrix projection model.\cr
+#'                 "dr": the damping ratio of a given
+#'                 matrix projection model.\cr
+#'                 "inertia": population inertia for a
+#'                 matrix projection model.\cr
+#'                 "maxamp": maximal amplification for a
+#'                 matrix projection model.\cr
+#'                 "maxatt": maximal attenuation for a
+#'                 matrix projection model.\cr
+#'                 "reac": reactivity: first time step amplification
+#'                 and first time step attenuation for a matrix
+#'                 projection model.\cr
 #' @return A plot displaying the chosen metric along a time axis
 #' @export
 #' @name plot_general
 #' @keywords internal
 
-plot_general <- function(metric,
-                         table){
+plot_general <- function(metric, table){
   if(metric == "reac"){
     name_metric = "Reactivity"}
   else if(metric == "maxamp") {
@@ -58,7 +59,6 @@ plot_general <- function(metric,
 
   all <- data.frame(table_metric_upr_TV, table_metric_lwr_TV, table_metric_vector_TV,
                     table_metric_upr_TC, table_metric_lwr_TC, table_metric_vector_TC)
-
 
   miny = (min(all, na.rm = TRUE) - 0.4 * min(all, na.rm = TRUE))
   maxy = max(all, na.rm = TRUE)
@@ -215,10 +215,11 @@ plot_general <- function(metric,
       )
   }
   # Create a plot
-  graphics::par(mar = c(4,4, 4, 10), #c(5, 4, 4, 10),
-                xpd = TRUE)
+  oldpar <- graphics::par(mar = c(4, 4, 4, 10), #c(5, 4, 4, 10),
+                          xpd = TRUE)
+  on.exit(graphics::par(oldpar)) ## restore original parameters once the function has ran
   grDevices::dev.new()
-  graphics::par(mar = c(4,4, 4, 10), #c(5, 4, 4, 10),
+  graphics::par(mar = c(4, 4, 4, 10), #c(5, 4, 4, 10),
                 xpd = TRUE)
   plot(
     tableStartYear,

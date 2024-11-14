@@ -7,17 +7,19 @@
 plot_general(metric, table)
 }
 \arguments{
-\item{metric}{"reac": Reactivity: first-timestep amplification
-and first-timestep attenuation for a population matrix
-projection model.
-"inertia": Population inertia for a population
-matrix projection model.
-"dr": Damping ratio of a given population
-matrix projection model.
-"maxamp": Maximal amplification for a population
-matrix projection model.
-"maxatt": Maximal attenuation for a population
-matrix projection model.}
+\item{metric}{"convt": the time to convergence of a
+matrix projection model.\cr
+"dr": the damping ratio of a given
+matrix projection model.\cr
+"inertia": population inertia for a
+matrix projection model.\cr
+"maxamp": maximal amplification for a
+matrix projection model.\cr
+"maxatt": maximal attenuation for a
+matrix projection model.\cr
+"reac": reactivity: first time step amplification
+and first time step attenuation for a matrix
+projection model.\cr}
 
 \item{table}{A dataframe containing all the resilience metrics calculated
 with the resilience function}

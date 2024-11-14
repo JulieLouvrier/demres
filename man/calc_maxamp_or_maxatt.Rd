@@ -17,9 +17,9 @@ matrix projection model.\cr
 matrix projection model.\cr
 "maxatt": Calculates maximal attenuation for a
 matrix projection model.\cr
-"reac": Calculates reactivity: first-timestep amplification
-and first-timestep attenuation for a matrix
-projection model. \cr
+"reac": Calculates reactivity: first time step amplification
+and first time step attenuation for a matrix
+projection model.\cr
 "all": all of the above metrics are provided.}
 
 \item{vector}{a numeric vector or one-column matrix describing the age/stage

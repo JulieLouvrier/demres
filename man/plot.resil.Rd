@@ -17,3 +17,6 @@ plots
 \description{
 Plotting method for objects of class resil
 }
+\seealso{
+\code{\link[=demres_plot]{demres_plot()}} for details
+}

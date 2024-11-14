@@ -17,9 +17,9 @@ matrix projection model.\cr
 matrix projection model.\cr
 "maxatt": Calculates maximal attenuation for a
 matrix projection model.\cr
-"reac": Calculates reactivity: first-timestep amplification
-and first-timestep attenuation for a matrix
-projection model. \cr
+"reac": Calculates reactivity: first time step amplification
+and first time step attenuation for a matrix
+projection model.\cr
 "all": all of the above metrics are provided.}
 
 \item{vector}{a numeric vector or one-column matrix describing the age/stage
@@ -38,9 +38,8 @@ based on the initial vector.}
 \item{accuracy}{option for calculating convergence time: the accuracy with which to determine convergence to asymptotic growth,
 expressed as a proportion. Set to 0.01 by default.}
 
-\item{iterations}{option for calculating convergence time: the maximum number of iterations of the model before the code breaks. For slowly-converging models
-and/or high specified convergence accuracy, this may need to be increased.
-Set to 1e+05 by default.}
+\item{iterations}{option for calculating convergence time: the maximum number of iterations of the model. Set to 1e+05 by default. For slowly-converging models
+and/or high specified convergence accuracy, this may need to be increased.}
 }
 \description{
 Internal functions used by \code{\link[=calc_resilience]{calc_resilience()}}.

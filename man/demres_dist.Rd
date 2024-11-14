@@ -8,7 +8,7 @@ and time-constant approaches}
 demres_dist(table, f = "wide")
 }
 \arguments{
-\item{table}{A data frame containing all the resilience metrics calculated
+\item{table}{A dataframe containing all the resilience metrics calculated
 with the resilience function}
 
 \item{f}{A character specifying whether the output should be shown in
@@ -19,12 +19,12 @@ resilience metrics as column names) format. Defaults to "wide".}
 A data frame displaying the distance measures for the metrics that are present in the table
 }
 \description{
-\code{summary} Calculates distance between resilience metrics calculated with
+The function \code{summary} calls \code{demres_dist} to calculate distance between resilience metrics calculated with
 time-varying and time-constant approaches:
 "RMSE": sqrt(mean((TV-TC)^2))
-with TV: the time-Varying resilience metric and TC the time constant one
+with TV: the time-varying resilience metric and TC the time constant one
 "rRMSE": sqrt(mean((TV-TC)^2)) / sd(TV)
-with TV: the time-Varying resilience metric and TC the time constant
+with TV: the time-varying resilience metric and TC the time constant
 "MAPE": mean(abs(TV - TC))/TC
 with TV: the resilience metric calculated using the time-varying approach
 and TC - using the time-constant approach.
@@ -36,7 +36,7 @@ data(bluecrane)
 # simulate an initial vector
 set.seed(1234)
 Cranevec1 <- runif(5)
-Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
+Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vector to sum up to 1
 
 BC_TVTC_demres <-
   resilience(
