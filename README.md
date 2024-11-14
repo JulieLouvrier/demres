@@ -237,22 +237,6 @@ metric along a time axis
 
 ``` r
 plot(BlueCrane_demres)
-#>     rect.w     rect.h  rect.left   rect.top    text.x1    text.x2    text.x3 
-#>  3.8075714  3.5840000 13.3844286 14.8000000 14.0632857 14.0632857 14.0632857 
-#>    text.y1    text.y2    text.y3     rect.w     rect.h  rect.left   rect.top 
-#> 13.3664000 12.6496000 11.9328000  3.2897857  0.1087419 13.9022143  1.2919300 
-#>     text.x     text.y     rect.w     rect.h  rect.left   rect.top    text.x1 
-#> 14.5810714  1.2194354  3.8075714  0.4129939 13.3844286  1.4741132 14.0632857 
-#>    text.x2    text.x3    text.y1    text.y2    text.y3     rect.w     rect.h 
-#> 14.0632857 14.0632857  1.3089156  1.2263168  1.1437180  3.8075714  0.5873486 
-#>  rect.left   rect.top    text.x1    text.x2    text.y1    text.y2     rect.w 
-#> 13.3844286  2.9177579 14.0632857 14.0632857  2.6240837  2.4772465  3.8075714 
-#>     rect.h  rect.left   rect.top    text.x1    text.x2    text.y1    text.y2 
-#>  0.1671221 13.3844286  0.7323399 14.0632857 14.0632857  0.6487789  0.6069983 
-#>     rect.w     rect.h  rect.left   rect.top    text.x1    text.x2    text.x3 
-#>  3.8075714  0.4940229 13.3844286  1.8382800 14.0632857 14.0632857 14.0632857 
-#>    text.y1    text.y2    text.y3 
-#>  1.6406708  1.5418662  1.4430617
 ```
 
 <figure>

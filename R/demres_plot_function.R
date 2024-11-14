@@ -41,6 +41,8 @@ demres_plot <- function(table) {
   unlist(lapply(unique_combis, FUN = function(x){help_plot(table = table,
                                                            metric = x)}))
 
+  return(invisible(NULL))
+
 }
 
 #' Helper function for the demres_plot function
@@ -180,5 +182,7 @@ help_plot <- function(metric,
   else{
     plot_general(metric = metric, table = table)
   }
+
+  return(invisible(NULL))
 
 }
