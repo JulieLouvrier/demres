@@ -17,7 +17,7 @@ The different metrics provided are:
 
 It is build around one (direct) dependency:
 
--   [**{popdemo}**](https://github.com/iainmstott/popdemo)
+- [**{popdemo}**](https://github.com/iainmstott/popdemo)
 
 **{demres}** aims at being compatible with both *tidyverse* and *base* R
 dialects.
@@ -197,8 +197,7 @@ and the time-constant approaches by using the RMSE, rRMSE or the MAPE:
 
 #### RMSE:
 
-$$\sqrt{mean((TV-TC)^2)}$$
-  
+$$\sqrt{mean((TV-TC)^2)}$$  
 with TV - the time-varying resilience metric and TC - the time-constant
 one
 
@@ -239,33 +238,16 @@ metric along a time axis
 plot(BlueCrane_demres)
 ```
 
-<figure>
-<img src="./man/figures/convt.bc.tvtc.png" alt="convergence time" />
-<figcaption aria-hidden="true">convergence time</figcaption>
-</figure>
+![](./man/figures/convt.bc.tvtc.png) <!-- convergence time -->
 
-<figure>
-<img src="./man/figures/dr.bc.tvtc.png" alt="damping ratio" />
-<figcaption aria-hidden="true">damping ratio</figcaption>
-</figure>
+![](./man/figures/dr.bc.tvtc.png) <!-- damping ratio -->
 
-<figure>
-<img src="./man/figures/inertia.bc.tvtc.png" alt="Inertia" />
-<figcaption aria-hidden="true">Inertia</figcaption>
-</figure>
+![Inertia](./man/figures/inertia.bc.tvtc.png) <!-- inertia -->
 
-<figure>
-<img src="./man/figures/maxamp.bc.tvtc.png"
-alt="Maximum amplification" />
-<figcaption aria-hidden="true">Maximum amplification</figcaption>
-</figure>
+![Maximum amplification](./man/figures/maxamp.bc.tvtc.png)
+<!-- maximum amplification -->
 
-<figure>
-<img src="./man/figures/maxatt.bc.tvtc.png" alt="Maximum attenuation" />
-<figcaption aria-hidden="true">Maximum attenuation</figcaption>
-</figure>
+![Maximum attenuation](./man/figures/maxatt.bc.tvtc.png)
+<!-- maximum attenuation -->
 
-<figure>
-<img src="./man/figures/reac.bc.tvtc.png" alt="Reactivity" />
-<figcaption aria-hidden="true">Reactivity</figcaption>
-</figure>
+![Reactivity](./man/figures/reac.bc.tvtc.png) <!-- reactivity -->

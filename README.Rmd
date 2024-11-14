@@ -1,7 +1,7 @@
 ---
 output:
   md_document:
-    variant: markdown_github
+    variant: gfm
 editor_options: 
   chunk_output_type: console
 ---
@@ -111,14 +111,14 @@ Function `plot` provides a plot to visually inspect the resilience metric along 
 plot(BlueCrane_demres)
 ```
 
-![convergence time](./man/figures/convt.bc.tvtc.png)
+![](./man/figures/convt.bc.tvtc.png) <!-- convergence time -->
 
-![damping ratio](./man/figures/dr.bc.tvtc.png)
+![](./man/figures/dr.bc.tvtc.png) <!-- damping ratio -->
 
-![Inertia](./man/figures/inertia.bc.tvtc.png)
+![Inertia](./man/figures/inertia.bc.tvtc.png) <!-- inertia -->
 
-![Maximum amplification](./man/figures/maxamp.bc.tvtc.png)
+![Maximum amplification](./man/figures/maxamp.bc.tvtc.png) <!-- maximum amplification -->
 
-![Maximum attenuation](./man/figures/maxatt.bc.tvtc.png)
+![Maximum attenuation](./man/figures/maxatt.bc.tvtc.png) <!-- maximum attenuation --> 
 
-![Reactivity](./man/figures/reac.bc.tvtc.png)
+![Reactivity](./man/figures/reac.bc.tvtc.png) <!-- reactivity -->
