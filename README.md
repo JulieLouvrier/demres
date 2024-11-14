@@ -3,8 +3,8 @@
 # demres
 
 The goal of **{demres}** is to provide easy functions to calculate
-different time-varying and time- constant demographic resilience
-metrics. It also allows plotting the resulting metrics and measuring the
+different time-varying and time-constant demographic resilience metrics.
+It also allows plotting the resulting metrics and measuring the
 discrepancy between the time-varying and the time-constant approach.
 
 The different metrics provided are:  
@@ -15,9 +15,9 @@ The different metrics provided are:
 - Maximum amplification  
 - Maximum attenuation
 
-It is build around one dependency:
+It is build around one (direct) dependency:
 
--   [**{popdemo}**](https://github.com/r-lib/rlang)
+-   [**{popdemo}**](https://github.com/iainmstott/popdemo)
 
 **{demres}** aims at being compatible with both *tidyverse* and *base* R
 dialects.
@@ -45,10 +45,10 @@ library(demres)
 data(bluecrane)
 ```
 
-### Calculate demographic resilience metrics based on a list of Matrices
+### Calculate demographic resilience metrics based on a list of population matrices
 
 The function `resilience` is made to calculate demographic resilience
-metrics based on a lost Matrix Population Models. It returns a
+metrics based on a list of matrix projection models. It returns a
 `dataframe` with both time-varying and time-constant approaches when
 required with the option `time`.
 
@@ -190,11 +190,10 @@ BlueCrane_demres
 #> 12      3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
 ```
 
-### Assessing the distance between the time-varying and the time-constant approaches
+### Assess the distance between the time-varying and the time-constant approaches
 
 The function `summary` calculates the distance between the time-varying
-resilience metric and the time-constant one by measuring the RMSE, rRMSE
-and the MAPE:
+and the time-constant approaches by using the RMSE, rRMSE or the MAPE:
 
 #### RMSE:
 
@@ -231,13 +230,12 @@ dist_BC
 #> MAPE  0.08229525
 ```
 
-### plotting the results
+### Plot the results
 
-`demres_plot` provides a plot to visually inspect the resilience metric
-along a time axis
+Function `plot` provides a plot to visually inspect the resilience
+metric along a time axis
 
 ``` r
-#plotting
 plot(BlueCrane_demres)
 #>     rect.w     rect.h  rect.left   rect.top    text.x1    text.x2    text.x3 
 #>  3.8075714  3.5840000 13.3844286 14.8000000 14.0632857 14.0632857 14.0632857 
@@ -258,43 +256,32 @@ plot(BlueCrane_demres)
 ```
 
 <figure>
-<img
-src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/convt.bc.tvtc.png"
-alt="convergence time" />
+<img src="./man/figures/convt.bc.tvtc.png" alt="convergence time" />
 <figcaption aria-hidden="true">convergence time</figcaption>
 </figure>
 
 <figure>
-<img
-src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/dr.bc.tvtc.png"
-alt="damping ratio" />
+<img src="./man/figures/dr.bc.tvtc.png" alt="damping ratio" />
 <figcaption aria-hidden="true">damping ratio</figcaption>
 </figure>
 
 <figure>
-<img
-src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/inertia.bc.tvtc.png"
-alt="Inertia" />
+<img src="./man/figures/inertia.bc.tvtc.png" alt="Inertia" />
 <figcaption aria-hidden="true">Inertia</figcaption>
 </figure>
 
 <figure>
-<img
-src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/maxamp.bc.tvtc.png"
+<img src="./man/figures/maxamp.bc.tvtc.png"
 alt="Maximum amplification" />
 <figcaption aria-hidden="true">Maximum amplification</figcaption>
 </figure>
 
 <figure>
-<img
-src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/maxatt.bc.tvtc.png"
-alt="Maximum attenuation" />
+<img src="./man/figures/maxatt.bc.tvtc.png" alt="Maximum attenuation" />
 <figcaption aria-hidden="true">Maximum attenuation</figcaption>
 </figure>
 
 <figure>
-<img
-src="C:/Users/louvrier/Documents/WILDER_Package_dir/demres/man/figures/reac.bc.tvtc.png"
-alt="Reactivity" />
+<img src="./man/figures/reac.bc.tvtc.png" alt="Reactivity" />
 <figcaption aria-hidden="true">Reactivity</figcaption>
 </figure>

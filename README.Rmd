@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # demres
 
-The goal of __{demres}__ is to provide easy functions to calculate different time-varying and time- constant demographic resilience metrics. It also allows plotting the resulting metrics and measuring the discrepancy between the time-varying and the time-constant approach. 
+The goal of __{demres}__ is to provide easy functions to calculate different time-varying and time-constant demographic resilience metrics. It also allows plotting the resulting metrics and measuring the discrepancy between the time-varying and the time-constant approach. 
 
 The different metrics provided are:   
 - Convergence time    
@@ -27,9 +27,9 @@ The different metrics provided are:
 - Maximum amplification   
 - Maximum attenuation   
 
-It is build around one dependency:
+It is build around one (direct) dependency:
 
-- [__{popdemo}__](https://github.com/r-lib/rlang)
+- [__{popdemo}__](https://github.com/iainmstott/popdemo)
 
 __{demres}__ aims at being compatible with both _tidyverse_ and _base_ R dialects.
 
