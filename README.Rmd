@@ -86,14 +86,15 @@ BlueCrane_demres
 The function `summary` calculates the distance between the time-varying and the time-constant approaches by using the RMSE, rRMSE or the MAPE: 
 
 #### RMSE: 
-$$\sqrt{mean((TV-TC)^2)}$$   
+$$\sqrt{mean((TV-TC)^2)}$$
+
 with TV - the time-varying resilience metric and TC - the time-constant one
 
-#### rRMSE: 
-$$\sqrt{mean((TV-TC)^2)} / sd(TV)$$   
+#### rRMSE:
+$$\sqrt{mean((TV-TC)^2)} / sd(TV)$$ 
 
-#### MAPE: 
-$$\frac{mean(abs(TV-TC))}{TC}$$ 
+#### MAPE:
+$$\frac{mean(abs(TV-TC))}{TC}$$
 
 ```{r, distance}
 #let's calculate all measures of distance for inertia

@@ -197,7 +197,8 @@ and the time-constant approaches by using the RMSE, rRMSE or the MAPE:
 
 #### RMSE:
 
-$$\sqrt{mean((TV-TC)^2)}$$  
+$$\sqrt{mean((TV-TC)^2)}$$
+
 with TV - the time-varying resilience metric and TC - the time-constant
 one
 
