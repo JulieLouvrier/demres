@@ -2,13 +2,13 @@ Package: demres
 Title: Provides Time Varying and Time Constant Demographic Resilience Metrics
 Version: 1.0
 Authors@R:
-  person("Julie", "Louvrier", , "julie.louvrier2@gmail.com", role = c("aut", "cre"),
-         comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+  person("Julie", "Louvrier", email = "julie.louvrier2@gmail.com", role = c("aut", "cre"),
+         comment = c(ORCID = "0000-0003-1252-1746"))
+Description: Quantify time-varying and time-constant demographic resilience metrics, including time to convergence, damping ratio, inertia, maximum amplification, maximum attenuation and reactivity.
 License: GPL (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Imports: popdemo, methods
 Depends: 
     R (>= 3.5)
