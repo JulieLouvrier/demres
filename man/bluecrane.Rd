@@ -11,7 +11,7 @@ Object of class \code{list} of \code{matrices}
 data("bluecrane")
 }
 \description{
-List of Matrix Projection Models for the blue crane \emph{Gopherus agassizii}
+List of Matrix Projection Models for the blue crane \emph{Anthropoides paradiseus}
 based on 5 age classes. The matrices are based on a population centred on
 South Africa's grassland, eastern Nama Karoo and Overberg regions. The matrices are based on age: \cr
 Age 1: Year 1\cr

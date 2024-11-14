@@ -5,7 +5,7 @@
 \alias{RMSE}
 \alias{rRMSE}
 \alias{MAPE}
-\title{Helper functions for demres_dist function from the package \strong{{demres}}}
+\title{Helper functions for demres_dist function}
 \usage{
 RMSE(TV, TC)
 
@@ -15,16 +15,16 @@ MAPE(TV, TC)
 }
 \arguments{
 \item{TV}{A vector containing values of time-varying demographic resilience
-for one specific  metric, calculated with demres}
+for one specific metric}
 
 \item{TC}{A vector containing the value of the time-constant demographic
-resilience for the same one specific  metric as for TV, calculated with demres}
+resilience for the same one specific metric as for TV}
 }
 \value{
 Values of the distance measure
 }
 \description{
-Helper functions for demres_dist function from the package \strong{{demres}}
+Helper functions for demres_dist function
 }
 \section{Functions}{
 \itemize{
