@@ -116,10 +116,10 @@ plot(BlueCrane_demres)
 
 ![](./man/figures/dr.bc.tvtc.png) <!-- damping ratio -->
 
-![Inertia](./man/figures/inertia.bc.tvtc.png) <!-- inertia -->
+![](./man/figures/inertia.bc.tvtc.png) <!-- inertia -->
 
-![Maximum amplification](./man/figures/maxamp.bc.tvtc.png) <!-- maximum amplification -->
+![](./man/figures/maxamp.bc.tvtc.png) <!-- maximum amplification -->
 
-![Maximum attenuation](./man/figures/maxatt.bc.tvtc.png) <!-- maximum attenuation --> 
+![](./man/figures/maxatt.bc.tvtc.png) <!-- maximum attenuation --> 
 
-![Reactivity](./man/figures/reac.bc.tvtc.png) <!-- reactivity -->
+![](./man/figures/reac.bc.tvtc.png) <!-- reactivity -->
