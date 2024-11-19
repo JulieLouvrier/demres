@@ -76,7 +76,7 @@ data(bluecrane); bluecrane
 
 ```
 
-The numbers in the matrices describe the probability of transitioning from stages described in columns to stages described in rows, between time intervals that are relevant to the species, in the case of the blue crane, years. For blue cranes, the probability to move from a 1 year old to a 2 year old is 61.2% on year 5 of the study (see `bluecrane[[5]]`), while this probability is 88.7% in year 2 of the study period (see `bluecrane[[2]]`). 
+The numbers in the matrices describe the elements known as vital rates. These represent the survival rates in a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offsprings that is contributed to the population by each (st)age class), per unit of time. For blue cranes, the probability to transition from a 1 year old to a 2 year old is 61.2% on year 5 of the study (see `bluecrane[[5]]`), while this probability is 88.7% in year 2 of the study period (see `bluecrane[[2]]`). 
 
 
 # Assess time-varying demographic resilience 
