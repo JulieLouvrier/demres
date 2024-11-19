@@ -17,7 +17,7 @@ RoxygenNote: 7.3.2
 Imports: popdemo, methods
 Depends: 
     R (>= 3.5)
-LazyData: true
+LazyData: false
 Suggests: 
     knitr,
     rmarkdown,
