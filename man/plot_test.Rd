@@ -4,7 +4,10 @@
 \alias{plot_test}
 \title{Plot test}
 \usage{
-plot_test()
+plot_test(ask = interactive())
+}
+\arguments{
+\item{ask}{logical; if TRUE, the user is asked before each plot, see \code{\link[graphics:par]{par(ask=.)}}.}
 }
 \description{
 Plot test

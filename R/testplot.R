@@ -1,14 +1,16 @@
 #' Plot test
+#' @param ask logical; if TRUE, the user is asked before each plot, see [`par(ask=.)`][graphics::par].
 #'
 #' @export
 #'
 plot_test <- function(ask = interactive()) {
   if (ask) {
-    oask <- devAskNewPage(TRUE)
-    on.exit(devAskNewPage(oask))
+    oask <- grDevices::devAskNewPage(TRUE)
+    on.exit(grDevices::devAskNewPage(oask))
   }
   plot(1)
-  dev.flush()
+  grDevices::dev.flush()
   plot(1:10)
-  dev.flush()
+  grDevices::dev.flush()
+  return(invisible(NULL))
 }
