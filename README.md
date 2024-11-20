@@ -68,57 +68,57 @@ BlueCrane_demres <- resilience(
     popname = "blue crane",
     time = "both",
     verbose = TRUE)
-#>                                                                                                           Message for time-varying resilience at time step 1
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 2
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 3
-#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
-#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 4
-#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
-#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 5
-#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
-#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 6
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#> 3                                                                                                                                                           
-#>                                                                                                           Message for time-varying resilience at time step 7
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 8
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#> 3                                                                                                                                                           
-#>                                                                                                           Message for time-varying resilience at time step 9
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                          Message for time-varying resilience at time step 10
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#> 3                                                                                                                                                           
-#>                                                                                                          Message for time-varying resilience at time step 11
-#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
-#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                          Message for time-varying resilience at time step 12
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#> 3                                                                                                                                                           
-#>                                                                                                                         Message for time-constant resilience
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#>                                                                                                          Message for time-varying resilience at time step 1
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 2                                            Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#>                                                                                                          Message for time-varying resilience at time step 2
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 2                                            Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#>                                                                                                          Message for time-varying resilience at time step 3
+#> 1                                             Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
+#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#>                                                                                                          Message for time-varying resilience at time step 4
+#> 1                                             Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
+#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#>                                                                                                          Message for time-varying resilience at time step 5
+#> 1                                             Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
+#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#>                                                                                                          Message for time-varying resilience at time step 6
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#> 3                                                                                                                                                          
+#>                                                                                                          Message for time-varying resilience at time step 7
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 2                                            Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#>                                                                                                          Message for time-varying resilience at time step 8
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#> 3                                                                                                                                                          
+#>                                                                                                          Message for time-varying resilience at time step 9
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 2                                            Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#>                                                                                                         Message for time-varying resilience at time step 10
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#> 3                                                                                                                                                          
+#>                                                                                                         Message for time-varying resilience at time step 11
+#> 1                                             Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
+#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#>                                                                                                         Message for time-varying resilience at time step 12
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#> 3                                                                                                                                                          
+#>                                                                                                                        Message for time-constant resilience
+#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector
+#> 2                                            Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
 #> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
 
 #let's take a look at what we got
@@ -236,19 +236,8 @@ Function `plot` provides a plot to visually inspect the resilience
 metric along a time axis
 
 ``` r
-plot(BlueCrane_demres)
+#plot(BlueCrane_demres)
+plot_test()
 ```
 
-![](./man/figures/convt.bc.tvtc.png) <!-- convergence time -->
-
-![](./man/figures/dr.bc.tvtc.png) <!-- damping ratio -->
-
-![Inertia](./man/figures/inertia.bc.tvtc.png) <!-- inertia -->
-
-![Maximum amplification](./man/figures/maxamp.bc.tvtc.png)
-<!-- maximum amplification -->
-
-![Maximum attenuation](./man/figures/maxatt.bc.tvtc.png)
-<!-- maximum attenuation -->
-
-![Reactivity](./man/figures/reac.bc.tvtc.png) <!-- reactivity -->
+![](README_files/figure-gfm/plotting-1.png)<!-- -->![](README_files/figure-gfm/plotting-2.png)<!-- -->
