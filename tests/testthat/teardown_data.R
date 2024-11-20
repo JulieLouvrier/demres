@@ -1,0 +1,1 @@
+rm(bluecrane, envir = .GlobalEnv)

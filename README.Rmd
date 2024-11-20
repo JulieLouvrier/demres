@@ -109,17 +109,7 @@ dist_BC
 Function `plot` provides a plot to visually inspect the resilience metric along a time axis
 
 ```{r, plotting}
-plot(BlueCrane_demres)
+#plot(BlueCrane_demres)
+plot_test()
 ```
 
-![](./man/figures/convt.bc.tvtc.png) <!-- convergence time -->
-
-![](./man/figures/dr.bc.tvtc.png) <!-- damping ratio -->
-
-![](./man/figures/inertia.bc.tvtc.png) <!-- inertia -->
-
-![](./man/figures/maxamp.bc.tvtc.png) <!-- maximum amplification -->
-
-![](./man/figures/maxatt.bc.tvtc.png) <!-- maximum attenuation --> 
-
-![](./man/figures/reac.bc.tvtc.png) <!-- reactivity -->
