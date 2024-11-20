@@ -241,3 +241,5 @@ plot_test()
 ```
 
 ![](README_files/figure-gfm/plotting-1.png)<!-- -->![](README_files/figure-gfm/plotting-2.png)<!-- -->
+
+    #> [1] 0
