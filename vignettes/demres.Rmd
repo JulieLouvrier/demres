@@ -93,7 +93,7 @@ With $\lambda_1$ the dominant eigenvalue and $\lambda_2$ the largest subdominant
 
 - _**Inertia**_ : The long-term population density in comparison with a population that reached a stable growth. _Inertia_ is calculated using  
 
-$$\textit{inertia} = {\rho}_{\infty} = \frac{\textbf{v}_{max}||\textbf{w}||_1}{\textbf{v}^\text{T}\textbf{w}}$$ 
+$$\textit{inertia} = {P}_{\infty} = \frac{\textbf{v}^\text{T}\hat{\textbf{n}}_0||\textbf{w}||_1}{\textbf{v}^\text{T}\textbf{w}}$$ 
 
 in case of an amplifying population and 
 
@@ -104,15 +104,15 @@ With **w** and **v** being right and left eigenvectors respectively. $\textbf{v}
 
 - _**Reactivity**_ : The population density that can be reached in the first time step after disturbance. _Reactivity_ is calculated using  
 
-$$\textit{reactivity} = \bar{\rho_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
+$$\textit{reactivity} = {P_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
 With **A** the matrix population model and $\hat{\textbf{A}}$ the standardized population matrix which is calculated as $\hat{\textbf{A}} = \frac{\textbf{A}}{\lambda_{1}}$. The vector $\hat{\textbf{n}}_0$ represents the initial demographic distribution, standardized to sum to 1 and is calculated as $\hat{\textbf{n}}_0 = \frac{{\textbf{n}}_0}{||\textbf{n}_0||_1}$. 
 
 - _**Maximum amplification**_ : The largest population density that can be reached at any time after disturbance. This metric is calculated using:
-$$maximum\ amplification = \bar{\rho}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+$$maximum\ amplification = \bar{P}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
 
 - _**Maximum attenuation**_ : The lowest population density that can be reached at any time after disturbance. This metric is calculated using: 
 
-$$maximum\ attenuation = \underline{\rho}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+$$maximum\ attenuation = \underline{P}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
 _Maximum amplification_ and _maximum attenuation_ can occur at any point along the projection. Some populations only have a _maximum amplification_ due to either their demographic rates or the initial vector (because they never attenuate), some only have a _maximum attenuation_ (because they never amplify), and some have both.
 
 [^2]: [Stott, I., Hodgson, D. J., & Townley, S. (2012) Functional Ecology, Methods in Ecology & Evolution, 3(5).](https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/j.2041-210X.2012.00222.x)
