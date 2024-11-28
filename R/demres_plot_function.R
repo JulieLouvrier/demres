@@ -4,6 +4,7 @@
 #' along a time axis
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the `resilience` function
+#' @param ask logical; if TRUE, the user is asked before each plot, see [`par(ask=.)`][graphics::par]
 #' @name demres_plot
 #' @return A plot displaying the chosen metric(s) along a time axis
 #' @export
@@ -31,12 +32,17 @@
 #'
 #' plot(BC_TVTC_demres)
 
-demres_plot <- function(table) {
+demres_plot <- function(table, ask = interactive()) {
   sub_names <- grep('[TVTC]', colnames(table), value = TRUE)
 
   unique_combis_uprlwr <- unlist(strsplit(grep('TV', sub_names, value = TRUE), "_TV"))
   unique_combis_lwr <- unlist(strsplit(unique_combis_uprlwr, "_upr"))
   unique_combis <- unique(unlist(strsplit(unique_combis_lwr, "_lwr")))
+
+  if (ask) {
+    oask <- grDevices::devAskNewPage(TRUE)
+    on.exit(grDevices::devAskNewPage(oask))
+  }
 
   unlist(lapply(unique_combis, FUN = function(x){help_plot(table = table,
                                                            metric = x)}))
@@ -104,9 +110,8 @@ help_plot <- function(metric, table) {
     # Create a plot
     graphics::par(mar = c(4,4, 4, 10), #c(5, 4, 4, 10),
                   xpd = TRUE)
-    grDevices::dev.new()
-    graphics::par(mar = c(4,4, 4, 10), #c(5, 4, 4, 10),
-                  xpd = TRUE)
+    #grDevices::dev.new()
+
     plot(
       tableStartYear,
       table_metric_vector_TV,
@@ -138,7 +143,7 @@ help_plot <- function(metric, table) {
     #legend
     graphics::legend(
       "topright",
-      inset = c(-0.4, 0.2),
+      inset = c(-0.6,0),
       legend = c("Damping ratio"),
       col = c("black"),
       lty = c(1),
@@ -150,7 +155,7 @@ help_plot <- function(metric, table) {
     #legend
     graphics::legend(
       "topright",
-      inset = c(-0.4, 0.5),
+      inset = c(-0.6, 0.5),
       legend = c("Damping ratio"),
       col = c("black"),
       pch = c(19),
@@ -159,12 +164,12 @@ help_plot <- function(metric, table) {
       box.lty = 0,
       title.adj = 0.15
     )
-
-
+    grDevices::dev.flush()
   }
 
   else{
     plot_general(metric = metric, table = table)
+    grDevices::dev.flush()
   }
 
   return(invisible(NULL))

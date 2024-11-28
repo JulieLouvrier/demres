@@ -4,11 +4,13 @@
 \alias{demres_plot}
 \title{Plot the resulting demographic resilience metrics}
 \usage{
-demres_plot(table)
+demres_plot(table, ask = interactive())
 }
 \arguments{
 \item{table}{A dataframe containing all the resilience metrics calculated
 with the \code{resilience} function}
+
+\item{ask}{logical; if TRUE, the user is asked before each plot, see \code{\link[graphics:par]{par(ask=.)}}}
 }
 \value{
 A plot displaying the chosen metric(s) along a time axis

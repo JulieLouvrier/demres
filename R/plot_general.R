@@ -218,7 +218,7 @@ plot_general <- function(metric, table){
   oldpar <- graphics::par(mar = c(4, 4, 4, 10), #c(5, 4, 4, 10),
                           xpd = TRUE)
   on.exit(graphics::par(oldpar)) ## restore original parameters once the function has ran
-  grDevices::dev.new()
+  #grDevices::dev.new()
   graphics::par(mar = c(4, 4, 4, 10), #c(5, 4, 4, 10),
                 xpd = TRUE)
   plot(
@@ -287,7 +287,7 @@ plot_general <- function(metric, table){
   if(!length(grep("_TC", names(table))) == 0){
     graphics::legend(
       "topright",
-      inset = c(-0.4, 0.2),
+      inset = c(-0.6, 0),
       legend = legenddefault,
       col = coldefault,
       lty = ltydefault,
@@ -301,7 +301,7 @@ plot_general <- function(metric, table){
   #legend
   graphics::legend(
     "topright",
-    inset = c(-0.4, 0.5),
+    inset = c(-0.6, 0.5),
     legend = legenddefault,
     col = coldefault,
     pch = pchdefault,
@@ -310,5 +310,7 @@ plot_general <- function(metric, table){
     box.lty = 0,
     title.adj = 0.15
   )
+
+  grDevices::dev.flush()
 
 }

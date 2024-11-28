@@ -464,22 +464,9 @@ Now looking at the minimum values, we can observe that the 5th year was the year
 # Plot 
 The function `plot` provides a visual representation of the time-varying and time-constant metrics that are present in the data frame returned by the function `resilience`. Depending on what the user specified as demographic distribution, the plot shows the resilience metrics computed by using  the lower bound, the upper bound, or the initial distribution vector. 
 
-```{r echo = -1}
+```{r, echo = -1, fig.width = 6, fig.height = 6}
 plot(Bluecrane.all.tvtc)
-
 ```
-
-![](./man/figures/convt.bc.tvtc.png) <!-- convergence time -->
-
-![](./man/figures/dr.bc.tvtc.png) <!-- damping ratio -->
-
-![](./man/figures/inertia.bc.tvtc.png) <!-- inertia -->
-
-![](./man/figures/maxamp.bc.tvtc.png) <!-- maximum amplification -->
-
-![](./man/figures/maxatt.bc.tvtc.png) <!-- maximum attenuation --> 
-
-![](./man/figures/reac.bc.tvtc.png) <!-- reactivity -->
 
 R opened as many windows as there are metrics in the table provided. In each window is a visual representation of the demographic resilience metrics over time. 
 
