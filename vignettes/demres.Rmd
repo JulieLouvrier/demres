@@ -33,7 +33,7 @@ __{demres}__ aims at being compatible with both _tidyverse_ and _base_ R dialect
 
 ***
 # Installing `demres`
-__{demres}__ is available on [GitHub](https://github.com/JulieLouvrier/demres). 
+__{demres}__ is available on [GitHub](https://github.com/ANONYMOUS/demres). 
 Vignette description usually requires the latest version of the package. 
 
 ## Package installation from Github
@@ -45,7 +45,7 @@ You can install this package using __{remotes}__ (or __{devtools}__):
 install.packages(c("devtools", "remotes"))
 
 #Installing from GitHub
-remotes::install_github("JulieLouvrier/demres")
+remotes::install_github("ANONYMOUS/demres")
 ```
 ***  
 # Matrix Population Models
