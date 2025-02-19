@@ -55,17 +55,17 @@ requested using the argument `time`.
 ``` r
 # Create initial vector
 set.seed(1234)
-Cranevec1 <- runif(5)
-Cranevec1 <- Cranevec1 / sum(Cranevec1) #scales the vector to sum to 1
+penguinvec1 <- runif(5)
+penguinvec1 <- penguinvec1 / sum(penguinvec1) #scales the vector to sum to 1
 
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
 adeliepenguin_demres <- resilience(
     listA = adeliepenguin,
     metrics = "all",
     bounds = TRUE,
-    vector = Cranevec1,
+    vector = penguinvec1,
     TDvector = TRUE,
-    popname = "blue crane",
+    popname = "adelie penguin",
     time = "both",
     verbose = TRUE)
 #>                                                                                                           Message for time-varying resilience at time step 1
@@ -124,18 +124,18 @@ adeliepenguin_demres <- resilience(
 #let's take a look at what we got
 adeliepenguin_demres
 #>    timestep    popname convt_TV convt_lwr_TV convt_upr_TV    dr_TV inertia_TV
-#> 1         1 blue crane       15           17           21 1.260737  1.5333348
-#> 2         2 blue crane       19           22           26 1.209277  1.2582784
-#> 3         3 blue crane       15           17           21 1.250912  0.8581260
-#> 4         4 blue crane       14           20           24 1.222042  0.9013004
-#> 5         5 blue crane       11           14           18 1.327353  0.8586647
-#> 6         6 blue crane       12           17           21 1.275744  1.1426049
-#> 7         7 blue crane        9           17           21 1.288798  1.1378826
-#> 8         8 blue crane        8           14           18 1.313330  0.9984802
-#> 9         9 blue crane       11           17           21 1.247210  1.0452734
-#> 10       10 blue crane       12           22           26 1.214877  0.9643615
-#> 11       11 blue crane       11           14           18 1.312434  0.8513696
-#> 12       12 blue crane       10           14           18 1.290253  1.0436617
+#> 1         1 adelie penguin       15           17           21 1.260737  1.5333348
+#> 2         2 adelie penguin       19           22           26 1.209277  1.2582784
+#> 3         3 adelie penguin       15           17           21 1.250912  0.8581260
+#> 4         4 adelie penguin       14           20           24 1.222042  0.9013004
+#> 5         5 adelie penguin       11           14           18 1.327353  0.8586647
+#> 6         6 adelie penguin       12           17           21 1.275744  1.1426049
+#> 7         7 adelie penguin        9           17           21 1.288798  1.1378826
+#> 8         8 adelie penguin        8           14           18 1.313330  0.9984802
+#> 9         9 adelie penguin       11           17           21 1.247210  1.0452734
+#> 10       10 adelie penguin       12           22           26 1.214877  0.9643615
+#> 11       11 adelie penguin       11           14           18 1.312434  0.8513696
+#> 12       12 adelie penguin       10           14           18 1.290253  1.0436617
 #>    inertia_lwr_TV inertia_upr_TV maxamp_TV maxamp_upr_TV maxatt_TV
 #> 1       0.3380643       2.453536  1.723496      3.188589        NA
 #> 2       0.3664144       2.764719  1.480409      3.722920        NA
@@ -212,10 +212,10 @@ $$\frac{mean(abs(TV-TC))}{TC}$$
 
 ``` r
 #let's calculate all measures of distance for inertia
-dist_BC <- summary(adeliepenguin_demres)
+dist_AP <- summary(adeliepenguin_demres)
 
 #let's take a look at what we got
-dist_BC
+dist_AP
 #>          convt convt_lwr  convt_upr         dr   inertia inertia_lwr
 #> RMSE  6.898067 2.8136572 2.81365717 0.03903875 0.1911224  0.02005321
 #> rRMSE 2.262518 0.9578473 0.95784731 0.97324861 0.9574318  0.96115364
@@ -239,16 +239,16 @@ metric along a time axis
 plot(adeliepenguin_demres)
 ```
 
-![](./man/figures/convt.bc.tvtc.png) <!-- convergence time -->
+![](./man/figures/convt.AP.tvtc.png) <!-- convergence time -->
 
-![](./man/figures/dr.bc.tvtc.png) <!-- damping ratio -->
+![](./man/figures/dr.AP.tvtc.png) <!-- damping ratio -->
 
-![Inertia](./man/figures/inertia.bc.tvtc.png) <!-- inertia -->
+![Inertia](./man/figures/inertia.AP.tvtc.png) <!-- inertia -->
 
-![Maximum amplification](./man/figures/maxamp.bc.tvtc.png)
+![Maximum amplification](./man/figures/maxamp.AP.tvtc.png)
 <!-- maximum amplification -->
 
-![Maximum attenuation](./man/figures/maxatt.bc.tvtc.png)
+![Maximum attenuation](./man/figures/maxatt.AP.tvtc.png)
 <!-- maximum attenuation -->
 
-![Reactivity](./man/figures/reac.bc.tvtc.png) <!-- reactivity -->
+![Reactivity](./man/figures/reac.AP.tvtc.png) <!-- reactivity -->

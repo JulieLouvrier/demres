@@ -5,9 +5,9 @@ test_that("resilience works as expected", {
       listA = adeliepenguin,
       metrics = "all",
       bounds = TRUE,
-      vector = Cranevec1,
+      vector = penguinvec1,
       TDvector = FALSE,
-      popname = "blue crane",
+      popname = "adelie penguin",
       time = "varying",
       verbose = FALSE
     )
@@ -16,18 +16,18 @@ test_that("resilience works as expected", {
     list(
       timestep = 1:12,
       popname = c(
-        "blue crane",
-        "blue crane",
-        "blue crane",
-        "blue crane",
-        "blue crane",
-        "blue crane",
-        "blue crane",
-        "blue crane",
-        "blue crane",
-        "blue crane",
-        "blue crane",
-        "blue crane"
+        "adelie penguin",
+        "adelie penguin",
+        "adelie penguin",
+        "adelie penguin",
+        "adelie penguin",
+        "adelie penguin",
+        "adelie penguin",
+        "adelie penguin",
+        "adelie penguin",
+        "adelie penguin",
+        "adelie penguin",
+        "adelie penguin"
       ),
       convt_TV = c(15, 17, 15, 17, 12, 15, 15, 12, 15, 17, 12, 15),
       convt_lwr_TV = c(17, 22, 17, 20, 14, 17, 17, 14, 17, 22, 14, 14),

@@ -49,9 +49,9 @@ remotes::install_github("JulieLouvrier/demres")
 ```
 ***  
 # Matrix Population Models
-## Blue crane models
+## adelie penguin models
 
-We will use a list of matrix projection models (MPMs) of a blue crane population (*Anthropoides paradiseus*) in the Northern Cape Province, South Africa, from the study by Altweg and Anderson (2009): "Rainfall in arid zones: possible effects of climate change on the population ecology of blue cranes" [^1].
+We will use a list of matrix projection models (MPMs) of a adelie penguin population (*Anthropoides paradiseus*) in the Northern Cape Province, South Africa, from the study by Altweg and Anderson (2009): "Rainfall in arid zones: possible effects of climate change on the population ecology of adelie penguins" [^1].
 
 The MPMs were extracted from the COMADRE database (https://compadre-db.org/). The data is a list of 12 matrices of dimension 5 x 5. The 5 stage classes have been defined based on age and are the following:     
 - "1 year"    
@@ -63,11 +63,11 @@ The MPMs were extracted from the COMADRE database (https://compadre-db.org/). Th
 [^1]: [Altweg and Anderson (2009) Functional Ecology, 23(5), 1014-1021.](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/j.1365-2435.2009.01563.x)
 
 ```{r echo = FALSE}
-cranepic <- magick::image_read("https://upload.wikimedia.org/wikipedia/commons/9/95/Blue_Crane_%28Anthropoides_paradiseus%29_parading_%2832458639642%29.jpg")
+penguinpic <- magick::image_read("https://upload.wikimedia.org/wikipedia/commons/1/12/Pygoscelis_adeliae.png")
 par(mar = c(0, 0, 0, 0))
-plot(as.raster(cranepic))
+plot(as.raster(penguinpic))
 text(10, 10, adj = c (0, 0), col = "white",
-     "Blue Crane parading")
+     "Adelie penguin")
 ```
 
 Load in the data:  
@@ -76,7 +76,7 @@ data(adeliepenguin); adeliepenguin
 
 ```
 
-The numbers in the matrices describe the elements known as vital rates. These represent the survival rates in a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offsprings that is contributed to the population by each (st)age class), per unit of time. For blue cranes, the probability to transition from a 1 year old to a 2 year old is 61.2% on year 5 of the study (see `adeliepenguin[[5]]`), while this probability is 88.7% in year 2 of the study period (see `adeliepenguin[[2]]`). 
+The numbers in the matrices describe the elements known as vital rates. These represent the survival rates in a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offsprings that is contributed to the population by each (st)age class), per unit of time. For adelie penguins, the probability to transition from a 1 year old to a 2 year old is 61.2% on year 5 of the study (see `adeliepenguin[[5]]`), while this probability is 88.7% in year 2 of the study period (see `adeliepenguin[[2]]`). 
 
 
 # Assess time-varying demographic resilience 
@@ -147,15 +147,15 @@ First, let us look at _inertia_, by setting `metrics = "inertia"` and `time = "v
 
 ```{r echo = -1}
 set.seed(1234)
-Cranevec1 <- runif(5)
-Cranevec1 <- Cranevec1/sum(Cranevec1) 
+penguinvec1 <- runif(5)
+penguinvec1 <- penguinvec1/sum(penguinvec1) 
 
 adeliepenguin.inertia.tv <- resilience(
      listA = adeliepenguin,
      metrics = "inertia",
      bounds = TRUE,
-     vector = Cranevec1,
-     popname = "blue crane",
+     vector = penguinvec1,
+     popname = "adelie penguin",
      time = "varying")
 
 adeliepenguin.inertia.tv
@@ -171,8 +171,8 @@ adeliepenguin.reac.tv <- resilience(
      listA = adeliepenguin,
      metrics = "reac",
      bounds = TRUE,
-     vector = Cranevec1,
-     popname = "blue crane",
+     vector = penguinvec1,
+     popname = "adelie penguin",
      time = "varying")
 
 adeliepenguin.reac.tv
@@ -188,8 +188,8 @@ adeliepenguin.all.tv <- resilience(
      listA = adeliepenguin,
      metrics = "all",
      bounds = TRUE,
-     vector = Cranevec1,
-     popname = "blue crane",
+     vector = penguinvec1,
+     popname = "adelie penguin",
      time = "varying")
 
 adeliepenguin.all.tv
@@ -217,9 +217,9 @@ adeliepenguin.all.tv.TD <- resilience(
      listA = adeliepenguin,
      metrics = "all",
      bounds = TRUE,
-     vector = Cranevec1,
+     vector = penguinvec1,
      TDvector = TRUE,
-     popname = "blue crane",
+     popname = "adelie penguin",
      time = "varying",
      verbose = FALSE)
 
@@ -245,7 +245,7 @@ adeliepenguin.all.tv$timestep <- factor(adeliepenguin.all.tv$timestep)
                                     
 plot(adeliepenguin.all.tv$inertia_TV, ylim = c(0, 1.6), type = "l", 
      xlab = "Time-step",
-     ylab = "Inertia of blue cranes")
+     ylab = "Inertia of adelie penguins")
 lines(adeliepenguin.all.tv.TD$inertia_TV, col = "red")
 legend(1.5, 0.5, legend = c("Time dependent", "No time dependent"),
        col = c("red", "black"), cex = 0.6, lty = c(1, 1), box.lty = 0)
@@ -259,7 +259,7 @@ adeliepenguin.all.tv$timestep <- factor(adeliepenguin.all.tv$timestep)
                                     
 plot(adeliepenguin.all.tv$reac_TV, ylim = c(0, 1.6), type = "l", 
      xlab = "Time-step",
-     ylab = "Reac of blue cranes")
+     ylab = "Reac of adelie penguins")
 lines(adeliepenguin.all.tv.TD$reac_TV, col = "red")
 legend(1.5, 0.5, legend = c("Time dependent", "No time dependent"),
        col = c("red", "black"), cex = 0.6, lty = c(1, 1), box.lty = 0)
@@ -278,8 +278,8 @@ adeliepenguin.inertia.tc <- resilience(
      listA = adeliepenguin,
      metrics = "inertia",
      bounds = TRUE,
-     vector = Cranevec1,
-     popname = "blue crane",
+     vector = penguinvec1,
+     popname = "adelie penguin",
      time = "constant",
      verbose = FALSE)
 
@@ -294,8 +294,8 @@ adeliepenguin.all.tc <- resilience(
      listA = adeliepenguin,
      metrics = "all",
      bounds = TRUE,
-     vector = Cranevec1,
-     popname = "blue crane",
+     vector = penguinvec1,
+     popname = "adelie penguin",
      time = "constant",
      verbose = FALSE)
 
@@ -311,8 +311,8 @@ adeliepenguin.reac.tvtc <- resilience(
      listA = adeliepenguin,
      metrics = "reac",
      bounds = TRUE,
-     vector = Cranevec1,
-     popname = "blue crane",
+     vector = penguinvec1,
+     popname = "adelie penguin",
      time = "both", 
      verbose = FALSE)
 
@@ -326,8 +326,8 @@ adeliepenguin.all.tvtc <- resilience(
      listA = adeliepenguin,
      metrics = "all",
      bounds = TRUE,
-     vector = Cranevec1,
-     popname = "blue crane",
+     vector = penguinvec1,
+     popname = "adelie penguin",
      time = "both", 
      verbose = TRUE)
 
@@ -352,9 +352,9 @@ Let's look at how the metrics vary in time in comparison with the time-constant 
 To be able to look at these distances, the metrics calculated with both time-varying and time-dependent approaches must be present in the table. 
 
 ```{r echo = -1}
-table.bc.reac <- summary(adeliepenguin.reac.tvtc)
+table.AP.reac <- summary(adeliepenguin.reac.tvtc)
 
-table.bc.reac
+table.AP.reac
 ```
 The upper bound has the largest value of RMSE. This means that the upper bound is the one for which the time-varying values are the most spread around the time-constant value for _reactivity_. When dividing this value by the standard deviation of the time-varying metric, it seems that all three metrics have a rRMSE below 1, which means that the value of the RMSE is below the value of the SD of the time-varying metrics, which can be interpreted as a reasonable dispersion around the time-constant metric. Finally, when looking at the MAPE, if we take 5% as the maximum threshold above which the difference between the time-varying and the time-constant approaches are considered to be important, then using the time-varying approach seems to be sensible for computing the metric at the upper bound, whereas the time-constant approach is a good enough approximation for the value computed at the lower bound and using the specified initial vector.  
 
@@ -362,9 +362,9 @@ The upper bound has the largest value of RMSE. This means that the upper bound i
 Then let's look at all the resilience metrics: 
 
 ```{r echo = -1}
-table.bc.all <- summary(adeliepenguin.all.tvtc)
+table.AP.all <- summary(adeliepenguin.all.tvtc)
 
-table.bc.all
+table.AP.all
 ```
 First, we can notice that the distance measures for _maximum attenuation_ cannot be computed because the population did not attenuate according to the time-constant approach. 
 
@@ -376,7 +376,7 @@ It is now worth investigating the reasons behind the fact that the upper bound a
 Let's first remember the initial vector we used 
 
 ```{r echo = -1}
-Cranevec1
+penguinvec1
 ```
 For this initial vector, adults were largely represented, with juveniles being in minority. 
 Now we will create the 5 stage-biased vectors of our population and identify the cases in which the upper and lower bounds are found:
@@ -420,15 +420,15 @@ adeliepenguin.all.tvtc.TD <- resilience(
      listA = adeliepenguin,
      metrics = "all",
      bounds = TRUE,
-     vector = Cranevec1,
+     vector = penguinvec1,
      TDvector = TRUE,
-     popname = "blue crane",
+     popname = "adelie penguin",
      time = "both",
      verbose = FALSE)
 
-table.bc.all.TD <- summary(adeliepenguin.all.tvtc.TD)
+table.AP.all.TD <- summary(adeliepenguin.all.tvtc.TD)
 
-table.bc.all.TD
+table.AP.all.TD
 
 ```
 

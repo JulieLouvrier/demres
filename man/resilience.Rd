@@ -92,18 +92,18 @@ data(adeliepenguin)
 
 # simulate an initial vector
 set.seed(1234)
-Cranevec1 <- runif(5)
-Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vector to sum up to 1
+penguinvec1 <- runif(5)
+penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vector to sum up to 1
 
 
-BC_TVTC_demres <-
+AP_TVTC_demres <-
   resilience(
     listA = adeliepenguin,
     metrics = "all",
     bounds = TRUE,
-    vector = Cranevec1,
+    vector = penguinvec1,
     TDvector = FALSE,
-    popname = "blue crane",
+    popname = "adelie penguin",
     time = "varying",
     verbose = TRUE
   )

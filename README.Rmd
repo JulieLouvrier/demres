@@ -63,17 +63,17 @@ The function `resilience` is made to calculate demographic resilience metrics ba
 ```{r, resilience metrics}
 # Create initial vector
 set.seed(1234)
-Cranevec1 <- runif(5)
-Cranevec1 <- Cranevec1 / sum(Cranevec1) #scales the vector to sum to 1
+penguinvec1 <- runif(5)
+penguinvec1 <- penguinvec1 / sum(penguinvec1) #scales the vector to sum to 1
 
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
 adeliepenguin_demres <- resilience(
     listA = adeliepenguin,
     metrics = "all",
     bounds = TRUE,
-    vector = Cranevec1,
+    vector = penguinvec1,
     TDvector = TRUE,
-    popname = "blue crane",
+    popname = "adelie penguin",
     time = "both",
     verbose = TRUE)
 
@@ -98,10 +98,10 @@ $$\frac{mean(abs(TV-TC))}{TC}$$
 
 ```{r, distance}
 #let's calculate all measures of distance for inertia
-dist_BC <- summary(adeliepenguin_demres)
+dist_AP <- summary(adeliepenguin_demres)
 
 #let's take a look at what we got
-dist_BC
+dist_AP
 ```
 
 ### Plot the results

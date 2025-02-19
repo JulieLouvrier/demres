@@ -43,12 +43,12 @@
 #' data(adeliepenguin)
 #'
 #' set.seed(1234)
-#' Cranevec1 <- runif(5)
-#' Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
-#' crane1 <- adeliepenguin[[1]]
+#' penguinvec1 <- runif(5)
+#' penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vec to sum to 1
+#' penguin1 <- adeliepenguin[[1]]
 #'
-#' all_crane_demres <- calc_resilience(crane1, metrics = c("all"),
-#' vector = Cranevec1, bounds = TRUE, popname = "blue crane", verbose = TRUE)
+#' all_penguin_demres <- calc_resilience(penguin1, metrics = c("all"),
+#' vector = penguinvec1, bounds = TRUE, popname = "adelie penguin", verbose = TRUE)
 #'
 #' @return A vector containing all the resilience metrics
 #' @name calc_resilience
