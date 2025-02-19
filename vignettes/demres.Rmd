@@ -72,11 +72,11 @@ text(10, 10, adj = c (0, 0), col = "white",
 
 Load in the data:  
 ```{r}
-data(bluecrane); bluecrane
+data(adeliepenguin); adeliepenguin
 
 ```
 
-The numbers in the matrices describe the elements known as vital rates. These represent the survival rates in a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offsprings that is contributed to the population by each (st)age class), per unit of time. For blue cranes, the probability to transition from a 1 year old to a 2 year old is 61.2% on year 5 of the study (see `bluecrane[[5]]`), while this probability is 88.7% in year 2 of the study period (see `bluecrane[[2]]`). 
+The numbers in the matrices describe the elements known as vital rates. These represent the survival rates in a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offsprings that is contributed to the population by each (st)age class), per unit of time. For blue cranes, the probability to transition from a 1 year old to a 2 year old is 61.2% on year 5 of the study (see `adeliepenguin[[5]]`), while this probability is 88.7% in year 2 of the study period (see `adeliepenguin[[2]]`). 
 
 
 # Assess time-varying demographic resilience 
@@ -150,15 +150,15 @@ set.seed(1234)
 Cranevec1 <- runif(5)
 Cranevec1 <- Cranevec1/sum(Cranevec1) 
 
-Bluecrane.inertia.tv <- resilience(
-     listA = bluecrane,
+adeliepenguin.inertia.tv <- resilience(
+     listA = adeliepenguin,
      metrics = "inertia",
      bounds = TRUE,
      vector = Cranevec1,
      popname = "blue crane",
      time = "varying")
 
-Bluecrane.inertia.tv
+adeliepenguin.inertia.tv
 ```
 Here we can see that _inertia_ varies in time. Since `bounds` were set to `TRUE`, the boundary values of _inertia_ were calculated also based on the stage-biased vector. Stage-biased vectors are biased towards one stage class, with individuals from this stage class representing 100% of the whole population. Consequently there are as many stage-biased vectors as there are stage classes in the population. For example, a population with 4 stage classes will have the 4 following stage-biased vectors: [1 0 0 0]; [0 1 0 0]; [0 0 1 0]; [0 0 0 1 ]. These upper and lower bounds therefore provide the upper and lower extremes that the demographic resilience metrics can take. 
 
@@ -167,15 +167,15 @@ The minimum values for _inertia_ calculated either with the vector or with the b
 
 Second, let us look at _reactivity_ by setting `metrics = "reac"`:
 ```{r echo = -1}
-Bluecrane.reac.tv <- resilience(
-     listA = bluecrane,
+adeliepenguin.reac.tv <- resilience(
+     listA = adeliepenguin,
      metrics = "reac",
      bounds = TRUE,
      vector = Cranevec1,
      popname = "blue crane",
      time = "varying")
 
-Bluecrane.reac.tv
+adeliepenguin.reac.tv
 ```
 
 A _reactivity_ of 1.32 would mean that in the first timestep, the population grows 1.32 as fast as a population that grows at its stable growth rate. It is therefore amplifying. 
@@ -184,21 +184,21 @@ A _reactivity_ of 1.32 would mean that in the first timestep, the population gro
 Now let's look at all the metrics possible with the option `metrics = "all"`
 
 ```{r echo = -1}
-Bluecrane.all.tv <- resilience(
-     listA = bluecrane,
+adeliepenguin.all.tv <- resilience(
+     listA = adeliepenguin,
      metrics = "all",
      bounds = TRUE,
      vector = Cranevec1,
      popname = "blue crane",
      time = "varying")
 
-Bluecrane.all.tv
+adeliepenguin.all.tv
 ```
 
 This time we have an object of class __resil__ that is a dataframe with 16 columns. 
 
 ```{r echo = -1}
-colnames(Bluecrane.all.tv)
+colnames(adeliepenguin.all.tv)
 ```
 
 All 6 metrics are given with their upper and lower bounds when possible. Messages were displayed due to the fact that the bounds were requested for _maximum amplification_ and _maximum attenuation_, but the lower bound cannot be calculated for _maximum amplification_ and the upper bound cannot be calculated for _maximum attenuation_. 
@@ -213,8 +213,8 @@ It is also possible to derive a list of initial vectors starting with one vector
 From here on we will set `verbose = FALSE` to avoid the display of all the messages.    
 
 ```{r echo = -1}
-Bluecrane.all.tv.TD <- resilience(
-     listA = bluecrane,
+adeliepenguin.all.tv.TD <- resilience(
+     listA = adeliepenguin,
      metrics = "all",
      bounds = TRUE,
      vector = Cranevec1,
@@ -223,30 +223,30 @@ Bluecrane.all.tv.TD <- resilience(
      time = "varying",
      verbose = FALSE)
 
-Bluecrane.all.tv.TD
+adeliepenguin.all.tv.TD
 ```
-Here we can see that values differ from the previous `Bluecrane.all.tv`. Indeed, _inertia_ and _reactivity_ often have values that are below 1 when the vector provided is time-dependent, meaning that the population is attenuating rather than amplifying during these years.  
+Here we can see that values differ from the previous `adeliepenguin.all.tv`. Indeed, _inertia_ and _reactivity_ often have values that are below 1 when the vector provided is time-dependent, meaning that the population is attenuating rather than amplifying during these years.  
 
 In comparison with the previous table, one can see that the values of _inertia_ and _reactivity_, calculated with the time-dependent initial vector converge towards 1 over time. 
 
 We can see this by comparing _inertia_ when the initial vector is static
 ```{r}
-Bluecrane.all.tv$inertia_TV
+adeliepenguin.all.tv$inertia_TV
 ```
 
 with values of _inertia_ when the initial vector is time-dependent
 ```{r}
-Bluecrane.all.tv.TD$inertia_TV
+adeliepenguin.all.tv.TD$inertia_TV
 ```
 Let's take a look at what _inertia_ looks like when using a time-dependent initial vector in comparison with one non-changing value of initial vector. 
 
 ```{r echo = -1}
-Bluecrane.all.tv$timestep <- factor(Bluecrane.all.tv$timestep) 
+adeliepenguin.all.tv$timestep <- factor(adeliepenguin.all.tv$timestep) 
                                     
-plot(Bluecrane.all.tv$inertia_TV, ylim = c(0, 1.6), type = "l", 
+plot(adeliepenguin.all.tv$inertia_TV, ylim = c(0, 1.6), type = "l", 
      xlab = "Time-step",
      ylab = "Inertia of blue cranes")
-lines(Bluecrane.all.tv.TD$inertia_TV, col = "red")
+lines(adeliepenguin.all.tv.TD$inertia_TV, col = "red")
 legend(1.5, 0.5, legend = c("Time dependent", "No time dependent"),
        col = c("red", "black"), cex = 0.6, lty = c(1, 1), box.lty = 0)
 abline(h = 1, col = "blue", lty = 2)
@@ -255,12 +255,12 @@ abline(h = 1, col = "blue", lty = 2)
 Let's look now at _reactivity_:
 
 ```{r echo = -1}
-Bluecrane.all.tv$timestep <- factor(Bluecrane.all.tv$timestep) 
+adeliepenguin.all.tv$timestep <- factor(adeliepenguin.all.tv$timestep) 
                                     
-plot(Bluecrane.all.tv$reac_TV, ylim = c(0, 1.6), type = "l", 
+plot(adeliepenguin.all.tv$reac_TV, ylim = c(0, 1.6), type = "l", 
      xlab = "Time-step",
      ylab = "Reac of blue cranes")
-lines(Bluecrane.all.tv.TD$reac_TV, col = "red")
+lines(adeliepenguin.all.tv.TD$reac_TV, col = "red")
 legend(1.5, 0.5, legend = c("Time dependent", "No time dependent"),
        col = c("red", "black"), cex = 0.6, lty = c(1, 1), box.lty = 0)
 abline(h = 1, col = "blue", lty = 2)
@@ -274,8 +274,8 @@ Note that it is also possible to provide a list of initial vectors, of a length 
 ## Using one resilience metric
 First we can look at _inertia_ again:
 ```{r echo = -1}
-Bluecrane.inertia.tc <- resilience(
-     listA = bluecrane,
+adeliepenguin.inertia.tc <- resilience(
+     listA = adeliepenguin,
      metrics = "inertia",
      bounds = TRUE,
      vector = Cranevec1,
@@ -283,15 +283,15 @@ Bluecrane.inertia.tc <- resilience(
      time = "constant",
      verbose = FALSE)
 
-Bluecrane.inertia.tc
+adeliepenguin.inertia.tc
 ```
 Here we can see that _inertia_ is calculated based on the mean MPM and is around 1.53 with a lower bound of 0.34 and an upper bound of 2.45. 
 
 ## Using several resilience metrics
 We can look now at all metrics with the option `metrics = "all"`:
 ```{r echo = -1}
-Bluecrane.all.tc <- resilience(
-     listA = bluecrane,
+adeliepenguin.all.tc <- resilience(
+     listA = adeliepenguin,
      metrics = "all",
      bounds = TRUE,
      vector = Cranevec1,
@@ -299,7 +299,7 @@ Bluecrane.all.tc <- resilience(
      time = "constant",
      verbose = FALSE)
 
-Bluecrane.all.tc
+adeliepenguin.all.tc
 ```
 
 The population does not attenuate based on the average matrix.
@@ -307,8 +307,8 @@ The population does not attenuate based on the average matrix.
 # Compare time-varying with time-constant approaches 
 ## One resilience metric
 ```{r echo = -1}
-Bluecrane.reac.tvtc <- resilience(
-     listA = bluecrane,
+adeliepenguin.reac.tvtc <- resilience(
+     listA = adeliepenguin,
      metrics = "reac",
      bounds = TRUE,
      vector = Cranevec1,
@@ -316,14 +316,14 @@ Bluecrane.reac.tvtc <- resilience(
      time = "both", 
      verbose = FALSE)
 
-Bluecrane.reac.tvtc
+adeliepenguin.reac.tvtc
 ```
 Both time-varying and time-constant approaches are displayed in the table for _reactivity_: time-constant ones have `_TC` appended in the end of the name, whereas time-varying ones have `_TV`.
 
 ## Several metrics
 ```{r echo = -1}
-Bluecrane.all.tvtc <- resilience(
-     listA = bluecrane,
+adeliepenguin.all.tvtc <- resilience(
+     listA = adeliepenguin,
      metrics = "all",
      bounds = TRUE,
      vector = Cranevec1,
@@ -331,7 +331,7 @@ Bluecrane.all.tvtc <- resilience(
      time = "both", 
      verbose = TRUE)
 
-Bluecrane.all.tvtc
+adeliepenguin.all.tvtc
 
 ```
 Because `verbose = TRUE` we can see the messages displayed for each time step of the time varying approach, as well as the messages for the time-constant approach. 
@@ -352,7 +352,7 @@ Let's look at how the metrics vary in time in comparison with the time-constant 
 To be able to look at these distances, the metrics calculated with both time-varying and time-dependent approaches must be present in the table. 
 
 ```{r echo = -1}
-table.bc.reac <- summary(Bluecrane.reac.tvtc)
+table.bc.reac <- summary(adeliepenguin.reac.tvtc)
 
 table.bc.reac
 ```
@@ -362,7 +362,7 @@ The upper bound has the largest value of RMSE. This means that the upper bound i
 Then let's look at all the resilience metrics: 
 
 ```{r echo = -1}
-table.bc.all <- summary(Bluecrane.all.tvtc)
+table.bc.all <- summary(adeliepenguin.all.tvtc)
 
 table.bc.all
 ```
@@ -397,8 +397,8 @@ list.initvec <- list(year1,
 
 list.demres <- lapply(X = list.initvec, 
                       FUN = resilience, 
-                      listA = bluecrane,
-                      popname = "bluecrane",
+                      listA = adeliepenguin,
+                      popname = "adeliepenguin",
                       bounds = TRUE,
                       metrics = "all",
                       verbose = FALSE)
@@ -416,8 +416,8 @@ In that case, if `time = "both"` the time-constant demographic resilience metric
 
 As we previously saw, the upper bound is the one with the largest values of distance between the time-varying and the time-constant approach. This means that the upper bound seems to vary the most in time in comparison to the other demographic resilience metrics. We saw that the upper bound of the demographic resilience metrics (except _convergence time_) can be obtained when the initial vector is biased towards adults only. The high variation in the upper bounds are therefore a representation of the variation in time of the demographic rates of the adults. 
 ```{r echo = -1}
-Bluecrane.all.tvtc.TD <- resilience(
-     listA = bluecrane,
+adeliepenguin.all.tvtc.TD <- resilience(
+     listA = adeliepenguin,
      metrics = "all",
      bounds = TRUE,
      vector = Cranevec1,
@@ -426,7 +426,7 @@ Bluecrane.all.tvtc.TD <- resilience(
      time = "both",
      verbose = FALSE)
 
-table.bc.all.TD <- summary(Bluecrane.all.tvtc.TD)
+table.bc.all.TD <- summary(adeliepenguin.all.tvtc.TD)
 
 table.bc.all.TD
 
@@ -447,7 +447,7 @@ Let's see how this translates in terms of demographic resilience metrics.
 ### Maximum values 
 ```{r echo = -1}
 #maximum values 
-apply(Bluecrane.all.tv[-c(1:2)], 2, which.max)
+apply(adeliepenguin.all.tv[-c(1:2)], 2, which.max)
 
 ```
 
@@ -456,7 +456,7 @@ The second year is the year during which most of the demographic resilience metr
 ### Minimum values 
 ```{r echo = -1}
 #minimum values 
-apply(Bluecrane.all.tv[-c(1:2)], 2, which.min)
+apply(adeliepenguin.all.tv[-c(1:2)], 2, which.min)
 ```
 
 Now looking at the minimum values, we can observe that the 5th year was the year during which the demographic resilience metrics were at their lowest, however with _convergence time_ at its lowest value and _damping ratio_ at its highest value, displaying a trade-off between amplification and convergence (resistance and recovery in other words). 
@@ -465,7 +465,7 @@ Now looking at the minimum values, we can observe that the 5th year was the year
 The function `plot` provides a visual representation of the time-varying and time-constant metrics that are present in the data frame returned by the function `resilience`. Depending on what the user specified as demographic distribution, the plot shows the resilience metrics computed by using  the lower bound, the upper bound, or the initial distribution vector. 
 
 ```{r, echo = -1, fig.width = 6, fig.height = 6}
-plot(Bluecrane.all.tvtc)
+plot(adeliepenguin.all.tvtc)
 ```
 
 R opened as many windows as there are metrics in the table provided. In each window is a visual representation of the demographic resilience metrics over time. 

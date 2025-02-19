@@ -1,4 +1,4 @@
-data(bluecrane)
+data(adeliepenguin)
 
 # simulate an initial vector
 set.seed(1234)

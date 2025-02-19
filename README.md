@@ -42,7 +42,7 @@ library(demres)
 
 ``` r
 # load data
-data(bluecrane)
+data(adeliepenguin)
 ```
 
 ### Calculate demographic resilience metrics based on a list of population matrices
@@ -59,8 +59,8 @@ Cranevec1 <- runif(5)
 Cranevec1 <- Cranevec1 / sum(Cranevec1) #scales the vector to sum to 1
 
 #let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-BlueCrane_demres <- resilience(
-    listA = bluecrane,
+adeliepenguin_demres <- resilience(
+    listA = adeliepenguin,
     metrics = "all",
     bounds = TRUE,
     vector = Cranevec1,
@@ -122,7 +122,7 @@ BlueCrane_demres <- resilience(
 #> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
 
 #let's take a look at what we got
-BlueCrane_demres
+adeliepenguin_demres
 #>    timestep    popname convt_TV convt_lwr_TV convt_upr_TV    dr_TV inertia_TV
 #> 1         1 blue crane       15           17           21 1.260737  1.5333348
 #> 2         2 blue crane       19           22           26 1.209277  1.2582784
@@ -212,7 +212,7 @@ $$\frac{mean(abs(TV-TC))}{TC}$$
 
 ``` r
 #let's calculate all measures of distance for inertia
-dist_BC <- summary(BlueCrane_demres)
+dist_BC <- summary(adeliepenguin_demres)
 
 #let's take a look at what we got
 dist_BC
@@ -236,7 +236,7 @@ Function `plot` provides a plot to visually inspect the resilience
 metric along a time axis
 
 ``` r
-plot(BlueCrane_demres)
+plot(adeliepenguin_demres)
 ```
 
 ![](./man/figures/convt.bc.tvtc.png) <!-- convergence time -->

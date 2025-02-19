@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' # load data
-#' data(bluecrane)
+#' data(adeliepenguin)
 #'
 #' # simulate an initial vector
 #' set.seed(1234)
@@ -28,7 +28,7 @@
 #'
 #' BC_TVTC_demres <-
 #'   resilience(
-#'     listA = bluecrane,
+#'     listA = adeliepenguin,
 #'     metrics = "all",
 #'     bounds = TRUE,
 #'     vector = Cranevec1,

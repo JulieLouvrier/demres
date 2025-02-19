@@ -88,7 +88,7 @@ on what is requested by the user (argument \code{time}).
 \examples{
 
 # load data
-data(bluecrane)
+data(adeliepenguin)
 
 # simulate an initial vector
 set.seed(1234)
@@ -98,7 +98,7 @@ Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vector to sum up to 1
 
 BC_TVTC_demres <-
   resilience(
-    listA = bluecrane,
+    listA = adeliepenguin,
     metrics = "all",
     bounds = TRUE,
     vector = Cranevec1,

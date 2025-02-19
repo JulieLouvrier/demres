@@ -1,36 +1,36 @@
-#' Blue crane list of matrices
+#' Adelie penguin list of matrices
 #'
-#' List of Matrix Projection Models for the blue crane \emph{Anthropoides paradiseus}
-#' based on 5 age classes. The matrices are based on a population centred on
-#' South Africa's grassland, eastern Nama Karoo and Overberg regions. The matrices are based on age: \cr
-#' Age 1: Year 1\cr
-#' Age 2: Year 2\cr
-#' Age 4: Year 4\cr
-#' Age 5: Year 5\cr
+#' List of Matrix Projection Models for the Adelie penguin \emph{pygoscelis adeliae}
+#' based on 2 age classes. The matrices are based on a population
+#' situated in the Copacabana colony on King George Island, Antarctica.
+#' The matrices are based on two stage classes: \cr
+#' Age 1: Juveniles  (ages 0–2)\cr
+#' Age 2: Adults  (ages 3+)\cr
+#'
 #'
 #' @docType data
 #'
-#' @usage data("bluecrane")
+#' @usage data("adeliepenguin")
 #'
 #' @format
 #' Object of class \code{list} of \code{matrices}
 #'
 #' @references
 #' \itemize{
-#'  \item Altwegg, R. and Anderson, M.D. (2009),
-#' Rainfall in arid zones: possible effects of climate change on the population
-#' ecology of blue cranes. Functional Ecology, 23: 1014-1021.
-#' https://doi.org/10.1111/j.1365-2435.2009.01563.x.
+#'  \item  Hinke, J. T., S. G. Trivelpiece, and W. Z. Trivelpiece. 2017.
+#'  Variable vital rates and the risk of population declines in Adélie penguins
+#'  from the Antarctic Peninsula region.
+#'  Ecosphere 8(1):e01666. doi: 10.1002/ecs2.1666
 #' }
 #'
 #' @examples
 #'   # read in data and view
-#'   data(bluecrane)
-#'   bluecrane
+#'   data(adeliepenguin)
+#'   adeliepenguin
 #'
 #' @concept data
-#' @concept crane
-#' @concept blue
-#' @concept Anthropoides paradiseus
+#' @concept penguin
+#' @concept Adelie
+#' @concept pygoscelis adeliae
 #'
-"bluecrane"
+"adeliepenguin"

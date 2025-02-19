@@ -22,6 +22,12 @@
 #' @export
 #' @name plot_general
 #' @keywords internal
+#'
+#' ju: add par(xpd=TRUE) for the legend on the right and then set par(xpd = FALSE)
+#' for resetting plotting options, example:
+#' legend("topright", legend = c("Series 1"), col = "blue", pch = 1,
+#' xpd = TRUE, inset = c(-0.2, 0))
+#' with larger coordinates for the margins
 
 plot_general <- function(metric, table){
   if(metric == "reac"){

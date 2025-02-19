@@ -2,7 +2,7 @@ test_that("resilience works as expected", {
 
   job <-
     resilience(
-      listA = bluecrane,
+      listA = adeliepenguin,
       metrics = "all",
       bounds = TRUE,
       vector = Cranevec1,

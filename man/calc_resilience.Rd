@@ -67,12 +67,12 @@ This function computes different metrics of resilience, given by the \emph{{popd
 package based on a matrix projection model.
 }
 \examples{
-data(bluecrane)
+data(adeliepenguin)
 
 set.seed(1234)
 Cranevec1 <- runif(5)
 Cranevec1 <- Cranevec1/sum(Cranevec1) #scales the vec to sum to 1
-crane1 <- bluecrane[[1]]
+crane1 <- adeliepenguin[[1]]
 
 all_crane_demres <- calc_resilience(crane1, metrics = c("all"),
 vector = Cranevec1, bounds = TRUE, popname = "blue crane", verbose = TRUE)
