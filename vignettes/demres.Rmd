@@ -51,16 +51,15 @@ remotes::install_github("JulieLouvrier/demres")
 # Matrix Population Models
 ## adelie penguin models
 
-We will use a list of matrix projection models (MPMs) of a adelie penguin population (*Anthropoides paradiseus*) in the Northern Cape Province, South Africa, from the study by Altweg and Anderson (2009): "Rainfall in arid zones: possible effects of climate change on the population ecology of adelie penguins" [^1].
+We will use a list of matrix projection models (MPMs) of an Adelie penguin population (*Pygoscelis adeliae*) from the Copacabana colony on King George Island, Antarctica, from the study by Hinke et al. (2017): "Variable vital rates and the risk of population declines in Adelie
+penguins from the Antarctic Peninsula region" [^1].
 
-The MPMs were extracted from the COMADRE database (https://compadre-db.org/). The data is a list of 12 matrices of dimension 5 x 5. The 5 stage classes have been defined based on age and are the following:     
-- "1 year"    
-- "2 years"    
-- "3 years"    
-- "4 years"    
-- "5 years"    
+The MPMs were extracted from the COMADRE database (https://compadre-db.org/). The data is a list of 28 matrices of dimension 2 x 2. The 2 stage classes have been defined based on age and are the following:     
+- "Juveniles" - ages 0–2      
+- "Adults" - ages 3+         
+   
 
-[^1]: [Altweg and Anderson (2009) Functional Ecology, 23(5), 1014-1021.](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/j.1365-2435.2009.01563.x)
+[^1]: [Hinke et al. 2017 Ecosphere, 8(1), e01666.](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecs2.1666)
 
 ```{r echo = FALSE}
 penguinpic <- magick::image_read("https://upload.wikimedia.org/wikipedia/commons/1/12/Pygoscelis_adeliae.png")
@@ -76,7 +75,8 @@ data(adeliepenguin); adeliepenguin
 
 ```
 
-The numbers in the matrices describe the elements known as vital rates. These represent the survival rates in a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offsprings that is contributed to the population by each (st)age class), per unit of time. For adelie penguins, the probability to transition from a 1 year old to a 2 year old is 61.2% on year 5 of the study (see `adeliepenguin[[5]]`), while this probability is 88.7% in year 2 of the study period (see `adeliepenguin[[2]]`). 
+#####REPRENDRE ICI AUSSI
+The numbers in the matrices describe the elements known as vital rates. These represent the survival rates in a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offspring that is contributed to the population by each (st)age class), per unit of time. For Adelie penguins, the highest value of fecundity (0.75) was found in year 14 of the study (see `adeliepenguin[[14]]`), while this parameter reached its lowest value of 0.16 in year 7 of the study period (see `adeliepenguin[[7]]`). The adult survival rate varied across years with its highest value (0.98) on years 4, 9, 12 and 15 and lowest values (0.72) on the year 22. The probability to transition from a juvenile to an adult reached its highest value (0.89) on year 21 and its lowest value (0.53) on years 10 and 28. 
 
 
 # Assess time-varying demographic resilience 
@@ -136,8 +136,7 @@ If `bounds = TRUE` but no `vector` is specified, the function provides metrics a
 •	`popname`: Character string describing the name of the population.      
 
 •	`time`: Character string: `"constant"` (if the metrics are to be calculated over the whole study period); `"varying"` (if the metrics are to be calculated for each time step) or `"both"`.          
-•	`accuracy`: Numeric. This is an option taken from the function `convt` from __{popdemo}__ to use when calculating the _convergence time_. It is a numeric value between 0  and 1 representing the  accuracy with which to determine convergence to asymptotic growth, expressed as a proportion. By default set to 0.01.         
-
+•	`accuracy`: Numeric. This is an option taken from the function `convt` from __{popdemo}__ to use when calculating the _convergence time_. It is a numeric value between 0  and 1 representing the  accuracy with which to determine convergence to asymptotic growth, expressed as a proportion. By default set to 0.01.      
 •	`iterations`: This is an option taken from the function `convt` from __{popdemo}__ to use when calculating the _convergence time_. It represents the maximum number of iterations of the model before the code breaks. By default set to 1e+05. 
 
 •	`verbose`: Boolean. If set to `TRUE`, it will display the messages that are produced when assessing the demographic resilience metrics. By default set to `TRUE.`        
@@ -147,23 +146,25 @@ First, let us look at _inertia_, by setting `metrics = "inertia"` and `time = "v
 
 ```{r echo = -1}
 set.seed(1234)
-penguinvec1 <- runif(5)
-penguinvec1 <- penguinvec1/sum(penguinvec1) 
+penguinvec1 <- runif(2)
+penguinvec1 <- penguinvec1 / sum(penguinvec1)
 
 adeliepenguin.inertia.tv <- resilience(
-     listA = adeliepenguin,
-     metrics = "inertia",
-     bounds = TRUE,
-     vector = penguinvec1,
-     popname = "adelie penguin",
-     time = "varying")
+  listA = adeliepenguin,
+  metrics = "inertia",
+  bounds = TRUE,
+  vector = penguinvec1,
+  popname = "adelie penguin",
+  time = "varying"
+)
 
 adeliepenguin.inertia.tv
 ```
+
 Here we can see that _inertia_ varies in time. Since `bounds` were set to `TRUE`, the boundary values of _inertia_ were calculated also based on the stage-biased vector. Stage-biased vectors are biased towards one stage class, with individuals from this stage class representing 100% of the whole population. Consequently there are as many stage-biased vectors as there are stage classes in the population. For example, a population with 4 stage classes will have the 4 following stage-biased vectors: [1 0 0 0]; [0 1 0 0]; [0 0 1 0]; [0 0 0 1 ]. These upper and lower bounds therefore provide the upper and lower extremes that the demographic resilience metrics can take. 
 
 
-The minimum values for _inertia_ calculated either with the vector or with the bounds were all found during the 5th year of the study period. While its maximum was reached on the second year. An _inertia_ of 1.5 means that after the transient period, the population would settle to a size 1.5 times as large as a population that grows with stable rate.
+The minimum values for _inertia_ for its upper bound and calculated with the vector were both found during the 7th year of the study period (1 and 1.05 respectively), while it was found during the 10th year of the study for the lower bound of inertia (0.54). While its upper bound's maximum (1.25) and maximum value based on the initial vector we provided (1.14) were both reached on the 14th year. While the maximum value of the lower bound of inertia was found on the 21st year of the study (0.80). An _inertia_ of 1.25 means that after the transient period, the population would settle to a size 1.25 times as large as a population that grows with stable rate.
 
 Second, let us look at _reactivity_ by setting `metrics = "reac"`:
 ```{r echo = -1}
@@ -210,7 +211,9 @@ Given the population demographic structure specified in $\hat{\textbf{n}}_0$, it
 ## Time-dependent initial vector
 It is also possible to derive a list of initial vectors starting with one vector representing the demographic structure of the population at the first time step (option `TDvector = TRUE` for Time-Dependent vector). At the first time step, the population size is projected to the next time step using the specified MPM and the given initial vector (for demographic structure). This results in proportions of individuals projected to be in each stage/age, which is then used as the demographic structure for the next time step. This process continues for as many time steps as there are.      
 
-From here on we will set `verbose = FALSE` to avoid the display of all the messages.    
+If `time = "both"` the time-constant demographic resilience metrics are calculated based on the averaged vector over the years.   
+
+From here on we will set `verbose = FALSE` to avoid the display of all the messages.
 
 ```{r echo = -1}
 adeliepenguin.all.tv.TD <- resilience(
@@ -243,11 +246,11 @@ Let's take a look at what _inertia_ looks like when using a time-dependent initi
 ```{r echo = -1}
 adeliepenguin.all.tv$timestep <- factor(adeliepenguin.all.tv$timestep) 
                                     
-plot(adeliepenguin.all.tv$inertia_TV, ylim = c(0, 1.6), type = "l", 
+plot(adeliepenguin.all.tv$inertia_TV, ylim = c(0.6, 1.3), type = "l", 
      xlab = "Time-step",
      ylab = "Inertia of adelie penguins")
 lines(adeliepenguin.all.tv.TD$inertia_TV, col = "red")
-legend(1.5, 0.5, legend = c("Time dependent", "No time dependent"),
+legend(1.5, 0.9, legend = c("Time dependent", "No time dependent"),
        col = c("red", "black"), cex = 0.6, lty = c(1, 1), box.lty = 0)
 abline(h = 1, col = "blue", lty = 2)
 ```
@@ -257,11 +260,11 @@ Let's look now at _reactivity_:
 ```{r echo = -1}
 adeliepenguin.all.tv$timestep <- factor(adeliepenguin.all.tv$timestep) 
                                     
-plot(adeliepenguin.all.tv$reac_TV, ylim = c(0, 1.6), type = "l", 
+plot(adeliepenguin.all.tv$reac_TV, ylim = c(0.6, 1.3), type = "l", 
      xlab = "Time-step",
-     ylab = "Reac of adelie penguins")
+     ylab = "Reactivity of adelie penguins")
 lines(adeliepenguin.all.tv.TD$reac_TV, col = "red")
-legend(1.5, 0.5, legend = c("Time dependent", "No time dependent"),
+legend(1.5, 0.9, legend = c("Time dependent", "No time dependent"),
        col = c("red", "black"), cex = 0.6, lty = c(1, 1), box.lty = 0)
 abline(h = 1, col = "blue", lty = 2)
 ```
@@ -285,7 +288,7 @@ adeliepenguin.inertia.tc <- resilience(
 
 adeliepenguin.inertia.tc
 ```
-Here we can see that _inertia_ is calculated based on the mean MPM and is around 1.53 with a lower bound of 0.34 and an upper bound of 2.45. 
+Here we can see that _inertia_ is calculated based on the mean MPM and is around 1.07 with a lower bound of 0.63 and an upper bound of 1.15 
 
 ## Using several resilience metrics
 We can look now at all metrics with the option `metrics = "all"`:
@@ -302,7 +305,7 @@ adeliepenguin.all.tc <- resilience(
 adeliepenguin.all.tc
 ```
 
-The population does not attenuate based on the average matrix.
+The population does not attenuate based on the average matrix and the initial vector that was provided.
 
 # Compare time-varying with time-constant approaches 
 ## One resilience metric
@@ -356,7 +359,7 @@ table.AP.reac <- summary(adeliepenguin.reac.tvtc)
 
 table.AP.reac
 ```
-The upper bound has the largest value of RMSE. This means that the upper bound is the one for which the time-varying values are the most spread around the time-constant value for _reactivity_. When dividing this value by the standard deviation of the time-varying metric, it seems that all three metrics have a rRMSE below 1, which means that the value of the RMSE is below the value of the SD of the time-varying metrics, which can be interpreted as a reasonable dispersion around the time-constant metric. Finally, when looking at the MAPE, if we take 5% as the maximum threshold above which the difference between the time-varying and the time-constant approaches are considered to be important, then using the time-varying approach seems to be sensible for computing the metric at the upper bound, whereas the time-constant approach is a good enough approximation for the value computed at the lower bound and using the specified initial vector.  
+The lower bound has the largest value of RMSE. This means that the upper bound is the one for which the time-varying values are the most spread around the time-constant value for _reactivity_. When dividing this value by the standard deviation of the time-varying metric, it seems that all three metrics have a rRMSE below 1, which means that the value of the RMSE is below the value of the SD of the time-varying metrics, which can be interpreted as a reasonable dispersion around the time-constant metric. Finally, when looking at the MAPE, if we take 5% as the maximum threshold above which the difference between the time-varying and the time-constant approaches are considered to be important, then using the time-varying approach seems to be sensible for computing the metric at the lower and upper bounds, whereas the time-constant approach is a good enough approximation for the value computed using the specified initial vector.  
 
 ## Several metrics
 Then let's look at all the resilience metrics: 
@@ -368,9 +371,9 @@ table.AP.all
 ```
 First, we can notice that the distance measures for _maximum attenuation_ cannot be computed because the population did not attenuate according to the time-constant approach. 
 
-Looking at the RMSE, _convergence time_ is the metric with the largest distance value. This is due to the the fact that _convergence time_ is expressed in number of time steps, therefore the values can vary greatly, and are much larger than the values of the other metrics that are around 1. Secondly, when looking at the rRMSE, all values seem to be below 1, meaning that the dispersion of the metrics computed with the time-varying approach is within 1 SD of the time-constant approach. However, when looking at the MAPE, we see that it has values above 5% for _convergence time_ calculated based on an initial vector and its bounds, the upper bound of _inertia_, the upper bound of _maximum amplification_, and the upper bound of _reactivity_. For these resilience metrics, we can consider that the time-varying approach is more sensible than the time-constant approach.
+Looking at the RMSE, _damping ratio_ is the metric with the largest distance value. This is due to the fact that _damping ratio_ displays values varying between 3.21 and 8.61 while its value based on the average matrix was calculated to be 4.48. This show the high variability over time of he population's capacity to converge towards an equilibrium. The second metric with the largest value of RMSE is _convergence time_. This is due to the the fact that _convergence time_ is expressed in number of time steps, therefore the values can vary greatly, and are much larger than the values of the other metrics that are around 1. Secondly, when looking at the rRMSE, all other metrics' values seem to be below (but close to) 1, meaning that the dispersion of the metrics computed with the time-varying approach is within 1 SD of the time-constant approach. However, when looking at the MAPE, we see that MAPE has values above 5% for _convergence time_ calculated based on an initial vector and its bounds, _damping ratio_,  the lower bound of _inertia_, the lower bound of _maximum attenuation_, and the lower and upper bound of _reactivity_. For these resilience metrics, we can consider that the time-varying approach is more sensible than the time-constant approach.
 
-It is now worth investigating the reasons behind the fact that the upper bound appears to be the metric that varies the most in time. 
+It is now worth investigating the reasons behind the fact that the lower bound appears to be the metric that varies the most in time. 
 
 # Check the stage-biased vectors 
 Let's first remember the initial vector we used 
@@ -379,21 +382,15 @@ Let's first remember the initial vector we used
 penguinvec1
 ```
 For this initial vector, adults were largely represented, with juveniles being in minority. 
-Now we will create the 5 stage-biased vectors of our population and identify the cases in which the upper and lower bounds are found:
+Now we will create the 2 stage-biased vectors of our population and identify the cases in which the upper and lower bounds are found:
 
 ```{r echo = -1}
 ## creating the stage-biased vectors
-year1 <- c(1,0,0,0,0)
-year2 <- c(0,1,0,0,0)
-year3 <- c(0,0,1,0,0)
-year4 <- c(0,0,0,1,0)
-year5 <- c(0,0,0,0,1)
+stage1 <- c(1,0)
+stage2 <- c(0,1)
 
-list.initvec <- list(year1,
-                     year2,
-                     year3,
-                     year4,
-                     year5)
+list.initvec <- list(stage1,
+                     stage2)
 
 list.demres <- lapply(X = list.initvec, 
                       FUN = resilience, 
@@ -407,14 +404,13 @@ list.demres <- lapply(X = list.initvec,
 list.demres
 ```
 
-If there is an over-representation of individuals in stages with low survival and zero/low fertility, then the population will grow slower (or decline faster) than the stable rate (i.e. attenuates). Such a case is represented with the initial vector `year 1` above, which seems to be the one that leads to the lowest values of _inertia_, _maximum attenuation_, _reactivity_ and the upper bounds of _convergence time_. This means that if the population consists of juveniles only: the population will attenuate to its lowest possible value and will take the longest time to converge. A bias towards year 2 also seems to make the population attenuate but not in the lowest values.  
+If there is an over-representation of individuals in stages with low survival and zero/low fertility, then the population will grow slower (or decline faster) than the stable rate (i.e. attenuates). Such a case is represented with the initial vector `stage 1` (that can be seen by computing `list.demres[[1]]`) above, which seems to be the one that leads to the lowest values of _inertia_, _maximum attenuation_, _reactivity_ and the upper bounds of _convergence time_. This means that if the population consists of juveniles only: the population will attenuate to its lowest possible value and will take the longest time to converge. 
 
-If there is an over-representation of individuals in stages with high survival and/or fertility, then the population will grow faster (or decline slower) than the stable rate (i.e. amplifies). Such a case is represented with the initial vector `year 5` above, which seems to be the one that leads to the highest values of _inertia_, _maximum attenuation_, _reactivity_ and the lower bounds of _convergence time_. This means that if the population consists of reproducing adults only: the population will amplify to its highest possible value and will take the shortest time to converge. 
+If there is an over-representation of individuals in stages with high survival and/or fertility, then the population will grow faster (or decline slower) than the stable rate (i.e. amplifies). Such a case is represented with the initial vector `stage 2` (that can be seen by computing `list.demres[[2]]`)above, which seems to be the one that leads to the highest values of _inertia_, _maximum attenuation_, _reactivity_ and the lower bounds of _convergence time_. This means that if the population consists of reproducing adults only: the population will amplify to its highest possible value and will take the shortest time to converge. 
+    
+As we previously saw, the lower bound is the one with the largest values of distance between the time-varying and the time-constant approach. This means that the lower bound seems to vary the most in time in comparison to the other demographic resilience metrics. We saw that the lower bound of the demographic resilience metrics (except _convergence time_) can be obtained when the initial vector is biased towards juveniles only. The high variation in the lower bounds are therefore a representation of the variation in time of the demographic rates of the juveniles. 
 
-## What happens when we use a time-dependent initial vector? 
-In that case, if `time = "both"` the time-constant demographic resilience metrics are calculated based on the average vector over the years. And the time-varying demographic resilience metrics are calculated, as explained above, by projecting the population structure to each new step based on the supplied initial vector for the first time step (and the population matrices for each time step).
-
-As we previously saw, the upper bound is the one with the largest values of distance between the time-varying and the time-constant approach. This means that the upper bound seems to vary the most in time in comparison to the other demographic resilience metrics. We saw that the upper bound of the demographic resilience metrics (except _convergence time_) can be obtained when the initial vector is biased towards adults only. The high variation in the upper bounds are therefore a representation of the variation in time of the demographic rates of the adults. 
+# comparisn when the vector is time-dependent
 ```{r echo = -1}
 adeliepenguin.all.tvtc.TD <- resilience(
      listA = adeliepenguin,
@@ -432,18 +428,18 @@ table.AP.all.TD
 
 ```
 
-In the case of a time-dependent initial vector, the distance measures are very different. _Convergence time_ is still the metric that shows the highest values of RMSE, however the rRMSE values this time indicate that the _convergence time_ and _maximum amplification_ both have a RMSE larger than a single standard deviation calculated across the values obtained with time-varying approach. This indicates a broad dispersion of the metrics obtained with the time-varying approach around the value obtained using the time-constant approach. 
-Finally, when looking at the MAPE, almost all metrics this time show a MAPE above 5% except for _damping ratio_, the lower bound of _maximum attenuation_ and the lower bound of _reactivity_. 
+In the case of a time-dependent initial vector, the distance measures are different. _daping ratio_ is still the metric that shows the highest values of RMSE, however the rRMSE values this time indicate that the _convergence time_ and _maximum amplification_ both have a RMSE larger than a single standard deviation calculated across the values obtained with time-varying approach. This indicates a broad dispersion of the metrics obtained with the time-varying approach around the value obtained using the time-constant approach. 
+Finally, when looking at the MAPE, almost all metrics this time show a MAPE above 5% except for _inertia_ and its upper bound.  
 Values of _damping ratio_ are not changing in that case because it is calculated based on the properties of the matrix and does not depend on the initial vector. 
 
-When initial vectors depend on time, we can conclude that the time-varying approach is even more sensible than when using only one initial vector across the time. 
+When initial vectors depend on time, we can conclude that the time-varying approach is even more sensible than when using only one initial vector across the time-steps. 
 
 # Check extreme years 
-
-We have seen already that the year 2 of the study was the best in terms of highest values of demographic rates, while the year 5 was the year during which the demographic rates were at their lowest. 
+We have seen already that the years 4,9,12 and 15 were the best in terms of adult survival probability, while he year 21 was the best for transition probability and the year 14 was the best in terms of fecundity. 
+On the other hand, the year 22 was the worst in terms of adult survival, the year 10 was he worst in terms of transition probability and the ear 7 was the worst for the fecundity.
 
 Let's see how this translates in terms of demographic resilience metrics. 
-
+## HERE 
 ### Maximum values 
 ```{r echo = -1}
 #maximum values 
