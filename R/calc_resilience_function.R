@@ -57,15 +57,21 @@
 calc_resilience <-
   function(A,
            metrics = "all",
-           bounds = FALSE,
-           vector = "n",
+           # bounds = FALSE,
+           vector = vect, #always present !!add error message if no vector!!
            popname = NULL,
            verbose = TRUE,
            accuracy = 0.01,
-           iterations = 1e+05) {
+           iterations = 1e+05,
+           return.N = TRUE,
+           return.t = TRUE
+             ) {
 
     if (is.null(A)) {
       stop("No Matrix was found")
+    }
+    if (is.null(vector)){
+      stop("No vector was provided")
     }
     if (!is.matrix(A)){
       stop("Please provide a matrix")
@@ -98,54 +104,65 @@ calc_resilience <-
 
     dat <- data.frame(popname = popname,
                       convt = NA,
-                      convt_lwr = NA,
-                      convt_upr = NA,
+                      convt.N = NA,
+                      # convt_lwr = NA,
+                      # convt_upr = NA,
                       dr = NA,
-                      inertia = NA,
-                      inertia_lwr = NA,
-                      inertia_upr = NA,
+                      # inertia = NA,
+                      # inertia_lwr = NA,
+                      # inertia_upr = NA,
                       maxamp = NA,
-                      maxamp_upr = NA,
+                      maxamp.t = NA,
+                      # maxamp_upr = NA,
                       maxatt = NA,
-                      maxatt_lwr = NA,
+                      maxatt.t = NA,
+                      # maxatt_lwr = NA,
                       reac = NA,
-                      reac_lwr = NA,
-                      reac_upr = NA)
+                      reac.t = NA) #to explain why it is always 1
+                      # reac_lwr = NA,
+                      # reac_upr = NA)
 
     if (metrics == "all") {
-      metrics <- c("reac", "inertia", "maxatt", "maxamp", "dr", "convt")
+      metrics <- c("reac", "maxatt", "maxamp", "dr", "convt")
     }
 
     # reac  -------------------------------------------------------------
     if ("reac" %in% metrics) {
-      reac_res <- calc_reac_or_inertia(metrics = "reac", vector = vector, A = A, bounds = bounds)
-      dat$reac     <- reac_res$value
-      dat$reac_lwr <- reac_res$lwr
-      dat$reac_upr <- reac_res$upr
+      reac_res <- popdemo::reac(A = A, vector = vector, return.N = return.N)
+      dat$reac <- reac_res$N
+      dat$reac.t <- 1
     }
-
-    # inertia  ----------------------------------------------------------------
-    if ("inertia" %in% metrics) {
-      inertia_res <- calc_reac_or_inertia(metrics = "inertia", vector = vector, A = A, bounds = bounds)
-      dat$inertia     <- inertia_res$value
-      dat$inertia_lwr <- inertia_res$lwr
-      dat$inertia_upr <- inertia_res$upr
-    }
+#
+#     # inertia  ----------------------------------------------------------------
+#     if ("inertia" %in% metrics) {
+#       inertia_res <- calc_reac_or_inertia(metrics = "inertia", vector = vector, A = A, bounds = bounds)
+#       dat$inertia     <- inertia_res$value
+#       dat$inertia_lwr <- inertia_res$lwr
+#       dat$inertia_upr <- inertia_res$upr
+#     }
 
     # maxamp ------------------------------------------------------------------
      if ("maxamp" %in% metrics) {
-       maxamp_res <- calc_maxamp_or_maxatt(metrics = "maxamp", vector = vector, A = A, bounds = bounds)
+       maxamp_res <- calc_maxamp_or_maxatt(metrics = "maxamp",
+                                           vector = vector,
+                                           A = A,
+                                           return.N = return.N,
+                                           return.t = return.t)
        dat$maxamp     <- maxamp_res$value
        #dat$maxatt_lwr <- maxamp_res$lwr
-       dat$maxamp_upr <- maxamp_res$upr
+       dat$maxamp.t <- maxamp_res$timestep
        msg <- cbind(msg, maxamp_res$msg)
     }
 
     # maxatt ------------------------------------------------------------------
     if ("maxatt" %in% metrics) {
-      maxatt_res <- calc_maxamp_or_maxatt(metrics = "maxatt", vector = vector, A = A, bounds = bounds)
+      maxatt_res <- calc_maxamp_or_maxatt(metrics = "maxatt",
+                                          vector = vector,
+                                          A = A,
+                                          return.N = return.N,
+                                          return.t = return.t)
       dat$maxatt     <- maxatt_res$value
-      dat$maxatt_lwr <- maxatt_res$lwr
+      dat$maxatt.t <- maxatt_res$timestep
       #dat$maxamp_upr <- maxatt_res$upr
       msg <- cbind(msg, maxatt_res$msg)
 
@@ -166,8 +183,8 @@ calc_resilience <-
                               iterations = iterations)
 
       dat$convt     <- convt_res$value
-      dat$convt_lwr <- convt_res$lwr
-      dat$convt_upr <- convt_res$upr
+      dat$convt.N <- convt_res$N
+      # dat$convt_upr <- convt_res$upr
     }
 
     if (any(is.na(dat))){
@@ -192,33 +209,33 @@ calc_resilience <-
 #' @inheritParams calc_resilience
 #' @seealso [calc_resilience()]
 #'
-calc_reac_or_inertia <- function(metrics, vector, A, bounds) {
-
-  if (length(metrics) != 1 || (!"reac" %in% metrics && !"inertia" %in% metrics)) {
-    stop("this function can only use 'reac' or 'inertia' as metrics")
-  }
-
-  list_res <- list(value = 999, lwr = 999, upr = 999)
-
-  fn <- switch(metrics,
-               reac = popdemo::reac,
-               inertia = popdemo::inertia)
-
-  if (vector[1] != "n") {
-    list_res$value <- fn(A, vector = vector)
-  } else {
-    if (!bounds) {
-      stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vector for", metrics))
-    }
-  }
-
-  if (bounds) {
-    list_res$lwr <- fn(A, bound = "lower")
-    list_res$upr <- fn(A, bound = "upper")
-  }
-
-  list_res
-}
+# calc_reac_or_inertia <- function(metrics, vector, A, bounds) {
+#
+#   if (length(metrics) != 1 || (!"reac" %in% metrics && !"inertia" %in% metrics)) {
+#     stop("this function can only use 'reac' or 'inertia' as metrics")
+#   }
+#
+#   list_res <- list(value = 999, lwr = 999, upr = 999)
+#
+#   fn <- switch(metrics,
+#                reac = popdemo::reac,
+#                inertia = popdemo::inertia)
+#
+#   if (vector[1] != "n") {
+#     list_res$value <- fn(A, vector = vector)
+#   } else {
+#     if (!bounds) {
+#       stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vector for", metrics))
+#     }
+#   }
+#
+#   if (bounds) {
+#     list_res$lwr <- fn(A, bound = "lower")
+#     list_res$upr <- fn(A, bound = "upper")
+#   }
+#
+#   list_res
+# }
 
 #' Calculate maxam or maxatt metric
 #'
@@ -227,7 +244,9 @@ calc_reac_or_inertia <- function(metrics, vector, A, bounds) {
 #' @inheritParams calc_resilience
 #' @seealso [calc_resilience()]
 #'
-calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
+
+##here for later acount for when return.N = FALSE and returns the $maxamp or $maxatt
+calc_maxamp_or_maxatt <- function(metrics, vector, A, return.N = return.N, return.t = return.t) {
   msg <- character(0)
 
   if (length(metrics) != 1 || (!"maxamp" %in% metrics && !"maxatt" %in% metrics)) {
@@ -235,7 +254,7 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
   }
 
 
-  list_res <- list(value = 999, lwr = 999, upr = 999, msg = character(0))
+  list_res <- list(value = 999, timestep.maxamp = 999,timestep.maxatt = 999, msg = character(0))
 
   fn <- switch(metrics,
                maxamp = popdemo::maxamp,
@@ -244,7 +263,7 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
   if (vector[1] != "n") {
     tt.error.maxa <-
       tryCatch(
-        maxa <- fn(A, vector = vector),
+        maxa <- fn(A, vector = vector, return.N = return.N, return.t = return.t),
         error = function(e) e
       )
     if (methods::is(tt.error.maxa, "error")) {
@@ -252,26 +271,29 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, bounds) {
       list_res$value <- 999
     }
     else {
-      list_res$value <- fn(A, vector = vector)
-    }
-  } else {
-    if (!bounds) {
-      stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vector for", metrics))
-    }
+      temp <- fn(A, vector = vector, return.N = return.N, return.t = return.t)
+      list_res$value <- temp$N
+      list_res$timestep <- temp$t
+      }
   }
-  if (bounds) {
-    list_res$lwr <- fn(A)
-    list_res$upr <- fn(A)
-    if(metrics == "maxamp") {
-      message_maxamp <- c("The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector")
-      msg <- cbind(msg, message_maxamp)
-    }
-
-    if(metrics == "maxatt") {
-      message_maxatt <- c("The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector")
-      msg <- cbind(msg, message_maxatt)
-    }
-  }
+  # else {
+  #   if (!bounds) {
+  #     stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vector for", metrics))
+  #   }
+  # }
+  # if (bounds) {
+  #   list_res$lwr <- fn(A)
+  #   list_res$upr <- fn(A)
+  #   if(metrics == "maxamp") {
+  #     message_maxamp <- c("The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector")
+  #     msg <- cbind(msg, message_maxamp)
+  #   }
+  #
+  #   if(metrics == "maxatt") {
+  #     message_maxatt <- c("The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector")
+  #     msg <- cbind(msg, message_maxatt)
+  #   }
+  # }
 
   list_res$msg <- msg
 
@@ -296,16 +318,18 @@ calc_convt <- function(metrics, vector, A, bounds, accuracy, iterations) {
 
   if (vector[1] != "n") {
     list_res$value <- popdemo::convt(A, vector = vector, accuracy = accuracy, iterations = iterations)
-  } else {
-    if (!bounds) {
-      stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vec for", metrics))
-    }
+  }
+  # else {
+  #   # if (!bounds) {
+  #   #   stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vec for", metrics))
+  #   # }
+  # }
+
+  if (return.N == TRUE) {
+
+##to work on it
+
   }
 
-  if (bounds) {
-    list_res$lwr <- min(popdemo::convt(A, accuracy = accuracy, iterations = iterations))
-    list_res$upr <- max(popdemo::convt(A, accuracy = accuracy, iterations = iterations))
-  }
-
-  list_res
+  return(list_res)
 }
