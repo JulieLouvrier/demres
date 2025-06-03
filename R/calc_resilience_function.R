@@ -13,8 +13,6 @@
 #'                 matrix projection model.\cr
 #'                 "dr": Calculates the damping ratio of a given
 #'                 matrix projection model.\cr
-#'                 "inertia": Calculates population inertia for a
-#'                 matrix projection model.\cr
 #'                 "maxamp": Calculates maximal amplification for a
 #'                 matrix projection model.\cr
 #'                 "maxatt": Calculates maximal attenuation for a
@@ -23,11 +21,6 @@
 #'                 and first time step attenuation for a matrix
 #'                 projection model.\cr
 #'                 "all": all of the above metrics are provided.
-#' @param bounds (optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
-#' bound should be calculated. If initial vector is not specified, the function
-#' provides metrics at their upper and lower bounds, calculated based on the stage-biased vector.
-#' If vector is specified, the function provides also the metrics calculated
-#' based on the initial vector.
 #' @param vector a numeric vector or one-column matrix describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific'
 #' resilience metric
@@ -38,17 +31,18 @@
 #' and/or high specified convergence accuracy, this may need to be increased.
 #' @param verbose Boolean. Set to TRUE as default. Indicates whether the messages about failure
 #' to compute particular metric should be displayed or not (default = TRUE)
+#' @param return.N Boolean. Set to TRUE as default. If TRUE returns population size at the point of the metric reached,
+#' if set to FALSE, returns the standardised maximal amplification
+#' @param return.t Boolean. If TRUE, returns the time at which the meric occurs in the population projection
 #' @export
 #' @examples
 #' data(adeliepenguin)
 #'
-#' set.seed(1234)
-#' penguinvec1 <- runif(5)
-#' penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vec to sum to 1
+#' penguinvec1 <- c(25, 75)
 #' penguin1 <- adeliepenguin[[1]]
 #'
 #' all_penguin_demres <- calc_resilience(penguin1, metrics = c("all"),
-#' vector = penguinvec1, bounds = TRUE, popname = "adelie penguin", verbose = TRUE)
+#' vector = penguinvec1, popname = "adelie penguin", verbose = TRUE, return.N = TRUE, return.t = TRUE)
 #'
 #' @return A vector containing all the resilience metrics
 #' @name calc_resilience
@@ -151,7 +145,7 @@ calc_resilience <-
        dat$maxamp     <- maxamp_res$value
        #dat$maxatt_lwr <- maxamp_res$lwr
        dat$maxamp.t <- maxamp_res$timestep
-       msg <- cbind(msg, maxamp_res$msg)
+       msg <- paste(msg, maxamp_res$msg)
     }
 
     # maxatt ------------------------------------------------------------------
@@ -164,7 +158,7 @@ calc_resilience <-
       dat$maxatt     <- maxatt_res$value
       dat$maxatt.t <- maxatt_res$timestep
       #dat$maxamp_upr <- maxatt_res$upr
-      msg <- cbind(msg, maxatt_res$msg)
+      msg <- paste(msg, maxatt_res$msg)
 
     }
 
@@ -178,13 +172,13 @@ calc_resilience <-
       convt_res <- calc_convt(metrics = "convt",
                               vector = vector,
                               A = A,
-                              bounds = bounds ,
+                              # bounds = bounds ,
                               accuracy = accuracy,
-                              iterations = iterations)
+                              iterations = iterations,
+                              return.N = return.N)
 
       dat$convt     <- convt_res$value
       dat$convt.N <- convt_res$N
-      # dat$convt_upr <- convt_res$upr
     }
 
     if (any(is.na(dat))){
@@ -254,7 +248,7 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, return.N = return.N, retur
   }
 
 
-  list_res <- list(value = 999, timestep.maxamp = 999,timestep.maxatt = 999, msg = character(0))
+  list_res <- list(value = 999, timestep = 999, msg = character(0))
 
   fn <- switch(metrics,
                maxamp = popdemo::maxamp,
@@ -308,27 +302,58 @@ calc_maxamp_or_maxatt <- function(metrics, vector, A, return.N = return.N, retur
 #' @inheritParams calc_resilience
 #' @seealso [calc_resilience()]
 #'
-calc_convt <- function(metrics, vector, A, bounds, accuracy, iterations) {
-
+calc_convt <- function(metrics,
+                       vector,
+                       A,
+                       # bounds,
+                       accuracy,
+                       iterations,
+                       return.N) {
   if (!"convt" %in% metrics) {
     stop("this function can only use 'convt'")
   }
 
-  list_res <- list(value = 999, lwr = 999, upr = 999)
+  list_res <- list(value = 999, N = 999)
 
   if (vector[1] != "n") {
-    list_res$value <- popdemo::convt(A, vector = vector, accuracy = accuracy, iterations = iterations)
-  }
-  # else {
-  #   # if (!bounds) {
-  #   #   stop(paste("Please specify bound=\"upper\", bound=\"lower\" or specify vec for", metrics))
-  #   # }
-  # }
+    list_res$value <- popdemo::convt(A,
+                                     vector = vector,
+                                     accuracy = accuracy,
+                                     iterations = iterations)
 
-  if (return.N == TRUE) {
 
-##to work on it
+    if (return.N == TRUE) {
+      # dimMat <- length(A)
+      maxconvt <- max(list_res$value)
 
+      # projpop_notstand <- (lapply(
+      #   c(1:dimMat),
+      #   FUN = function(x) {
+      #     as.vector(popdemo::project(
+      #       A[[x]],
+      #       standard.A = FALSE,
+      #       #not standardized matrix
+      #       vector = vector,
+      #       #not standardized vector
+      #       time = (maxconvt + 1) #time steps to project
+      #     ))
+      #   }
+      # ))
+
+      projpop_notstand <- popdemo::project(
+            A,
+            standard.A = FALSE,
+            #not standardized matrix
+            vector = vector,
+            #not standardized vector
+            time = (maxconvt + 1) #time steps to project
+          )
+
+
+        list_res$N <- projpop_notstand[list_res$value]
+
+
+    }
   }
 
   return(list_res)

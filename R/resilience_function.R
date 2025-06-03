@@ -18,9 +18,6 @@
 #' user wants to obtain a time-dependent list of initial vectors. This vector
 #' corresponds to the population stage distribution that is obtained from the projection
 #' of the population to the current time step using the specified matrix for each time step.
-#' @param time set to "both" as default. A character string: "constant", "varying" or "both" \cr
-#'            "constant": if the metrics are to be calculated over the whole study period; \cr
-#'            "varying": if the metrics are to be calculated for each time step.
 #' @param f A character specifying whether the output should be shown in
 #' "long" (demographic resilience metrics as row names) or in "wide" (demographic
 #' resilience metrics as column names) format. Defaults to "wide".
@@ -31,7 +28,7 @@
 #'
 #' # simulate an initial vector
 #' set.seed(1234)
-#' penguinvec1 <- runif(5)
+#' penguinvec1 <- runif(2)
 #' penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vector to sum up to 1
 #'
 #'
@@ -39,12 +36,12 @@
 #'   resilience(
 #'     listA = adeliepenguin,
 #'     metrics = "all",
-#'     bounds = TRUE,
 #'     vector = penguinvec1,
 #'     TDvector = FALSE,
 #'     popname = "adelie penguin",
-#'     time = "varying",
-#'     verbose = TRUE
+#'     verbose = TRUE,
+#'     return.N = TRUE,
+#'     return.t = TRUE
 #'   )
 #'
 #' @return An object of class "resil", which is a dataframe
@@ -53,42 +50,46 @@
 #' @name resilience
 
 resilience <- function(listA,
-                   metrics = "all",
-                   # bounds = FALSE,
-                   vector = "n",
-                   TDvector = FALSE,
-                   popname = NULL,
-                   # time = "both",
-                   verbose = TRUE,
-                   accuracy = 0.01,
-                   iterations = 1e+05,
-                   f = 'wide',
-                   return.N = TRUE,
-                   return.t = TRUE) {
-
+                       metrics = "all",
+                       # bounds = FALSE,
+                       vector = "n",
+                       TDvector = FALSE,
+                       popname = NULL,
+                       # time = "both",
+                       verbose = TRUE,
+                       accuracy = 0.01,
+                       iterations = 1e+05,
+                       f = 'wide',
+                       return.N = TRUE,
+                       return.t = TRUE) {
   message_varying <- character(0)
-  message_constant <- character(0)
 
-  if(is.list(listA) && length(listA) == 1){
-    warning("You provided a list of one matrix.
+  if (is.list(listA) && length(listA) == 1) {
+    warning(
+      "You provided a list of one matrix.
     A list of several matrices should be provided.
-    Resilience is nevertheless calculated for this one matrix")
+    Resilience is nevertheless calculated for this one matrix"
+    )
     listA <- listA[[1]]
   }
 
-  if(!is.list(listA)) {
-    warning("A list of several matrices should be provided.
-            Resilience is nevertheless calculated for this one matrix")
-    met <- calc_resilience(A = listA,
-                           metrics = metrics,
-                           # bounds = bounds,
-                           vector = vector,
-                           popname = popname,
-                           verbose = verbose,
-                           accuracy = accuracy,
-                           iterations = iterations,
-                           return.N = return.N,
-                           return.t = return.t)
+  if (!is.list(listA)) {
+    warning(
+      "A list of several matrices should be provided.
+            Resilience is nevertheless calculated for this one matrix"
+    )
+    met <- calc_resilience(
+      A = listA,
+      metrics = metrics,
+      # bounds = bounds,
+      vector = vector,
+      popname = popname,
+      verbose = verbose,
+      accuracy = accuracy,
+      iterations = iterations,
+      return.N = return.N,
+      return.t = return.t
+    )
 
     message <- data.frame(t(attr(met, "msg")))
     rownames(message) <- NULL
@@ -96,76 +97,88 @@ resilience <- function(listA,
 
 
     if (verbose) {
-      if(length(message) > 0){
+      if (length(message) > 0) {
         print(message)
       }
     }
   }
 
   else{
-  if(TDvector){
-    vector <- get_TD_vector(IV = vector, listA = listA)
-  }
+    if (TDvector) {
+      vector <- get_TD_vector(IV = vector, listA = listA)
+    }
 
-    if(is.list(vector)){
-      if(!length(vector) == length(listA)){
-        stop("please provide a list of initial vectors with an equal length as the list of matrices")
+    if (is.list(vector)) {
+      if (!length(vector) == length(listA)) {
+        stop(
+          "please provide a list of initial vectors with an equal length as the list of matrices"
+        )
       }
-        temp_list <-
-          mapply(function(A, X) {
-            calc_resilience(A,
-                            metrics = metrics,
-                            # bounds = bounds,
-                            vector = X,
-                            popname = popname,
-                            verbose = verbose,
-                            accuracy = accuracy,
-                            iterations = iterations,
-                            return.N = return.N,
-                            return.t = return.t)
-          }, A = listA, X = vector, SIMPLIFY = FALSE)
+      temp_list <-
+        mapply(function(A, X) {
+          calc_resilience(
+            A,
+            metrics = metrics,
+            # bounds = bounds,
+            vector = X,
+            popname = popname,
+            verbose = verbose,
+            accuracy = accuracy,
+            iterations = iterations,
+            return.N = return.N,
+            return.t = return.t
+          )
+        },
+        A = listA,
+        X = vector,
+        SIMPLIFY = FALSE)
 
-        message_varying_temp <- sapply(temp_list, function(e) attr(e, "msg"))
+      message_varying_temp <- lapply(temp_list, function(e)
+        attr(e, "msg"))
 
-          n.obs <- sapply(message_varying_temp, length)
-          seq.max <- seq_len(max(n.obs))
-          if(length(seq.max) > 0){
-            message_varying <- data.frame(sapply(message_varying_temp, "[", i = seq.max))
-            message_varying[is.na(message_varying)] <- ""
-            colnames(message_varying) <- paste0("Message for resilience calculation at time step ", seq_len(length(listA)))
-          }
+      n.obs <- sapply(message_varying_temp, length)
+      seq.max <- seq_len(max(n.obs))
+      if (length(seq.max) > 0) {
+        message_varying <- data.frame(sapply(message_varying_temp, "[", i = seq.max))
+        message_varying[is.na(message_varying)] <- ""
+        colnames(message_varying) <- NULL
+        rownames(message_varying) <- paste0("Message for resilience calculated at time step ",
+                                            seq_len(length(listA)))
+      }
 
-        metres <- do.call("rbind", temp_list)
+      metres <- do.call("rbind", temp_list)
 
-        colnames(metres)[-1] <- paste0(colnames(metres)[-1], "_TV")
-        metres <- cbind(timestep = c(seq_len(nrow(metres))), metres)
+      # colnames(metres)[-1] <- paste0(colnames(metres)[-1], "_TV")
+      metres <- cbind(timestep = c(seq_len(nrow(metres))), metres)
 
-        # meanA <- apply(simplify2array(listA), 1:2, mean)
-        # meanvec <- apply(simplify2array(vector), 1, mean)
-        # res <- calc_resilience(A = meanA,
-        #                        metrics = metrics,
-        #                        bounds = bounds,
-        #                        vector = meanvec,
-        #                        popname = popname,
-        #                        verbose = verbose,
-        #                        accuracy = accuracy,
-        #                        iterations = iterations)
-        #
-        #  if(!is.null(attr(res, "msg"))){
-        #   message_constant <- data.frame(t(attr(res, "msg")))
-        #   if(length(message_constant) > 0){
-        #     rownames(message_constant) <- NULL
-        #     colnames(message_constant) <- "Message for time-constant resilience"
-          }
-        }
+      # meanA <- apply(simplify2array(listA), 1:2, mean)
+      # meanvec <- apply(simplify2array(vector), 1, mean)
+      # res <- calc_resilience(A = meanA,
+      #                        metrics = metrics,
+      #                        bounds = bounds,
+      #                        vector = meanvec,
+      #                        popname = popname,
+      #                        verbose = verbose,
+      #                        accuracy = accuracy,
+      #                        iterations = iterations)
+      #
+      #  if(!is.null(attr(res, "msg"))){
+      #   message_constant <- data.frame(t(attr(res, "msg")))
+      #   if(length(message_constant) > 0){
+      #     rownames(message_constant) <- NULL
+      #     colnames(message_constant) <- "Message for time-constant resilience"
+      # }
+      # }
 
-        names(res)[-1] <- paste0(names(res)[-1], "_TC")
-        met <- cbind(metres, res)
+      # names(res)[-1] <- paste0(names(res)[-1], "_TC")
+      # met <- cbind(metres, res)
 
-        if(length(which(duplicated(names(met)))) > 0) {
-          met <- met[,-which(duplicated(names(met)))]
-        }
-        else{met <- met}
+      if (length(which(duplicated(names(metres)))) > 0) {
+        metres <- metres[, -which(duplicated(names(metres)))]
+      }
+      else{
+        metres <- metres
+      }
 
       # else {
       #   if (time == "varying"){
@@ -216,60 +229,67 @@ resilience <- function(listA,
       #         colnames(message_constant) <- "Message for time-constant resilience"
       #       }
       #     }
-#
-    #       names(res)[-1] <- paste0(names(res)[-1], "_TC")
-    #       met <- res
-    #     }
-    #   }
-    #
+      #
+      #       names(res)[-1] <- paste0(names(res)[-1], "_TC")
+      #       met <- res
+      #     }
+      #   }
+      #
     }
 
     else{
-        temp_list <-
-          lapply(
-            listA,
-            calc_resilience,
-            metrics,
-            bounds,
-            vector,
-            popname,
-            verbose,
-            accuracy,
-            iterations
-          )
+      temp_list <-
+        lapply(
+          listA,
+          calc_resilience,
+          metrics,
+          # bounds,
+          vector,
+          popname,
+          verbose,
+          accuracy,
+          iterations,
+          return.N,
+          return.t
+        )
 
-        message_varying <- data.frame(sapply(temp_list, function(e) attr(e, "msg")))
-        if(length(message_varying) > 0){
-        colnames(message_varying) <- paste0("Message for resilience calculated at time step ", seq_len(length(listA)))
-        }
-        metres <- do.call(rbind.data.frame, temp_list)
-        names(metres)[-1] <- paste0(names(metres)[-1], "_TV")
-        metres <- cbind(timestep = c(seq_len(nrow(metres))), metres)
+      message_varying <- data.frame(sapply(temp_list, function(e)
+        attr(e, "msg")))
+      if (length(message_varying) > 0) {
+        colnames(message_varying) <- NULL
+        rownames(message_varying) <- paste0("Message for resilience calculated at time step ",
+                                            seq_len(length(listA)))
+      }
+      metres <- do.call(rbind.data.frame, temp_list)
+      # names(metres)[-1] <- paste0(names(metres)[-1], "_TV")
+      metres <- cbind(timestep = c(seq_len(nrow(metres))), metres)
 
-        # meanA <- apply(simplify2array(listA), 1:2, mean)
-        #          res <- calc_resilience(A = meanA,
-        #                                 metrics = metrics,
-        #                                 bounds = bounds,
-        #                                 vector = vector,
-        #                                 popname = popname,
-        #                                 verbose = verbose,
-        #                                 accuracy = accuracy,
-        #                                 iterations = iterations)
-        #          if(!is.null(attr(res, "msg"))){
-        # message_constant <- data.frame(t(attr(res, "msg")))
-        # if(length(message_constant) > 0){
-        # rownames(message_constant) <- NULL
-        # colnames(message_constant) <- "Message for time-constant resilience"
-        # }
-        #          }
-        #
-        # names(res)[-1] <- paste0(names(res)[-1], "_TC")
-        # met <- cbind(metres, res)
+      # meanA <- apply(simplify2array(listA), 1:2, mean)
+      #          res <- calc_resilience(A = meanA,
+      #                                 metrics = metrics,
+      #                                 bounds = bounds,
+      #                                 vector = vector,
+      #                                 popname = popname,
+      #                                 verbose = verbose,
+      #                                 accuracy = accuracy,
+      #                                 iterations = iterations)
+      #          if(!is.null(attr(res, "msg"))){
+      # message_constant <- data.frame(t(attr(res, "msg")))
+      # if(length(message_constant) > 0){
+      # rownames(message_constant) <- NULL
+      # colnames(message_constant) <- "Message for time-constant resilience"
+      # }
+      #          }
+      #
+      # names(res)[-1] <- paste0(names(res)[-1], "_TC")
+      # met <- cbind(metres, res)
 
-        if(length(which(duplicated(names(met)))) > 0) {
-          met <- met[,-which(duplicated(names(met)))]
-        }
-        else{met <- met}
+      if (length(which(duplicated(names(metres)))) > 0) {
+        metres <- metres[, -which(duplicated(names(metres)))]
+      }
+      else{
+        metres <- metres
+      }
 
       # else {
       #   if(time == "varying"){
@@ -319,20 +339,20 @@ resilience <- function(listA,
       # }
     }
 
-  if (verbose) {
-    if(length(message_varying) > 0){
-      print(message_varying)
+    if (verbose) {
+      if (length(message_varying) > 0) {
+        print(message_varying)
+      }
+
+      # if(length(message_constant) > 0){
+      #   print(message_constant)
+      # }
     }
+  }
 
-  # if(length(message_constant) > 0){
-  #   print(message_constant)
-  # }
-  # }
-}
+  class(metres) <- c("resil", class(metres))
 
-  class(met) <- c("resil", class(met))
-
-  return(met)
+  return(metres)
 }
 
 #' Printing method for objects of class resil
@@ -370,8 +390,6 @@ summary.resil <- function(object, f = 'wide', ...) {
 #' @export
 #' @seealso [demres_plot()] for details
 #'
-plot.resil <- function(x,...) {
+plot.resil <- function(x, ...) {
   demres_plot(x)
 }
-
-

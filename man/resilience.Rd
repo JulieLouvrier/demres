@@ -8,15 +8,15 @@ populations based on a list of matrix population models}
 resilience(
   listA,
   metrics = "all",
-  bounds = FALSE,
   vector = "n",
   TDvector = FALSE,
   popname = NULL,
-  time = "both",
   verbose = TRUE,
   accuracy = 0.01,
   iterations = 1e+05,
-  f = "wide"
+  f = "wide",
+  return.N = TRUE,
+  return.t = TRUE
 )
 }
 \arguments{
@@ -38,12 +38,6 @@ and first time step attenuation for a matrix
 projection model.\cr
 "all": all of the above metrics are provided.}
 
-\item{bounds}{(optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
-bound should be calculated. If initial vector is not specified, the function
-provides metrics at their upper and lower bounds, calculated based on the stage-biased vector.
-If vector is specified, the function provides also the metrics calculated
-based on the initial vector.}
-
 \item{vector}{a list of numeric vectors or one-column matrices describing the age/stage
 distribution ('demographic structure') used to calculate a 'case-specific' resilience metric,
 based on the stage or age-structure.}
@@ -54,10 +48,6 @@ corresponds to the population stage distribution that is obtained from the proje
 of the population to the current time step using the specified matrix for each time step.}
 
 \item{popname}{a character string describing the name of the population.}
-
-\item{time}{set to "both" as default. A character string: "constant", "varying" or "both" \cr
-"constant": if the metrics are to be calculated over the whole study period; \cr
-"varying": if the metrics are to be calculated for each time step.}
 
 \item{verbose}{Boolean. Set to TRUE as default. Indicates whether the messages about failure
 to compute particular metric should be displayed or not (default = TRUE)}
@@ -71,6 +61,10 @@ and/or high specified convergence accuracy, this may need to be increased.}
 \item{f}{A character specifying whether the output should be shown in
 "long" (demographic resilience metrics as row names) or in "wide" (demographic
 resilience metrics as column names) format. Defaults to "wide".}
+
+\item{time}{set to "both" as default. A character string: "constant", "varying" or "both" \cr
+"constant": if the metrics are to be calculated over the whole study period; \cr
+"varying": if the metrics are to be calculated for each time step.}
 }
 \value{
 An object of class "resil", which is a dataframe
@@ -92,7 +86,7 @@ data(adeliepenguin)
 
 # simulate an initial vector
 set.seed(1234)
-penguinvec1 <- runif(5)
+penguinvec1 <- runif(2)
 penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vector to sum up to 1
 
 
@@ -100,11 +94,9 @@ AP_TVTC_demres <-
   resilience(
     listA = adeliepenguin,
     metrics = "all",
-    bounds = TRUE,
     vector = penguinvec1,
     TDvector = FALSE,
     popname = "adelie penguin",
-    time = "varying",
     verbose = TRUE
   )
 

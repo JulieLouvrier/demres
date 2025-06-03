@@ -7,12 +7,13 @@
 calc_resilience(
   A,
   metrics = "all",
-  bounds = FALSE,
-  vector = "n",
+  vector = vect,
   popname = NULL,
   verbose = TRUE,
   accuracy = 0.01,
-  iterations = 1e+05
+  iterations = 1e+05,
+  return.N = TRUE,
+  return.t = TRUE
 )
 }
 \arguments{
@@ -34,12 +35,6 @@ and first time step attenuation for a matrix
 projection model.\cr
 "all": all of the above metrics are provided.}
 
-\item{bounds}{(optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
-bound should be calculated. If initial vector is not specified, the function
-provides metrics at their upper and lower bounds, calculated based on the stage-biased vector.
-If vector is specified, the function provides also the metrics calculated
-based on the initial vector.}
-
 \item{vector}{a numeric vector or one-column matrix describing the age/stage
 distribution ('demographic structure') used to calculate a 'case-specific'
 resilience metric}
@@ -54,6 +49,12 @@ expressed as a proportion. Set to 0.01 by default.}
 
 \item{iterations}{option for calculating convergence time: the maximum number of iterations of the model. Set to 1e+05 by default. For slowly-converging models
 and/or high specified convergence accuracy, this may need to be increased.}
+
+\item{bounds}{(optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
+bound should be calculated. If initial vector is not specified, the function
+provides metrics at their upper and lower bounds, calculated based on the stage-biased vector.
+If vector is specified, the function provides also the metrics calculated
+based on the initial vector.}
 }
 \value{
 A vector containing all the resilience metrics
@@ -70,12 +71,11 @@ package based on a matrix projection model.
 data(adeliepenguin)
 
 set.seed(1234)
-penguinvec1 <- runif(5)
-penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vec to sum to 1
+penguinvec1 <- c(25, 75)
 penguin1 <- adeliepenguin[[1]]
 
 all_penguin_demres <- calc_resilience(penguin1, metrics = c("all"),
-vector = penguinvec1, bounds = TRUE, popname = "adelie penguin", verbose = TRUE)
+vector = penguinvec1, popname = "adelie penguin", verbose = TRUE, return.N = TRUE, return.t = TRUE)
 
 }
 \keyword{internal}

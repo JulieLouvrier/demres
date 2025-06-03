@@ -2,9 +2,15 @@
 % Please edit documentation in R/calc_resilience_function.R
 \name{calc_maxamp_or_maxatt}
 \alias{calc_maxamp_or_maxatt}
-\title{Calculate maxam or maxatt metric}
+\title{Calculate reactivity or inertia metric}
 \usage{
-calc_maxamp_or_maxatt(metrics, vector, A, bounds)
+calc_maxamp_or_maxatt(
+  metrics,
+  vector,
+  A,
+  return.N = return.N,
+  return.t = return.t
+)
 }
 \arguments{
 \item{metrics}{"convt": Calculates the time to convergence of a
@@ -28,16 +34,16 @@ resilience metric}
 
 \item{A}{a square, primitive, irreducible, non-negative numeric matrix of any
 dimension}
-
-\item{bounds}{(optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
-bound should be calculated. If initial vector is not specified, the function
-provides metrics at their upper and lower bounds, calculated based on the stage-biased vector.
-If vector is specified, the function provides also the metrics calculated
-based on the initial vector.}
 }
 \description{
 Internal functions used by \code{\link[=calc_resilience]{calc_resilience()}}.
 }
 \seealso{
+\code{\link[=calc_resilience]{calc_resilience()}}
+
+Calculate maxam or maxatt metric
+
+Internal functions used by \code{\link[=calc_resilience]{calc_resilience()}}.
+
 \code{\link[=calc_resilience]{calc_resilience()}}
 }
