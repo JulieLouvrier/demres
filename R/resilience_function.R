@@ -376,10 +376,10 @@ print.resil <- function(x, ...) {
 #' @param ... further arguments passed to or from other methods
 #' @return summary statistics
 #' @export
-#' @seealso [demres_dist()] for details
+#' @seealso [demres_summary()] for details
 #'
 summary.resil <- function(object, f = 'wide', ...) {
-  demres_dist(object, f)
+  demres_summary(object, f)
 }
 
 #' Plotting method for objects of class resil

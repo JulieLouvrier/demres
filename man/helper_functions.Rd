@@ -5,7 +5,7 @@
 \alias{RMSE}
 \alias{rRMSE}
 \alias{MAPE}
-\title{Helper functions for demres_dist function}
+\title{Helper functions for demres_summary function}
 \usage{
 RMSE(TV, TC)
 
@@ -24,7 +24,7 @@ resilience for the same one specific metric as for TV}
 Values of the distance measure
 }
 \description{
-Helper functions for demres_dist function
+Helper functions for demres_summary function
 }
 \section{Functions}{
 \itemize{

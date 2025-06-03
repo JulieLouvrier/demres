@@ -27,8 +27,6 @@ matrices of any dimension}
 matrix projection model.\cr
 "dr": Calculates the damping ratio of a given
 matrix projection model.\cr
-"inertia": Calculates population inertia for a
-matrix projection model.\cr
 "maxamp": Calculates maximal amplification for a
 matrix projection model.\cr
 "maxatt": Calculates maximal attenuation for a
@@ -62,9 +60,10 @@ and/or high specified convergence accuracy, this may need to be increased.}
 "long" (demographic resilience metrics as row names) or in "wide" (demographic
 resilience metrics as column names) format. Defaults to "wide".}
 
-\item{time}{set to "both" as default. A character string: "constant", "varying" or "both" \cr
-"constant": if the metrics are to be calculated over the whole study period; \cr
-"varying": if the metrics are to be calculated for each time step.}
+\item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size at the point of the metric reached,
+if set to FALSE, returns the standardised maximal amplification}
+
+\item{return.t}{Boolean. If TRUE, returns the time at which the meric occurs in the population projection}
 }
 \value{
 An object of class "resil", which is a dataframe
@@ -97,7 +96,9 @@ AP_TVTC_demres <-
     vector = penguinvec1,
     TDvector = FALSE,
     popname = "adelie penguin",
-    verbose = TRUE
+    verbose = TRUE,
+    return.N = TRUE,
+    return.t = TRUE
   )
 
 }

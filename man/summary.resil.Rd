@@ -22,5 +22,5 @@ summary statistics
 Summary method for objects of class resil
 }
 \seealso{
-\code{\link[=demres_dist]{demres_dist()}} for details
+\code{\link[=demres_summary]{demres_summary()}} for details
 }

@@ -1,4 +1,4 @@
-#' Helper functions for demres_dist function
+#' Helper functions for demres_summary function
 #'
 #' @param TV A vector containing values of time-varying demographic resilience
 #' for one specific metric

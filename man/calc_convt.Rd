@@ -4,14 +4,12 @@
 \alias{calc_convt}
 \title{Calculate convergence time}
 \usage{
-calc_convt(metrics, vector, A, bounds, accuracy, iterations)
+calc_convt(metrics, vector, A, accuracy, iterations, return.N)
 }
 \arguments{
 \item{metrics}{"convt": Calculates the time to convergence of a
 matrix projection model.\cr
 "dr": Calculates the damping ratio of a given
-matrix projection model.\cr
-"inertia": Calculates population inertia for a
 matrix projection model.\cr
 "maxamp": Calculates maximal amplification for a
 matrix projection model.\cr
@@ -29,17 +27,14 @@ resilience metric}
 \item{A}{a square, primitive, irreducible, non-negative numeric matrix of any
 dimension}
 
-\item{bounds}{(optional) Boolean. Set to FALSE as default. If TRUE, specifies whether the upper and  lower
-bound should be calculated. If initial vector is not specified, the function
-provides metrics at their upper and lower bounds, calculated based on the stage-biased vector.
-If vector is specified, the function provides also the metrics calculated
-based on the initial vector.}
-
 \item{accuracy}{option for calculating convergence time: the accuracy with which to determine convergence to asymptotic growth,
 expressed as a proportion. Set to 0.01 by default.}
 
 \item{iterations}{option for calculating convergence time: the maximum number of iterations of the model. Set to 1e+05 by default. For slowly-converging models
 and/or high specified convergence accuracy, this may need to be increased.}
+
+\item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size at the point of the metric reached,
+if set to FALSE, returns the standardised maximal amplification}
 }
 \description{
 Internal functions used by \code{\link[=calc_resilience]{calc_resilience()}}.
