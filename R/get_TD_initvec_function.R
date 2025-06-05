@@ -25,8 +25,8 @@ get_TD_vector <- function(IV, listA) {
     return(vectorTD)
   } else {
     for (i in seq_len(lengthA - 1)) {
-      temp <- popdemo::project(listA[[i]], vector = vectorTD[[i]], time = 1)
-      vectorTD[[i + 1]] <- as.numeric(((temp@vec)[2, ]) / sum(temp@vec[2, ]))
+      temp <- popdemo::project(listA[[i]], vector = vectorTD[[i]], standard.A = FALSE, time = 1)
+      vectorTD[[i + 1]] <- as.numeric((temp@vec)[2, ])
     }
   }
   return(vectorTD)
