@@ -31,9 +31,9 @@
 #' and/or high specified convergence accuracy, this may need to be increased.
 #' @param verbose Boolean. Set to TRUE as default. Indicates whether the messages about failure
 #' to compute particular metric should be displayed or not (default = TRUE)
-#' @param return.N Boolean. Set to TRUE as default. If TRUE returns population size at the point of the metric reached,
-#' if set to FALSE, returns the standardised maximal amplification
-#' @param return.t Boolean. If TRUE, returns the time at which the meric occurs in the population projection
+#' @param return.N Boolean. Set to TRUE as default. If TRUE returns population size.
+#' If set to FALSE, returns the standardised value of the requested metric.
+#' @param return.t Boolean. If TRUE, returns the time at which the metric is reached in the population projection
 #' @export
 #' @examples
 #' data(adeliepenguin)
