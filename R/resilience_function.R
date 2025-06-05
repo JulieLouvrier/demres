@@ -92,7 +92,7 @@ resilience <- function(listA,
       "A list of several matrices should be provided.
             Resilience is nevertheless calculated for this one matrix"
     )
-    met <- calc_resilience(
+    metres <- calc_resilience(
       A = listA,
       metrics = metrics,
       # bounds = bounds,
@@ -105,7 +105,7 @@ resilience <- function(listA,
       return.t = return.t
     )
 
-    message <- data.frame(t(attr(met, "msg")))
+    message <- data.frame(t(attr(metres, "msg")))
     rownames(message) <- NULL
     colnames(message) <- "Message for one matrix"
 
