@@ -1,19 +1,15 @@
-#' Provides time-varying and time-constant resilience metrics for
+#' Calculates time-varying resilience metrics for
 #' populations based on a list of matrix population models
 #'
-#' The function `resilience` calculates resilience metrics of a population based
-#' on a list of matrix population models.
-#'
 #' This function works with a list of matrices or just with one matrix
-#' and returns either time-varying metrics or time-constant metrics, depending
-#' on what is requested by the user (argument `time`).
+#' and returns time-varying metrics.
 #'
 #' @inheritParams calc_resilience
 #' @param listA a list of square, primitive, irreducible, non-negative numeric
 #' matrices of any dimension
 #' @param vector a list of numeric vectors or one-column matrices describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific' resilience metric,
-#' based on the stage or age-structure.
+#' based on the stage- or age-structure.
 #' @param TDvector Boolean. Set to FALSE as default. Specifies whether or not the
 #' user wants to obtain a time-dependent list of initial vectors. This vector
 #' corresponds to the population stage distribution that is obtained from the projection
@@ -25,16 +21,34 @@
 #'
 #' # load data
 #' data(adeliepenguin)
+#' penguinvec1 <- c(25, 75)
 #'
 #' # simulate an initial vector
-#' set.seed(1234)
-#' penguinvec1 <- runif(2)
-#' penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vector to sum up to 1
-#'
+#' #set.seed(1234)
+#' # subset of the list to check how it works with a list of pop vectors
+#' adeliesubs <- adeliepenguin[1:10]
+#' penguinvec_list_rel <- replicate(n =10, expr= runif(2))
+#' penguinvec_list_norm <- lapply(1:10, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
+#' penguinvec_list <- lapply(penguinvec_list_norm, FUN = function(x){round(x*100)})
 #'
 #' AP_TVTC_demres <-
 #'   resilience(
-#'     listA = adeliepenguin,
+#'     listA = adeliesubs,
+#'     metrics = "all",
+#'     vector = penguinvec_list,
+#'     TDvector = FALSE,
+#'     popname = "adelie penguin",
+#'     verbose = TRUE,
+#'     return.N = TRUE,
+#'     return.t = TRUE
+#'   )  ## TDvector function still to be fully debugged
+#'
+#'# test with one matrix
+#' adelie <- adeliepenguin[[1]]
+#'
+#' AP_demres_OneMat <-
+#'   resilience(
+#'     listA = adelie,
 #'     metrics = "all",
 #'     vector = penguinvec1,
 #'     TDvector = FALSE,
@@ -42,7 +56,7 @@
 #'     verbose = TRUE,
 #'     return.N = TRUE,
 #'     return.t = TRUE
-#'   )
+#'   )  ## TDvector function still to be fully debugged
 #'
 #' @return An object of class "resil", which is a dataframe
 #' containing the requested resilience metrics.
@@ -52,8 +66,8 @@
 resilience <- function(listA,
                        metrics = "all",
                        # bounds = FALSE,
-                       vector = "n",
-                       TDvector = FALSE,
+                       vector,
+                       TDvector = FALSE, ## V: this has to be fixed yet, returns all standardised
                        popname = NULL,
                        # time = "both",
                        verbose = TRUE,
@@ -105,7 +119,7 @@ resilience <- function(listA,
 
   else{
     if (TDvector) {
-      vector <- get_TD_vector(IV = vector, listA = listA)
+      vector <- get_TD_vector(IV = vector[[1]], listA = listA)
     }
 
     if (is.list(vector)) {
@@ -139,6 +153,7 @@ resilience <- function(listA,
       n.obs <- sapply(message_varying_temp, length)
       seq.max <- seq_len(max(n.obs))
       if (length(seq.max) > 0) {
+        #message_varying <- data.frame(unlist(message_varying_temp)) #- for the TDvec - this does not work properly, drops NAs
         message_varying <- data.frame(sapply(message_varying_temp, "[", i = seq.max))
         message_varying[is.na(message_varying)] <- ""
         colnames(message_varying) <- NULL
