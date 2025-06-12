@@ -24,16 +24,16 @@
 #' penguinvec1 <- c(25, 75)
 #'
 #' # simulate an initial vector
-#' #set.seed(1234)
+#' #set.seed(12348100000)
 #' # subset of the list to check how it works with a list of pop vectors
-#' adeliesubs <- adeliepenguin[1:10]
-#' penguinvec_list_rel <- replicate(n =10, expr= runif(2))
-#' penguinvec_list_norm <- lapply(1:10, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
+#' penguinvec_list_rel <- replicate(n =28, expr= runif(2))
+#' penguinvec_list_norm <- lapply(1:28, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
 #' penguinvec_list <- lapply(penguinvec_list_norm, FUN = function(x){round(x*100)})
+#'
 #'
 #' AP_TVTC_demres <-
 #'   resilience(
-#'     listA = adeliesubs,
+#'     listA = adeliepenguin,
 #'     metrics = "all",
 #'     vector = penguinvec_list,
 #'     TDvector = FALSE,
@@ -41,8 +41,21 @@
 #'     verbose = TRUE,
 #'     return.N = TRUE,
 #'     return.t = TRUE
-#'   )  ## TDvector function still to be fully debugged
+#'   )
 #'
+#' #' penguinvec_list <- list(penguivec)  ## for TDvector = TRUE you can initiate with a single vector, but it has to
+#' # be specified as a list
+#' AP_TVTC_demres <-
+#'   resilience(
+#'     listA = adeliepenguin,
+#'     metrics = "all",
+#'     vector = penguinvec_list,
+#'     TDvector = FALSE,
+#'     popname = "adelie penguin",
+#'     verbose = TRUE,
+#'     return.N = TRUE,
+#'     return.t = TRUE
+#'   )
 #'# test with one matrix
 #' adelie <- adeliepenguin[[1]]
 #'
@@ -56,7 +69,7 @@
 #'     verbose = TRUE,
 #'     return.N = TRUE,
 #'     return.t = TRUE
-#'   )  ## TDvector function still to be fully debugged
+#'   )
 #'
 #' @return An object of class "resil", which is a dataframe
 #' containing the requested resilience metrics.
@@ -151,6 +164,7 @@ resilience <- function(listA,
         attr(e, "msg"))
 
       n.obs <- sapply(message_varying_temp, length)
+      message_varying_temp <- lapply(message_varying_temp, FUN = function(x){ifelse(is.null(x), x[1] <- NA, x[1] <- x[1])} )
       seq.max <- seq_len(max(n.obs))
       if (length(seq.max) > 0) {
         #message_varying <- data.frame(unlist(message_varying_temp)) #- for the TDvec - this does not work properly, drops NAs
@@ -159,6 +173,7 @@ resilience <- function(listA,
         colnames(message_varying) <- NULL
         rownames(message_varying) <- paste0("Message for resilience calculated at time step ",
                                             seq_len(length(listA)))
+        message_varying <- message_varying[!message_varying[, 1] == "", ]
       }
 
       metres <- do.call("rbind", temp_list)
