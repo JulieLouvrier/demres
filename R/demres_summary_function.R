@@ -22,19 +22,20 @@
 #' data(adeliepenguin)
 #'
 #' # simulate an initial vector
-#' set.seed(1234)
-#' penguinvec1 <- runif(5)
-#' penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vector to sum up to 1
+#' penguinvec_list_rel <- replicate(n =28, expr= runif(2))
+#' penguinvec_list_norm <- lapply(1:28, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
+#' penguinvec_list <- lapply(penguinvec_list_norm, FUN = function(x){round(x*100)})
 #'
 #' AP_TVTC_demres <-
 #'   resilience(
 #'     listA = adeliepenguin,
-#'     metrics = "all",
-#'     vector = penguinvec1,
+#'     metrics = "maxatt",
+#'     vector = penguinvec_list,
 #'     TDvector = FALSE,
 #'     popname = "adelie penguin",
-#'     time = "both",
-#'     verbose = TRUE
+#'     verbose = TRUE,
+#'     return.N = TRUE,
+#'     return.t = TRUE
 #'   )
 #'
 #' dist_AP <- summary(AP_TVTC_demres)
@@ -43,9 +44,8 @@
 #' @export
 
 demres_summary <- function(table, f = 'wide') {
-    #
-    # colnames(distance_demres) <- unique_combis
-  distance_demres <- lapply(table[c("convt", "convt.N", "dr", "maxamp")], #here have to make more flexible and select all the columns with numeric values
+  sel_cols <- colnames(table)[colnames(table) %in% c("convt", "dr", "maxamp", "maxatt", "reac")]
+  distance_demres <- lapply(table[sel_cols],
                             summary.temp)
 
     # if(f == 'wide'){
