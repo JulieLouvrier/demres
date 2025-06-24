@@ -408,8 +408,8 @@ print.resil <- function(x, ...) {
 #' @export
 #' @seealso [demres_summary()] for details
 #'
-summary.resil <- function(object, f = 'wide', ...) {
-  demres_summary(object, f)
+summary.resil <- function(object, ...) {
+  demres_summary(object, ... )
 }
 
 #' Plotting method for objects of class resil
