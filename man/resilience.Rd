@@ -2,19 +2,18 @@
 % Please edit documentation in R/resilience_function.R
 \name{resilience}
 \alias{resilience}
-\title{Provides time-varying and time-constant resilience metrics for
+\title{Calculates time-varying resilience metrics for
 populations based on a list of matrix population models}
 \usage{
 resilience(
   listA,
   metrics = "all",
-  vector = "n",
+  vector,
   TDvector = FALSE,
   popname = NULL,
   verbose = TRUE,
   accuracy = 0.01,
   iterations = 1e+05,
-  f = "wide",
   return.N = TRUE,
   return.t = TRUE
 )
@@ -38,12 +37,12 @@ projection model.\cr
 
 \item{vector}{a list of numeric vectors or one-column matrices describing the age/stage
 distribution ('demographic structure') used to calculate a 'case-specific' resilience metric,
-based on the stage or age-structure.}
+based on the stage- or age-structure.}
 
 \item{TDvector}{Boolean. Set to FALSE as default. Specifies whether or not the
 user wants to obtain a time-dependent list of initial vectors. This vector
 corresponds to the population stage distribution that is obtained from the projection
-of the population to the current time step using the specified matrix for each time step.}
+of the population to the current time step using the specified matrix for each time step}
 
 \item{popname}{a character string describing the name of the population.}
 
@@ -56,44 +55,34 @@ expressed as a proportion. Set to 0.01 by default.}
 \item{iterations}{option for calculating convergence time: the maximum number of iterations of the model. Set to 1e+05 by default. For slowly-converging models
 and/or high specified convergence accuracy, this may need to be increased.}
 
-\item{f}{A character specifying whether the output should be shown in
-"long" (demographic resilience metrics as row names) or in "wide" (demographic
-resilience metrics as column names) format. Defaults to "wide".}
+\item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size.
+If set to FALSE, returns the standardised value of the requested metric.}
 
-\item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size at the point of the metric reached,
-if set to FALSE, returns the standardised maximal amplification}
-
-\item{return.t}{Boolean. If TRUE, returns the time at which the meric occurs in the population projection}
+\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection}
 }
 \value{
 An object of class "resil", which is a dataframe
 containing the requested resilience metrics.
 }
 \description{
-The function \code{resilience} calculates resilience metrics of a population based
-on a list of matrix population models.
-}
-\details{
 This function works with a list of matrices or just with one matrix
-and returns either time-varying metrics or time-constant metrics, depending
-on what is requested by the user (argument \code{time}).
+and returns time-varying metrics.
 }
 \examples{
-
 # load data
 data(adeliepenguin)
 
 # simulate an initial vector
-set.seed(1234)
-penguinvec1 <- runif(2)
-penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vector to sum up to 1
+set.seed(125435)
+penguinvec_list_rel <- replicate(n =28, expr= runif(2))
+penguinvec_list_norm <- lapply(1:28, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
+penguinvec_list <- lapply(penguinvec_list_norm, FUN = function(x){round(x*100)})
 
-
-AP_TVTC_demres <-
+AP_demres <-
   resilience(
     listA = adeliepenguin,
     metrics = "all",
-    vector = penguinvec1,
+    vector = penguinvec_list,
     TDvector = FALSE,
     popname = "adelie penguin",
     verbose = TRUE,

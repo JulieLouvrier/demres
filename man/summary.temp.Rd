@@ -4,7 +4,7 @@
 \alias{summary.temp}
 \title{Calculate maxam or maxatt metric}
 \usage{
-\method{summary}{temp}(x, fn = list(mean, sd))
+\method{summary}{temp}(x, fn = fn)
 }
 \description{
 Internal functions used by \code{\link[=demres_summary]{demres_summary()}}.

@@ -5,15 +5,11 @@
 \title{Calculates the distance between resilience metrics calculated with time-varying
 and time-constant approaches}
 \usage{
-demres_summary(table, f = "wide")
+demres_summary(table, fn = list(mean, sd))
 }
 \arguments{
 \item{table}{A dataframe containing all the resilience metrics calculated
 with the resilience function}
-
-\item{f}{A character specifying whether the output should be shown in
-"long" (demographic resilience metrics as row names) or in "wide" (demographic
-resilience metrics as column names) format. Defaults to "wide".}
 }
 \value{
 A data frame displaying the distance measures for the metrics that are present in the table
@@ -34,22 +30,36 @@ and TC - using the time-constant approach.
 data(adeliepenguin)
 
 # simulate an initial vector
-set.seed(1234)
-penguinvec1 <- runif(5)
-penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vector to sum up to 1
+set.seed(125435)
+penguinvec_list_rel <- replicate(n =28, expr= runif(2))
+penguinvec_list_norm <- lapply(1:28, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
+penguinvec_list <- lapply(penguinvec_list_norm, FUN = function(x){round(x*100)})
 
-AP_TVTC_demres <-
+AP_demres <-
   resilience(
     listA = adeliepenguin,
     metrics = "all",
-    bounds = TRUE,
-    vector = penguinvec1,
+    vector = penguinvec_list,
     TDvector = FALSE,
     popname = "adelie penguin",
-    time = "both",
-    verbose = TRUE
+    verbose = TRUE,
+    return.N = TRUE,
+    return.t = TRUE
   )
 
-dist_AP <- summary(AP_TVTC_demres)
+
+summary_AP <- summary(AP_TVTC_demres, fn = list(mean, sd, var))
+
+It is also possible to compile your own functions, for example
+
+coeffvar <- function(data, na.rm = TRUE){ # have to soecify na.rm = TRUE here
+CV <- sd(data, na.rm = TRUE) / mean(data, na.rm = TRUE) * 100
+}
+
+AP_CV <- summary(AP_TVTC_demres, fn = list(coeffvar))
+
+Or a combination
+AP_mix <- summary(AP_TVTC_demres, fn = list(coeffvar, mean, sd))
+
 
 }

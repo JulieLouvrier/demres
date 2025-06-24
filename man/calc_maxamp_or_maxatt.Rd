@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_resilience_function.R
 \name{calc_maxamp_or_maxatt}
 \alias{calc_maxamp_or_maxatt}
-\title{Calculate reactivity or inertia metric}
+\title{Calculate maxamp or maxatt metric}
 \usage{
 calc_maxamp_or_maxatt(
   metrics,
@@ -33,20 +33,14 @@ resilience metric}
 \item{A}{a square, primitive, irreducible, non-negative numeric matrix of any
 dimension}
 
-\item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size at the point of the metric reached,
-if set to FALSE, returns the standardised maximal amplification}
+\item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size.
+If set to FALSE, returns the standardised value of the requested metric.}
 
-\item{return.t}{Boolean. If TRUE, returns the time at which the meric occurs in the population projection}
+\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection}
 }
 \description{
 Internal functions used by \code{\link[=calc_resilience]{calc_resilience()}}.
 }
 \seealso{
-\code{\link[=calc_resilience]{calc_resilience()}}
-
-Calculate maxam or maxatt metric
-
-Internal functions used by \code{\link[=calc_resilience]{calc_resilience()}}.
-
 \code{\link[=calc_resilience]{calc_resilience()}}
 }

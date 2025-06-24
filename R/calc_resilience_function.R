@@ -280,7 +280,6 @@ calc_maxamp_or_maxatt <- function(metrics,
 calc_convt <- function(metrics,
                        vector,
                        A,
-                       # bounds,
                        accuracy,
                        iterations,
                        return.N) {

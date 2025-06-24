@@ -48,10 +48,10 @@ expressed as a proportion. Set to 0.01 by default.}
 \item{iterations}{option for calculating convergence time: the maximum number of iterations of the model. Set to 1e+05 by default. For slowly-converging models
 and/or high specified convergence accuracy, this may need to be increased.}
 
-\item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size at the point of the metric reached,
-if set to FALSE, returns the standardised maximal amplification}
+\item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size.
+If set to FALSE, returns the standardised value of the requested metric.}
 
-\item{return.t}{Boolean. If TRUE, returns the time at which the meric occurs in the population projection}
+\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection}
 }
 \value{
 A vector containing all the resilience metrics
