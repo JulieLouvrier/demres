@@ -24,11 +24,11 @@
 #' penguinvec_list_norm <- lapply(1:28, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
 #' penguinvec_list <- lapply(penguinvec_list_norm, FUN = function(x){round(x*100)})
 #'
-#' AP_TVTC_demres <-
+#' AP_demres <-
 #'   resilience(
 #'     listA = adeliepenguin,
 #'     metrics = "all",
-#'     vector = penguinvec_list[[1]],
+#'     vector = penguinvec_list,
 #'     TDvector = FALSE,
 #'     popname = "adelie penguin",
 #'     verbose = TRUE,
@@ -41,7 +41,7 @@
 #'
 #' It is also possible to compile your own functions, for example
 #'
-#' coeffvar <- function(data, na.rm = TRUE){
+#' coeffvar <- function(data, na.rm = TRUE){ # have to soecify na.rm = TRUE here
 #' CV <- sd(data, na.rm = TRUE) / mean(data, na.rm = TRUE) * 100
 #' }
 #'
