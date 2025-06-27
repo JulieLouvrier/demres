@@ -29,12 +29,13 @@
 #'     listA = adeliepenguin,
 #'     metrics = "all",
 #'     vector = penguinvec_list,
-#'     TDvector = FALSE,
+#'     TDvector = TRUE,
 #'     popname = "adelie penguin",
 #'     verbose = TRUE,
 #'     return.N = TRUE,
 #'     return.t = TRUE
 #'   )
+#'
 #'
 #' @return An object of class "resil", which is a dataframe
 #' containing the requested resilience metrics.
@@ -44,7 +45,7 @@
 resilience <- function(listA,
                        metrics = "all",
                        vector,
-                       TDvector = FALSE, ## V: this has to be fixed yet, returns all standardised
+                       TDvector = FALSE,
                        popname = NULL,
                        verbose = TRUE,
                        accuracy = 0.01,
@@ -155,6 +156,21 @@ resilience <- function(listA,
       if (length(message_varying) > 0) {
         print(message_varying)
       }
+    }
+  }
+
+  if(return.t == FALSE) {
+    if ('maxatt' %in% metrics) {
+      colnames_remove <- paste0(colnames(metres)[colnames(metres) %in% c('maxatt')], '.t')
+      metres <- metres[, setdiff(colnames(AP_demres), col_rem)]
+    }
+    if ('maxamp' %in% metrics) {
+      colnames_remove <- paste0(colnames(metres)[colnames(metres) %in% c('maxamp')], '.t')
+      metres <- metres[, setdiff(colnames(AP_demres), col_rem)]
+    }
+    if ('reac' %in% metrics) {
+      colnames_remove <- paste0(colnames(metres)[colnames(metres) %in% c('reac')], '.t')
+      metres <- metres[, setdiff(colnames(AP_demres), col_rem)]
     }
   }
 
