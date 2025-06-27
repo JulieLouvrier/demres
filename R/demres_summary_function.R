@@ -50,7 +50,8 @@
 #' @export
 
 demres_summary <- function(table, fn = list(mean, sd)) {
-  sel_cols <- colnames(table)[colnames(table) %in% c("convt", "dr", "maxamp", "maxatt", "reac")]
+  sel_cols <- colnames(table)[colnames(table) %in% c("convt", "dr", "maxamp", "maxatt", "reac",
+                                                     "convt.N", "maxamp.t", "maxatt.t")]
   distance_demres <- lapply(table[sel_cols],
                             summary.temp, fn = fn)
 
