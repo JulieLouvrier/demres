@@ -1,15 +1,9 @@
-#' Calculates the distance between resilience metrics calculated with time-varying
-#' and time-constant approaches
+#' Calculates the requested summary statistics for time-varying resilience metrics
 #'
-#' The function `summary` calls `demres_summary` to calculate distance between resilience metrics calculated with
-#' time-varying and time-constant approaches:
-#' "RMSE": sqrt(mean((TV-TC)^2))
-#' with TV: the time-varying resilience metric and TC the time constant one
-#' "rRMSE": sqrt(mean((TV-TC)^2)) / sd(TV)
-#' with TV: the time-varying resilience metric and TC the time constant
-#' "MAPE": mean(abs(TV - TC))/TC
-#' with TV: the resilience metric calculated using the time-varying approach
-#' and TC - using the time-constant approach.
+#' The function `summary` calls `demres_summary` to calculate specified summary
+#'  statistics for time-varying resilience metrics. By default mean and sd are
+#'  calculated.
+#'
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the resilience function
 #' @name demres_summary
@@ -36,23 +30,25 @@
 #'
 #' summary_AP <- summary(AP_demres, fn = list(mean, sd, var))
 #'
-#' It is also possible to compile your own functions, for example
+#' It is also possible to compute your own functions, for example
 #'
-#' coeffvar <- function(data, na.rm = TRUE){ # have to soecify na.rm = TRUE here
+#' coeffvar <- function(data, na.rm = TRUE){ # have to specify na.rm = TRUE here
 #' CV <- sd(data, na.rm = TRUE) / mean(data, na.rm = TRUE) * 100
 #' }
 #'
-#' AP_CV <- summary(AP_TVTC_demres, fn = list(coeffvar))
+#' AP_CV <- summary(AP_demres, fn = list(coeffvar))
 #'
 #' Or a combination
-#' AP_mix <- summary(AP_TVTC_demres, fn = list(coeffvar, mean, sd))
+#' AP_mix <- summary(AP_demres, fn = list(coeffvar, mean, sd))
 #'
 #'
-#' @return A data frame displaying the distance measures for the metrics that are present in the table
+#' @return A data frame with requested summary statistics (in columns) per each
+#' resilience metric.
 #' @export
 
 demres_summary <- function(table, fn = list(mean, sd)) {
-  sel_cols <- colnames(table)[colnames(table) %in% c("convt", "dr", "maxamp", "maxatt", "reac")]
+  sel_cols <- colnames(table)[colnames(table) %in% c("convt", "dr", "maxamp", "maxatt", "reac",
+                                                     "convt.N", "maxamp.t", "maxatt.t")]
   distance_demres <- lapply(table[sel_cols],
                             summary.temp, fn = fn)
 

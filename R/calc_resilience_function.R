@@ -34,7 +34,7 @@
 #' @param return.N Boolean. Set to TRUE as default. If TRUE returns population size.
 #' If set to FALSE, returns the standardised value of the requested metric.
 #' @param return.t Boolean. If TRUE, returns the time at which the metric is reached in the population projection
-#' @export
+#' If FALSE does not return the time.
 #' @examples
 #' data(adeliepenguin)
 #'
@@ -42,7 +42,7 @@
 #' penguin1 <- adeliepenguin[[1]]
 #'
 #' all_penguin_demres <- calc_resilience(penguin1, metrics = c("all"),
-#' vector = penguinvec1, popname = "adelie penguin", verbose = TRUE, return.N = TRUE, return.t = TRUE)
+#' vector = penguinvec1, popname = "adelie penguin", verbose = TRUE, return.N = TRUE, return.t = FALSE)
 #'
 #' @return A vector containing all the resilience metrics
 #' @name calc_resilience
@@ -102,7 +102,7 @@ calc_resilience <-
       reac.t = NA
     )
 
-    if (metrics == "all") {
+    if ("all" %in% metrics) {
       metrics <- c("reac", "maxatt", "maxamp", "dr", "convt")
     }
 
@@ -138,7 +138,7 @@ calc_resilience <-
       dat$maxamp.t <- maxamp_res$timestep
       if (return.t == FALSE)
       {
-        dat$maxamp.t <- 999
+        dat$maxamp.t <- 999 # V: this has to be set to NULL, imo
       }
       msg <- paste(msg, maxamp_res$msg)
     }
@@ -265,7 +265,6 @@ calc_maxamp_or_maxatt <- function(metrics,
   }
 
   list_res$msg <- msg
-
   list_res
 }
 
@@ -289,7 +288,7 @@ calc_convt <- function(metrics,
 
   list_res <- list(value = 999, N = 999)
 
-  if (vector[1] != "n") {
+
     list_res$value <- popdemo::convt(A,
                                      vector = vector,
                                      accuracy = accuracy,
@@ -298,22 +297,25 @@ calc_convt <- function(metrics,
 
     if (return.N == TRUE) {
       maxconvt <- max(list_res$value)
-
-
-
-      projpop_notstand <- popdemo::project(
+      projpop <- popdemo::project(
         A,
         standard.A = FALSE,
         vector = vector,
         time = (maxconvt + 1)
       )
 
-
-      list_res$N <- projpop_notstand[list_res$value]
-
-
     }
-  }
+    if (return.N == FALSE) {
+      maxconvt <- max(list_res$value)
+      projpop <- popdemo::project(
+        A,
+        standard.A = TRUE,
+        vector = vector / sum(vector),
+        time = (maxconvt + 1)
+      )
+    }
+
+      list_res$N <- projpop[list_res$value]
 
   return(list_res)
 }

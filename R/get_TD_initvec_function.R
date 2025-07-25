@@ -5,7 +5,7 @@
 #' step together with each time-varying population matrix to project population
 #' dynamics over time.
 #'
-#' @param IV a one-column matrix describing the age/stage distribution
+#' @param IV a vector describing the age/stage distribution
 #'  ('demographic structure') used to calculate a 'case-specific',
 #'  stage/ age structure for the first year. The other initial vectors will be
 #'  calculated from this first initial vector.
