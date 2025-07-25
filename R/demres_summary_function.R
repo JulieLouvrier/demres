@@ -20,15 +20,12 @@
 #'
 #' # simulate an initial vector
 #' set.seed(125435)
-#' penguinvec_list_rel <- replicate(n =28, expr= runif(2))
-#' penguinvec_list_norm <- lapply(1:28, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
-#' penguinvec_list <- lapply(penguinvec_list_norm, FUN = function(x){round(x*100)})
-#'
+#' vector_list <- lapply(1:28, function(i) runif(2))
 #' AP_demres <-
 #'   resilience(
 #'     listA = adeliepenguin,
 #'     metrics = "all",
-#'     vector = penguinvec_list,
+#'     vector = vector_list,
 #'     TDvector = FALSE,
 #'     popname = "adelie penguin",
 #'     verbose = TRUE,
@@ -37,7 +34,7 @@
 #'   )
 #'
 #'
-#' summary_AP <- summary(AP_TVTC_demres, fn = list(mean, sd, var))
+#' summary_AP <- summary(AP_demres, fn = list(mean, sd, var))
 #'
 #' It is also possible to compile your own functions, for example
 #'
