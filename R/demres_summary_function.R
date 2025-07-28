@@ -14,7 +14,8 @@
 #'
 #' # simulate an initial vector
 #' set.seed(125435)
-#' vector_list <- lapply(1:28, function(i) runif(2))
+#' vector_list <- lapply(1:28, function(i) round(runif(2) * 100 ))
+#'
 #' AP_demres <-
 #'   resilience(
 #'     listA = adeliepenguin,

@@ -20,16 +20,14 @@
 #'
 #' # simulate an initial vector
 #' set.seed(125435)
-#' penguinvec_list_rel <- replicate(n =28, expr= runif(2))
-#' penguinvec_list_norm <- lapply(1:28, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
-#' penguinvec_list <- lapply(penguinvec_list_norm, FUN = function(x){round(x*100)})
+#' vector_list <- lapply(1:28, function(i) round(runif(2) * 100 ))
 #'
 #' AP_demres <-
 #'   resilience(
 #'     listA = adeliepenguin,
 #'     metrics = "all",
-#'     vector = penguinvec_list,
-#'     TDvector = TRUE,
+#'     vector = vector_list,
+#'     TDvector = FALSE,
 #'     popname = "adelie penguin",
 #'     verbose = TRUE,
 #'     return.N = TRUE,
