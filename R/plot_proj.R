@@ -111,19 +111,13 @@ plot_proj <- function(
   drop <- c()
 
   if (isFALSE(multiple)) {
-    if (isTRUE(facet)) {
-      drop <- c(drop, "facet")
-    }
-    if (isTRUE(compare)) {
-      drop <- c(drop, "compare")
-    }
-    if (isTRUE(compare)) {
-      drop <- c(drop, "sort")
-    }
+    if (isTRUE(facet))   { drop <- c(drop, "facet") }
+    if (isTRUE(compare)) { drop <- c(drop, "compare") }
+    if (isTRUE(sort))    { drop <- c(drop, "sort") }
 
     if (length(drop) == 1) {
       message(
-        paste0("`", drop[1], " = TRUE` is ignored as popvec only contains one population projection.")
+        paste0("`", drop[1], " = TRUE` is ignored as popvec contains a single trajectory.")
       )
     }
     if (length(drop) > 1) {
@@ -132,7 +126,7 @@ plot_proj <- function(
           paste(head(paste0("`", drop, " = TRUE`"), -1), collapse = ", "),
           " and ",
           tail(paste0("`", drop, " = TRUE`"), 1),
-          " are ignored as popvec only contains one population projection."
+          " are ignored as popvec contains a single trajectory."
         )
       )
     }
