@@ -58,8 +58,8 @@ are applied in order (affected by \code{sort} option) in case of an unnamed
 vector. To set a single line color, pass only one color.}
 
 \item{...}{Other arguments passed on to \code{ggplot2::geom_line()}'s params
-argument. Might throw a warning about duplicated aesthetics which can be
-ignored.}
+argument. Will throw warnings about duplicated aesthetics when using
+\code{linewidth} argument which can be ignored.}
 }
 \value{
 A plot displaying the chosen metric(s) along a time axis
@@ -100,4 +100,12 @@ plot(AP_demres,
     timeproj = 5,
     sort = TRUE,
     compare = TRUE)
+
+plot(AP_demres,
+    listA = adeliepenguin,
+    vector = vector_list,
+    timeproj = 5,
+    sort = TRUE,
+    compare = TRUE,
+    facet = FALSE)
 }

@@ -50,6 +50,14 @@
 #'     timeproj = 5,
 #'     sort = TRUE,
 #'     compare = TRUE)
+#'
+#' plot(AP_demres,
+#'     listA = adeliepenguin,
+#'     vector = vector_list,
+#'     timeproj = 5,
+#'     sort = TRUE,
+#'     compare = TRUE,
+#'     facet = FALSE)
 
 demres_plot <- function(table,
                         listA,
