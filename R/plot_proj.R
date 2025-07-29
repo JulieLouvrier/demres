@@ -32,22 +32,16 @@
 #'
 #' @details
 #' The function automatically detects whether \code{popvec} contains single or
-#' multiple population projections. For multiple projections:
-#' \itemize{
-#'   \item Time steps are calculated as 0 to (total_length - 1) / n_populations
-#'   \item Each population gets a unique ID and group identifier
-#'   \item Various visualization options become available
-#' }
-#'
-#' When arguments are not applicable (e.g., \code{facet = TRUE} for single
-#' populations), informative messages are displayed and the arguments are ignored.
+#' multiple projections. For multiple trajectories, various additional
+#' visualization options become available.
+#' When arguments are not applicable for single trajectories (applies to
+#' \code{facet}, \code{compare}, and \code{sort}), the arguments are ignored.
 #'
 #' @examples
 #' # Single trajectory
 #' single_pop <- c(100, 105, 120, 160, 200, 270)
 #' plot_proj(single_pop)
-#' plot_proj(single_pop, palette = "blue") +
-#'   coord_cartesian(ylim = c(0, 300))
+#' plot_proj(single_pop, palette = "blue") + coord_cartesian(ylim = c(0, 300))
 #'
 #' # Multiple trajectories
 #' multi_pop <- list(
