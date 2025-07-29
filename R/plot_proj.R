@@ -25,8 +25,8 @@
 #'   are applied in order (affected by \code{sort} option) in case of an unnamed
 #'   vector. To set a single line color, pass only one color.
 #' @param ... Other arguments passed on to \code{ggplot2::geom_line()}'s params
-#'   argument. Might throw a warning about duplicated aesthetics which can be
-#'   ignored.
+#'   argument. Will throw warnings about duplicated aesthetics when using
+#'   \code{linewidth} argument which can be ignored.
 #'
 #' @return A ggplot2 object containing the population projection plot(s).
 #'
