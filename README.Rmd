@@ -22,7 +22,6 @@ The goal of __{demres}__ is to provide easy functions to calculate different tim
 The different metrics provided are:   
 - Convergence time    
 - Damping ratio    
-- Inertia  
 - Reactivity   
 - Maximum amplification   
 - Maximum attenuation   
@@ -53,7 +52,6 @@ library(demres)
 ```{r, import data}
 # load data
 data(adeliepenguin)
-
 ```
 
 ### Calculate demographic resilience metrics based on a list of population matrices
@@ -62,46 +60,37 @@ The function `resilience` is made to calculate demographic resilience metrics ba
 
 ```{r, resilience metrics}
 # Create initial vector
-set.seed(1234)
-penguinvec1 <- runif(5)
-penguinvec1 <- penguinvec1 / sum(penguinvec1) #scales the vector to sum to 1
+set.seed(125435)
+vec <- round(runif(2) * 100 )
+vector_list <- lapply(1:28, function(i) vec)
 
-#let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-adeliepenguin_demres <- resilience(
-    listA = adeliepenguin,
-    metrics = "all",
-    bounds = TRUE,
-    vector = penguinvec1,
-    TDvector = TRUE,
-    popname = "adelie penguin",
-    time = "both",
-    verbose = TRUE)
+#let's calculate all metrics of demographic resilience for with one initial vector
+AP_demres <-
+   resilience(
+     listA = adeliepenguin,
+     metrics = "all",
+     vector = vector_list,
+     TDvector = FALSE,
+     popname = "adelie penguin",
+     verbose = TRUE,
+     return.N = TRUE,
+     return.t = TRUE
+   )
 
 #let's take a look at what we got
-adeliepenguin_demres
+AP_demres
 ```
 
 ### Assess the distance between the time-varying and the time-constant approaches
 
-The function `summary` calculates the distance between the time-varying and the time-constant approaches by using the RMSE, rRMSE or the MAPE: 
+The function `summary` calculates the variation in the time-varying metrics: 
 
-#### RMSE: 
-$$\sqrt{mean((TV-TC)^2)}$$
-
-with TV - the time-varying resilience metric and TC - the time-constant one
-
-#### rRMSE:
-$$\sqrt{mean((TV-TC)^2)} / sd(TV)$$ 
-
-#### MAPE:
-$$\frac{mean(abs(TV-TC))}{TC}$$
-
-```{r, distance}
-#let's calculate all measures of distance for inertia
-dist_AP <- summary(adeliepenguin_demres)
+```{r, variation}
+#let's calculate the default variation measures, namely mean and sd 
+summary_AP <- summary(AP_demres)
 
 #let's take a look at what we got
-dist_AP
+summary_AP
 ```
 
 ### Plot the results
@@ -109,7 +98,13 @@ dist_AP
 Function `plot` provides a plot to visually inspect the resilience metric along a time axis
 
 ```{r, fig.width = 6, fig.height = 6}
-plot(adeliepenguin_demres)
+plot(AP_demres,
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5,
+     sort = FALSE,
+     compare = TRUE)
+
 ```
 
 
