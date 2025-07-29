@@ -36,7 +36,8 @@ dimension}
 \item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size.
 If set to FALSE, returns the standardised value of the requested metric.}
 
-\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection}
+\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection
+If FALSE does not return the time.}
 }
 \description{
 Internal functions used by \code{\link[=calc_resilience]{calc_resilience()}}.

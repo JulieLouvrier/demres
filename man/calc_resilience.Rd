@@ -51,7 +51,8 @@ and/or high specified convergence accuracy, this may need to be increased.}
 \item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size.
 If set to FALSE, returns the standardised value of the requested metric.}
 
-\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection}
+\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection
+If FALSE does not return the time.}
 }
 \value{
 A vector containing all the resilience metrics
@@ -67,11 +68,14 @@ package based on a matrix projection model.
 \examples{
 data(adeliepenguin)
 
-penguinvec1 <- c(25, 75)
+# simulate an initial vector
+set.seed(125435)
+vec <- round(runif(2) * 100 )
+
 penguin1 <- adeliepenguin[[1]]
 
 all_penguin_demres <- calc_resilience(penguin1, metrics = c("all"),
-vector = penguinvec1, popname = "adelie penguin", verbose = TRUE, return.N = TRUE, return.t = TRUE)
+vector = penguinvec1, popname = "adelie penguin", verbose = TRUE, return.N = TRUE, return.t = FALSE)
 
 }
 \keyword{internal}

@@ -38,7 +38,10 @@
 #' @examples
 #' data(adeliepenguin)
 #'
-#' penguinvec1 <- c(25, 75)
+#' # simulate an initial vector
+#' set.seed(125435)
+#' vec <- round(runif(2) * 100 )
+#'
 #' penguin1 <- adeliepenguin[[1]]
 #'
 #' all_penguin_demres <- calc_resilience(penguin1, metrics = c("all"),

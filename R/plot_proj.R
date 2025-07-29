@@ -61,7 +61,7 @@
 #' plot_proj(multi_pop)
 #'
 #' # rank trajectories and remove shaded lines
-#' plot_proj(multi_pop, sort = TRUE, compare = FALSE)
+#' plot_proj(multi_pop, sort = TRUE, compare = TRUE)
 #' # apply custom color
 #' plot_proj(multi_pop, palette = "red")
 #' # plot all trajectories in a single panel
@@ -71,6 +71,7 @@
 #' plot_proj(multi_pop, facet = FALSE, palette = "blue", alpha = .3)
 #'
 #' @export
+
 plot_proj <- function(
     popvec = NULL,
     standard.A = FALSE,

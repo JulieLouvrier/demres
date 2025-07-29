@@ -8,7 +8,7 @@ starting with the first initial vector}
 get_TD_vector(IV, listA)
 }
 \arguments{
-\item{IV}{a one-column matrix describing the age/stage distribution
+\item{IV}{a vector describing the age/stage distribution
 ('demographic structure') used to calculate a 'case-specific',
 stage/ age structure for the first year. The other initial vectors will be
 calculated from this first initial vector.}

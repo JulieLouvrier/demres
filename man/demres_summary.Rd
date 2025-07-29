@@ -2,8 +2,7 @@
 % Please edit documentation in R/demres_summary_function.R
 \name{demres_summary}
 \alias{demres_summary}
-\title{Calculates the distance between resilience metrics calculated with time-varying
-and time-constant approaches}
+\title{Calculates the requested summary statistics for time-varying resilience metrics}
 \usage{
 demres_summary(table, fn = list(mean, sd))
 }
@@ -12,18 +11,13 @@ demres_summary(table, fn = list(mean, sd))
 with the resilience function}
 }
 \value{
-A data frame displaying the distance measures for the metrics that are present in the table
+A data frame with requested summary statistics (in columns) per each
+resilience metric.
 }
 \description{
-The function \code{summary} calls \code{demres_summary} to calculate distance between resilience metrics calculated with
-time-varying and time-constant approaches:
-"RMSE": sqrt(mean((TV-TC)^2))
-with TV: the time-varying resilience metric and TC the time constant one
-"rRMSE": sqrt(mean((TV-TC)^2)) / sd(TV)
-with TV: the time-varying resilience metric and TC the time constant
-"MAPE": mean(abs(TV - TC))/TC
-with TV: the resilience metric calculated using the time-varying approach
-and TC - using the time-constant approach.
+The function \code{summary} calls \code{demres_summary} to calculate specified summary
+statistics for time-varying resilience metrics. By default mean and sd are
+calculated.
 }
 \examples{
 # load data
@@ -31,15 +25,14 @@ data(adeliepenguin)
 
 # simulate an initial vector
 set.seed(125435)
-penguinvec_list_rel <- replicate(n =28, expr= runif(2))
-penguinvec_list_norm <- lapply(1:28, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
-penguinvec_list <- lapply(penguinvec_list_norm, FUN = function(x){round(x*100)})
+vec <- round(runif(2) * 100 )
+vector_list <- lapply(1:28, function(i) vec)
 
 AP_demres <-
   resilience(
     listA = adeliepenguin,
     metrics = "all",
-    vector = penguinvec_list,
+    vector = vector_list,
     TDvector = FALSE,
     popname = "adelie penguin",
     verbose = TRUE,
@@ -48,18 +41,18 @@ AP_demres <-
   )
 
 
-summary_AP <- summary(AP_TVTC_demres, fn = list(mean, sd, var))
+summary_AP <- summary(AP_demres, fn = list(mean, sd, var))
 
-It is also possible to compile your own functions, for example
+It is also possible to compute your own functions, for example
 
-coeffvar <- function(data, na.rm = TRUE){ # have to soecify na.rm = TRUE here
+coeffvar <- function(data, na.rm = TRUE){ # have to specify na.rm = TRUE here
 CV <- sd(data, na.rm = TRUE) / mean(data, na.rm = TRUE) * 100
 }
 
-AP_CV <- summary(AP_TVTC_demres, fn = list(coeffvar))
+AP_CV <- summary(AP_demres, fn = list(coeffvar))
 
 Or a combination
-AP_mix <- summary(AP_TVTC_demres, fn = list(coeffvar, mean, sd))
+AP_mix <- summary(AP_demres, fn = list(coeffvar, mean, sd))
 
 
 }

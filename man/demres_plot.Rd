@@ -4,13 +4,62 @@
 \alias{demres_plot}
 \title{Plot the resulting demographic resilience metrics}
 \usage{
-demres_plot(table, ask = interactive())
+demres_plot(
+  table,
+  listA,
+  vector,
+  TDvector = FALSE,
+  timeproj = 5,
+  standard.A = FALSE,
+  facet = NULL,
+  compare = NULL,
+  sort = FALSE,
+  palette = NULL,
+  ...
+)
 }
 \arguments{
 \item{table}{A dataframe containing all the resilience metrics calculated
-with the \code{resilience} function}
+with the resilience function}
 
-\item{ask}{logical; if TRUE, the user is asked before each plot, see \code{\link[graphics:par]{par(ask=.)}}}
+\item{listA}{a list of square, primitive, irreducible, non-negative numeric
+matrices of any dimension}
+
+\item{vector}{a list of numeric vectors or one-column matrices describing the age/stage
+distribution ('demographic structure') used to calculate a 'case-specific' resilience metric,
+based on the stage- or age-structure.}
+
+\item{TDvector}{Boolean. Set to FALSE as default. Specifies whether or not the
+user wants to obtain a time-dependent list of initial vectors. This vector
+corresponds to the population stage distribution that is obtained from the projection
+of the population to the current time step using the specified matrix for each time step}
+
+\item{timeproj}{Numeric.The number of projection intervals.}
+
+\item{standard.A}{Logical. Set to \code{TRUE} if projection matrices contain
+standardised asymptotic dynamics (scaled by the dominant eigenvalue).}
+
+\item{facet}{Logical. If \code{TRUE} (default for lists), creates separate
+panels for each trajectory. If \code{FALSE}, plots all trajectories on the
+same panel. Ignored for single trajectories.}
+
+\item{compare}{Logical. If \code{TRUE} (default for lists), adds grey
+background lines showing all populations in each facet for comparison.
+Only applies when \code{facet = TRUE}. Ignored for single trajectories.}
+
+\item{sort}{Logical. If \code{TRUE}, orders trajectories by their final
+(most recent) population value in descending order. Changes legend title
+to "Time step (ranked)". Only applies when \code{popvec} is a list.
+Ignored for single trajectories.}
+
+\item{palette}{Character vector of colors to use for the plot. Should contain
+at least as many colors as trajectories. For multiple trajectories, colors
+are applied in order (affected by \code{sort} option) in case of an unnamed
+vector. To set a single line color, pass only one color.}
+
+\item{...}{Other arguments passed on to \code{ggplot2::geom_line()}'s params
+argument. Might throw a warning about duplicated aesthetics which can be
+ignored.}
 }
 \value{
 A plot displaying the chosen metric(s) along a time axis
@@ -24,22 +73,31 @@ along a time axis
 data(adeliepenguin)
 
 # simulate an initial vector
-set.seed(1234)
-penguinvec1 <- runif(5)
-penguinvec1 <- penguinvec1/sum(penguinvec1) #scales the vec to sum to 1
+set.seed(125435)
+vec <- round(runif(2) * 100 )
+vector_list <- lapply(1:28, function(i) vec)
 
-
-AP_TVTC_demres <-
+AP_demres <-
   resilience(
     listA = adeliepenguin,
     metrics = "all",
-    bounds = TRUE,
-    vector = penguinvec1,
+    vector = vector_list,
     TDvector = FALSE,
     popname = "adelie penguin",
-    time = "both",
-    verbose = TRUE
+    verbose = TRUE,
+    return.N = TRUE,
+    return.t = TRUE
   )
 
-plot(AP_TVTC_demres)
+plot(AP_demres,
+    listA = adeliepenguin,
+    vector = vector_list,
+    timeproj = 5)
+
+plot(AP_demres,
+    listA = adeliepenguin,
+    vector = vector_list,
+    timeproj = 5,
+    sort = TRUE,
+    compare = TRUE)
 }

@@ -58,7 +58,8 @@ and/or high specified convergence accuracy, this may need to be increased.}
 \item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size.
 If set to FALSE, returns the standardised value of the requested metric.}
 
-\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection}
+\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection
+If FALSE does not return the time.}
 }
 \value{
 An object of class "resil", which is a dataframe
@@ -74,20 +75,20 @@ data(adeliepenguin)
 
 # simulate an initial vector
 set.seed(125435)
-penguinvec_list_rel <- replicate(n =28, expr= runif(2))
-penguinvec_list_norm <- lapply(1:28, FUN = function(x){penguinvec_list_rel[, x]/ sum(penguinvec_list_rel[, x])})
-penguinvec_list <- lapply(penguinvec_list_norm, FUN = function(x){round(x*100)})
+vec <- round(runif(2) * 100 )
+vector_list <- lapply(1:28, function(i) vec)
 
 AP_demres <-
   resilience(
     listA = adeliepenguin,
     metrics = "all",
-    vector = penguinvec_list,
+    vector = vector_list,
     TDvector = FALSE,
     popname = "adelie penguin",
     verbose = TRUE,
     return.N = TRUE,
     return.t = TRUE
   )
+
 
 }
