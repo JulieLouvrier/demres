@@ -143,7 +143,7 @@ plot_proj <- function(
     legend_title <- "Time step (ranked)"
   }
 
-  # color handling for single projections or unique line color
+  # color handling for single trajectories or unique line color
   if (isFALSE(multiple)) {
     if (!is.null(palette)) { color <- palette[1] } else { color <- "black" }
   } else {
@@ -197,6 +197,7 @@ plot_proj <- function(
     ggplot2::scale_y_continuous(
       expand = ggplot2::expansion(mult = c(.05, .03))
     ) +
+    # use custom color palette
     {
       if(isTRUE(multiple) & !is.null(palette))
         ggplot2::scale_color_manual(values = palette)
@@ -205,6 +206,7 @@ plot_proj <- function(
       if(isTRUE(multiple) & is.null(palette))
         ggplot2::scale_color_viridis_d(option = "mako", begin = .1, end = .8)
     } +
+    # style visualization
     {
       if(!is.null(palette) & isTRUE(facet))
         ggplot2::guides(color = ggplot2::guide_none())
