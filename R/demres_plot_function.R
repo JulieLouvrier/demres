@@ -16,6 +16,7 @@
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the resilience function
 #' @name demres_plot
+#' @importFrom ggplot2 aes
 #' @return A plot displaying the chosen metric(s) along a time axis
 #' @export
 #' @examples
@@ -50,15 +51,17 @@
 #'     listA = adeliepenguin,
 #'     vector = vector_list,
 #'     timeproj = 5,
-#'     sort = TRUE,
-#'     compare = TRUE)
+#'     #sort = TRUE,
+#'     compare = TRUE,
+#'     standard.A = TRUE,
+#'     standard.vec = TRUE)
 #'
 #' # One plot to compare them all together
 #' plot(AP_demres,
 #'     listA = adeliepenguin,
 #'     vector = vector_list,
 #'     timeproj = 5,
-#'     sort = TRUE,
+#'     #sort = TRUE,
 #'     compare = TRUE,
 #'     facet = FALSE)
 #'
@@ -69,8 +72,18 @@
 #'     timeproj = 5,
 #'     standard.A = TRUE,
 #'     standard.vec = TRUE,
-#'     sort = TRUE,
+#'     #sort = TRUE,
 #'     compare = TRUE,
+#'     facet = FALSE)
+#'
+#'plot(AP_demres1,
+#'     listA = list(adeliepenguin[[1]]),
+#'     vector = list(vector_list[[1]]),
+#'     timeproj = 5,
+#'     standard.A = TRUE,
+#'     standard.vec = TRUE,
+#'     #sort = TRUE,
+#'     #compare = TRUE,
 #'     facet = FALSE)
 
 
@@ -102,13 +115,26 @@ demres_plot <- function(table,
 
  if(standard.vec){
    vec_stand <- lapply(vector, function(x){x/sum(x)})
-
-
+   vector <- vec_stand
  }
 
   if (TDvector) {
     vector <- get_TD_vector(IV = vector[[1]], listA = listA)
   }
+
+  if (is.list(listA) && length(listA) == 1) {
+    listA <- listA[[1]]
+    vector <- vector[[1]]
+
+    projpopdemres <- popdemo::project(
+        listA,
+        vector,
+        standard.A = standard.A,
+        time = timeproj
+      )
+  }
+
+  else {
 
  projpopdemres <- mapply(function(A, X) {
      popdemo::project(
@@ -121,6 +147,7 @@ demres_plot <- function(table,
    A = listA,
    X = vector,
    SIMPLIFY = FALSE)
+  }
 
  #now calling the plot_proj function
   pp <- plot_proj(popvec = projpopdemres,

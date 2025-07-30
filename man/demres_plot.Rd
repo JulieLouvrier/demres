@@ -90,11 +90,13 @@ AP_demres <-
     return.t = TRUE
   )
 
+# Facet plot with comparison with the other trajectories, ordered by matrices order
 plot(AP_demres,
     listA = adeliepenguin,
     vector = vector_list,
     timeproj = 5)
 
+# Facet plot with comparison with the other trajectories, ordered by decreasing order
 plot(AP_demres,
     listA = adeliepenguin,
     vector = vector_list,
@@ -102,10 +104,22 @@ plot(AP_demres,
     sort = TRUE,
     compare = TRUE)
 
+# One plot to compare them all together
 plot(AP_demres,
     listA = adeliepenguin,
     vector = vector_list,
     timeproj = 5,
+    sort = TRUE,
+    compare = TRUE,
+    facet = FALSE)
+
+# Compare with the standardized value
+plot(AP_demres,
+    listA = adeliepenguin,
+    vector = vector_list,
+    timeproj = 5,
+    standard.A = TRUE,
+    standard.vec = TRUE,
     sort = TRUE,
     compare = TRUE,
     facet = FALSE)

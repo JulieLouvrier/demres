@@ -35,6 +35,18 @@
 #'     return.t = TRUE
 #'   )
 #'
+#' AP_demres1 <-
+#'   resilience(
+#'     listA = list(adeliepenguin[[1]]),
+#'     metrics = "all",
+#'     vector = list(vector_list[[1]]),
+#'     TDvector = FALSE,
+#'     popname = "adelie penguin",
+#'     verbose = TRUE,
+#'     return.N = TRUE,
+#'     return.t = TRUE
+#'   )
+#'
 #'
 #' @return An object of class "resil", which is a dataframe
 #' containing the requested resilience metrics.
@@ -53,6 +65,10 @@ resilience <- function(listA,
                        return.t = TRUE) {
   message_varying <- character(0)
 
+  if (!is.list(vector)) {
+    stop("The population vector should be a list of one or several vectors")
+  }
+
   if (is.list(listA) && length(listA) == 1) {
     warning(
       "You provided a list of one matrix.
@@ -60,9 +76,7 @@ resilience <- function(listA,
     Resilience is nevertheless calculated for this one matrix"
     )
     listA <- listA[[1]]
-  }
-  if (!is.list(vector)) {
-    stop("The population vector should be a list of one or several vectors")
+    vector <- vector[[1]]
   }
 
   if (!is.list(listA)) {
