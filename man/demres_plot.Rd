@@ -11,6 +11,7 @@ demres_plot(
   TDvector = FALSE,
   timeproj = 5,
   standard.A = FALSE,
+  standard.vec = FALSE,
   facet = NULL,
   compare = NULL,
   sort = FALSE,

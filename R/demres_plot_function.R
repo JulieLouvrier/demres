@@ -13,7 +13,7 @@
 #' corresponds to the population stage distribution that is obtained from the projection
 #' of the population to the current time step using the specified matrix for each time step
 #' @param timeproj Numeric.The number of projection intervals.
-#'@param table A dataframe containing all the resilience metrics calculated
+#' @param table A dataframe containing all the resilience metrics calculated
 #' with the resilience function
 #' @name demres_plot
 #' @return A plot displaying the chosen metric(s) along a time axis
@@ -39,11 +39,13 @@
 #'     return.t = TRUE
 #'   )
 #'
+#' # Facet plot with comparison with the other trajectories, ordered by matrices order
 #' plot(AP_demres,
 #'     listA = adeliepenguin,
 #'     vector = vector_list,
 #'     timeproj = 5)
 #'
+#' # Facet plot with comparison with the other trajectories, ordered by decreasing order
 #' plot(AP_demres,
 #'     listA = adeliepenguin,
 #'     vector = vector_list,
@@ -51,6 +53,7 @@
 #'     sort = TRUE,
 #'     compare = TRUE)
 #'
+#' # One plot to compare them all together
 #' plot(AP_demres,
 #'     listA = adeliepenguin,
 #'     vector = vector_list,
@@ -58,6 +61,17 @@
 #'     sort = TRUE,
 #'     compare = TRUE,
 #'     facet = FALSE)
+#' # Compare with the standardized value
+#'plot(AP_demres,
+#'     listA = adeliepenguin,
+#'     vector = vector_list,
+#'     timeproj = 5,
+#'     standard.A = TRUE,
+#'     standard.vec = TRUE,
+#'     sort = TRUE,
+#'     compare = TRUE,
+#'     facet = FALSE)
+
 
 demres_plot <- function(table,
                         listA,
@@ -65,12 +79,31 @@ demres_plot <- function(table,
                         TDvector = FALSE,
                         timeproj = 5,
                         standard.A = FALSE,
+                        standard.vec = FALSE,
                         facet = NULL,
                         compare = NULL,
                         sort = FALSE,
                         palette = NULL,
                         ...
                         ) {
+  if(standard.A){
+
+    listA_stand <- lapply(listA, function(x) {
+      M <- x
+      eigvals <- eigen(M)$values
+      lmax <- which.max(Re(eigvals))
+      lambda <- Re(eigvals[lmax])
+      A <- M/lambda
+
+      } )
+    listA <- listA_stand
+  }
+
+ if(standard.vec){
+   vec_stand <- lapply(vector, function(x){x/sum(x)})
+
+
+ }
 
   if (TDvector) {
     vector <- get_TD_vector(IV = vector[[1]], listA = listA)
