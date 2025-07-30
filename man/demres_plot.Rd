@@ -101,15 +101,17 @@ plot(AP_demres,
     listA = adeliepenguin,
     vector = vector_list,
     timeproj = 5,
-    sort = TRUE,
-    compare = TRUE)
+    #sort = TRUE,
+    compare = TRUE,
+    standard.A = TRUE,
+    standard.vec = TRUE)
 
 # One plot to compare them all together
 plot(AP_demres,
     listA = adeliepenguin,
     vector = vector_list,
     timeproj = 5,
-    sort = TRUE,
+    #sort = TRUE,
     compare = TRUE,
     facet = FALSE)
 
@@ -120,7 +122,17 @@ plot(AP_demres,
     timeproj = 5,
     standard.A = TRUE,
     standard.vec = TRUE,
-    sort = TRUE,
+    #sort = TRUE,
     compare = TRUE,
+    facet = FALSE)
+
+plot(AP_demres1,
+    listA = list(adeliepenguin[[1]]),
+    vector = list(vector_list[[1]]),
+    timeproj = 5,
+    standard.A = TRUE,
+    standard.vec = TRUE,
+    #sort = TRUE,
+    #compare = TRUE,
     facet = FALSE)
 }

@@ -90,5 +90,17 @@ AP_demres <-
     return.t = TRUE
   )
 
+AP_demres1 <-
+  resilience(
+    listA = list(adeliepenguin[[1]]),
+    metrics = "all",
+    vector = list(vector_list[[1]]),
+    TDvector = FALSE,
+    popname = "adelie penguin",
+    verbose = TRUE,
+    return.N = TRUE,
+    return.t = TRUE
+  )
+
 
 }

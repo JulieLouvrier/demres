@@ -122,7 +122,7 @@ demres_plot <- function(table,
     vector <- get_TD_vector(IV = vector[[1]], listA = listA)
   }
 
-  if (is.list(listA) && length(listA) == 1) {
+  if (is.list(listA) && length(listA) == 1 && length(vector) == 1) {
     listA <- listA[[1]]
     vector <- vector[[1]]
 
