@@ -105,6 +105,26 @@ plot(AP_demres,
      sort = FALSE,
      compare = TRUE)
 
+ # One plot to compare them all together
+ plot(AP_demres,
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5,
+     sort = TRUE,
+     compare = TRUE,
+     facet = FALSE)
+     
+ # Compare with the standardized value
+plot(AP_demres,
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5,
+     standard.A = TRUE,
+     standard.vec = TRUE,
+     sort = TRUE,
+     compare = TRUE,
+     facet = FALSE)
+
 ```
 
 

@@ -61,6 +61,7 @@
 #'     sort = TRUE,
 #'     compare = TRUE,
 #'     facet = FALSE)
+#'
 #' # Compare with the standardized value
 #'plot(AP_demres,
 #'     listA = adeliepenguin,
