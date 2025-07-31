@@ -65,39 +65,10 @@ AP_demres <-
      vector = vector_list,
      TDvector = FALSE,
      popname = "adelie penguin",
-     verbose = TRUE,
+     verbose = FALSE,
      return.N = TRUE,
      return.t = TRUE
    )
-#>                                                                                                                                                                  
-#> Message for resilience calculated at time step 1   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 2   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 3   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 4   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 5   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 6   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 7   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 8   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 9   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 10  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 11  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 12  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 13  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 14  Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
-#> Message for resilience calculated at time step 15  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 16  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 17  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 18  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 19  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 20  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 21  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 22  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 23  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 24  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 25  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 26  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 27  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
-#> Message for resilience calculated at time step 28  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed
 
 #let's take a look at what we got
 AP_demres

@@ -72,7 +72,7 @@ AP_demres <-
      vector = vector_list,
      TDvector = FALSE,
      popname = "adelie penguin",
-     verbose = TRUE,
+     verbose = FALSE,
      return.N = TRUE,
      return.t = TRUE
    )
