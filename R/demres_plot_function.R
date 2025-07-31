@@ -16,7 +16,7 @@
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the resilience function
 #' @name demres_plot
-#' @importFrom ggplot2 aes
+#' @import ggplot2
 #' @return A plot displaying the chosen metric(s) along a time axis
 #' @export
 #' @examples

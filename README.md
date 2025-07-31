@@ -10,7 +10,6 @@ discrepancy between the time-varying and the time-constant approach.
 The different metrics provided are:  
 - Convergence time  
 - Damping ratio  
-- Inertia  
 - Reactivity  
 - Maximum amplification  
 - Maximum attenuation
@@ -27,7 +26,7 @@ dialects.
 You can install this package using **{remotes}** (or **{devtools}**):
 
 ``` r
-remotes::install_github("JulieLouvrier/demres")
+remotes::install_github("JulieLouvrier/demres@V1.1")
 ```
 
 ## Basic usage of the package
@@ -54,180 +53,134 @@ requested using the argument `time`.
 
 ``` r
 # Create initial vector
-set.seed(1234)
-penguinvec1 <- runif(5)
-penguinvec1 <- penguinvec1 / sum(penguinvec1) #scales the vector to sum to 1
+set.seed(125435)
+vec <- round(runif(2) * 100 )
+vector_list <- lapply(1:28, function(i) vec)
 
-#let's calculate all metrics of demographic resilience for that one matrix with one initial vector
-adeliepenguin_demres <- resilience(
-    listA = adeliepenguin,
-    metrics = "all",
-    bounds = TRUE,
-    vector = penguinvec1,
-    TDvector = TRUE,
-    popname = "adelie penguin",
-    time = "both",
-    verbose = TRUE)
-#>                                                                                                           Message for time-varying resilience at time step 1
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 2
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 3
-#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
-#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 4
-#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
-#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 5
-#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
-#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 6
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#> 3                                                                                                                                                           
-#>                                                                                                           Message for time-varying resilience at time step 7
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                           Message for time-varying resilience at time step 8
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#> 3                                                                                                                                                           
-#>                                                                                                           Message for time-varying resilience at time step 9
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                          Message for time-varying resilience at time step 10
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#> 3                                                                                                                                                           
-#>                                                                                                          Message for time-varying resilience at time step 11
-#> 1                                              Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed 
-#> 2 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#>                                                                                                          Message for time-varying resilience at time step 12
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector 
-#> 3                                                                                                                                                           
-#>                                                                                                                         Message for time-constant resilience
-#> 1 The lower bound of maximum amplification cannot be computed. Therefore, the lower maximum attenuation is calculated using the default stage biased vector 
-#> 2                                             Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
-#> 3 The upper bound of maximum attenuation cannot be computed. Therefore, the upper maximum amplification is calculated using the default stage biased vector
+#let's calculate all metrics of demographic resilience for with one initial vector
+AP_demres <-
+   resilience(
+     listA = adeliepenguin,
+     metrics = "all",
+     vector = vector_list,
+     TDvector = FALSE,
+     popname = "adelie penguin",
+     verbose = TRUE,
+     return.N = TRUE,
+     return.t = TRUE
+   )
+#>                                                                                                                                                                  
+#> Message for resilience calculated at time step 1   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 2   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 3   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 4   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 5   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 6   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 7   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 8   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 9   Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 10  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 11  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 12  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 13  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 14  Model does not attenuate.  Cannot compute maximum attenuation with the stated initial vector, Na is displayed 
+#> Message for resilience calculated at time step 15  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 16  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 17  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 18  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 19  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 20  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 21  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 22  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 23  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 24  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 25  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 26  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 27  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed  
+#> Message for resilience calculated at time step 28  Model does not amplify. Cannot compute maximum amplification with the stated initial vector, Na is displayed
 
 #let's take a look at what we got
-adeliepenguin_demres
-#>    timestep    popname convt_TV convt_lwr_TV convt_upr_TV    dr_TV inertia_TV
-#> 1         1 adelie penguin       15           17           21 1.260737  1.5333348
-#> 2         2 adelie penguin       19           22           26 1.209277  1.2582784
-#> 3         3 adelie penguin       15           17           21 1.250912  0.8581260
-#> 4         4 adelie penguin       14           20           24 1.222042  0.9013004
-#> 5         5 adelie penguin       11           14           18 1.327353  0.8586647
-#> 6         6 adelie penguin       12           17           21 1.275744  1.1426049
-#> 7         7 adelie penguin        9           17           21 1.288798  1.1378826
-#> 8         8 adelie penguin        8           14           18 1.313330  0.9984802
-#> 9         9 adelie penguin       11           17           21 1.247210  1.0452734
-#> 10       10 adelie penguin       12           22           26 1.214877  0.9643615
-#> 11       11 adelie penguin       11           14           18 1.312434  0.8513696
-#> 12       12 adelie penguin       10           14           18 1.290253  1.0436617
-#>    inertia_lwr_TV inertia_upr_TV maxamp_TV maxamp_upr_TV maxatt_TV
-#> 1       0.3380643       2.453536  1.723496      3.188589        NA
-#> 2       0.3664144       2.764719  1.480409      3.722920        NA
-#> 3       0.3457900       2.481637        NA      3.238037 0.7740310
-#> 4       0.3601647       2.662348        NA      3.548079 0.8186359
-#> 5       0.3058453       2.216446        NA      2.770840 0.7270000
-#> 6       0.3315223       2.380029  1.216825      3.061100 0.9894003
-#> 7       0.3262064       2.321470  1.206248      2.959427        NA
-#> 8       0.3128593       2.252394  1.043203      2.835762 0.9786728
-#> 9       0.3477418       2.500855  1.133028      3.271153        NA
-#> 10      0.3642050       2.713575  1.039046      3.635428 0.9224155
-#> 11      0.3126440       2.259734        NA      2.848023 0.7762351
-#> 12      0.3241436       2.326127  1.090320      2.966458 0.9626888
-#>    maxatt_lwr_TV   reac_TV reac_lwr_TV reac_upr_TV convt_TC convt_lwr_TC
-#> 1      0.1377865 1.3230440   0.5324434    2.895077        6           17
-#> 2      0.1325322 1.3618635   0.5723503    3.382101        6           17
-#> 3      0.1393395 0.9860133   0.5436130    2.935359        6           17
-#> 4      0.1352809 0.9876613   0.5634825    3.219720        6           17
-#> 5      0.1379891 0.7728866   0.4907642    2.518515        6           17
-#> 6      0.1392934 0.9894003   0.5239987    2.778008        6           17
-#> 7      0.1405172 1.1160518   0.5173623    2.684792        6           17
-#> 8      0.1389008 1.0228788   0.4997366    2.576003        6           17
-#> 9      0.1390491 1.1330283   0.5462951    2.965338        6           17
-#> 10     0.1342159 1.0390461   0.5693033    3.299575        6           17
-#> 11     0.1383543 0.8256561   0.4992444    2.587806        6           17
-#> 12     0.1393490 0.9626888   0.5142661    2.693034        6           17
-#>    convt_upr_TC    dr_TC inertia_TC inertia_lwr_TC inertia_upr_TC maxamp_TC
-#> 1            21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 2            21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 3            21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 4            21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 5            21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 6            21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 7            21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 8            21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 9            21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 10           21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 11           21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#> 12           21 1.260737   1.048844      0.3380642       2.453536  1.067201
-#>    maxamp_upr_TC maxatt_TC maxatt_lwr_TC  reac_TC reac_lwr_TC reac_upr_TC
-#> 1       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 2       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 3       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 4       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 5       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 6       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 7       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 8       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 9       3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 10      3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 11      3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
-#> 12      3.188589        NA     0.1377865 1.041294   0.5324433    2.895078
+AP_demres
+#>    timestep        popname convt convt.N       dr maxamp maxamp.t maxatt
+#> 1         1 adelie penguin     2 65.8200 4.844809     NA       NA  65.82
+#> 2         2 adelie penguin     2 69.7500 3.934655     NA       NA  69.75
+#> 3         3 adelie penguin     2 72.4500 4.363470     NA       NA  72.45
+#> 4         4 adelie penguin     3 71.6838 7.288792     NA       NA  62.31
+#> 5         5 adelie penguin     3 82.7760 5.032717     NA       NA  68.40
+#> 6         6 adelie penguin     3 60.1974 6.026819     NA       NA  57.69
+#> 7         7 adelie penguin     2 50.6400 8.606140     NA       NA  50.64
+#> 8         8 adelie penguin     3 74.9571 6.302694     NA       NA  64.23
+#> 9         9 adelie penguin     3 90.1536 4.657293     NA       NA  71.52
+#> 10       10 adelie penguin     2 70.8000 4.608732     NA       NA  70.80
+#> 11       11 adelie penguin     2 66.9900 4.779472     NA       NA  66.99
+#> 12       12 adelie penguin     2 74.5500 4.500000     NA       NA  74.55
+#> 13       13 adelie penguin     3 56.4126 4.943374     NA       NA  56.34
+#> 14       14 adelie penguin     2 79.2600 3.907040  79.26        1     NA
+#> 15       15 adelie penguin     1 60.0000 3.922862     NA       NA  78.75
+#> 16       16 adelie penguin     2 60.5100 3.952740     NA       NA  60.51
+#> 17       17 adelie penguin     1 60.0000 3.632194     NA       NA  71.91
+#> 18       18 adelie penguin     3 56.9244 6.180351     NA       NA  56.16
+#> 19       19 adelie penguin     2 65.6100 4.899730     NA       NA  65.61
+#> 20       20 adelie penguin     2 57.8400 3.692842     NA       NA  57.84
+#> 21       21 adelie penguin     2 70.9500 3.205801     NA       NA  70.95
+#> 22       22 adelie penguin     2 62.2800 3.732414     NA       NA  62.28
+#> 23       23 adelie penguin     2 67.5300 4.320532     NA       NA  67.53
+#> 24       24 adelie penguin     3 57.6108 7.540645     NA       NA  56.16
+#> 25       25 adelie penguin     2 68.0700 3.854944     NA       NA  68.07
+#> 26       26 adelie penguin     3 50.2956 8.396133     NA       NA  52.14
+#> 27       27 adelie penguin     1 60.0000 3.226423     NA       NA  67.68
+#> 28       28 adelie penguin     1 60.0000 3.966774     NA       NA  67.29
+#>    maxatt.t  reac reac.t
+#> 1         1 65.82      1
+#> 2         1 69.75      1
+#> 3         1 72.45      1
+#> 4         1 62.31      1
+#> 5         1 68.40      1
+#> 6         1 57.69      1
+#> 7         1 50.64      1
+#> 8         1 64.23      1
+#> 9         1 71.52      1
+#> 10        1 70.80      1
+#> 11        1 66.99      1
+#> 12        1 74.55      1
+#> 13        1 56.34      1
+#> 14       NA 79.26      1
+#> 15        1 78.75      1
+#> 16        1 60.51      1
+#> 17        1 71.91      1
+#> 18        1 56.16      1
+#> 19        1 65.61      1
+#> 20        1 57.84      1
+#> 21        1 70.95      1
+#> 22        1 62.28      1
+#> 23        1 67.53      1
+#> 24        1 56.16      1
+#> 25        1 68.07      1
+#> 26        1 52.14      1
+#> 27        1 67.68      1
+#> 28        1 67.29      1
 ```
 
 ### Assess the distance between the time-varying and the time-constant approaches
 
-The function `summary` calculates the distance between the time-varying
-and the time-constant approaches by using the RMSE, rRMSE or the MAPE:
-
-#### RMSE:
-
-$$\sqrt{mean((TV-TC)^2)}$$
-
-with TV - the time-varying resilience metric and TC - the time-constant
-one
-
-#### rRMSE:
-
-$$\sqrt{mean((TV-TC)^2)} / sd(TV)$$
-
-#### MAPE:
-
-$$\frac{mean(abs(TV-TC))}{TC}$$
+The function `summary` calculates the variation in the time-varying
+metrics:
 
 ``` r
-#let's calculate all measures of distance for inertia
-dist_AP <- summary(adeliepenguin_demres)
+#let's calculate the default variation measures, namely mean and sd 
+summary_AP <- summary(AP_demres)
 
 #let's take a look at what we got
-dist_AP
-#>          convt convt_lwr  convt_upr         dr   inertia inertia_lwr
-#> RMSE  6.898067 2.8136572 2.81365717 0.03903875 0.1911224  0.02005321
-#> rRMSE 2.262518 0.9578473 0.95784731 0.97324861 0.9574318  0.96115364
-#> MAPE  1.041667 0.1225490 0.09920635 0.02662846 0.1387432  0.05155810
-#>       inertia_upr    maxamp maxamp_upr maxatt maxatt_lwr      reac   reac_lwr
-#> RMSE   0.17897716 0.2849170 0.31047904    NaN 0.00231687 0.1657916 0.02703314
-#> rRMSE  0.95867538 1.1827921 0.95905906    NaN 0.95785432 0.9575008 0.95866190
-#> MAPE   0.06183159 0.1756083 0.08265399    NaN 0.01320329 0.1210779 0.04415418
-#>         reac_upr
-#> RMSE  0.28129654
-#> rRMSE 0.95920804
-#> MAPE  0.08229525
+summary_AP
+#>               mean        sd
+#> convt     2.178571 0.6696362
+#> convt.N  65.859332 9.3337207
+#> dr        4.940014 1.4940121
+#> maxamp   79.260000        NA
+#> maxamp.t  1.000000        NA
+#> maxatt   64.976667 7.0857343
+#> maxatt.t  1.000000 0.0000000
+#> reac     65.486786 7.4588397
 ```
 
 ### Plot the results
@@ -236,19 +189,42 @@ Function `plot` provides a plot to visually inspect the resilience
 metric along a time axis
 
 ``` r
-plot(adeliepenguin_demres)
+plot(AP_demres,
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5,
+     sort = FALSE,
+     compare = TRUE)
 ```
 
-![](./man/figures/convt.AP.tvtc.png) <!-- convergence time -->
+![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
-![](./man/figures/dr.AP.tvtc.png) <!-- damping ratio -->
+``` r
 
-![Inertia](./man/figures/inertia.AP.tvtc.png) <!-- inertia -->
+ # One plot to compare them all together
+ plot(AP_demres,
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5,
+     sort = TRUE,
+     compare = TRUE,
+     facet = FALSE)
+```
 
-![Maximum amplification](./man/figures/maxamp.AP.tvtc.png)
-<!-- maximum amplification -->
+![](README_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->
 
-![Maximum attenuation](./man/figures/maxatt.AP.tvtc.png)
-<!-- maximum attenuation -->
+``` r
+     
+ # Compare with the standardized value
+plot(AP_demres,
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5,
+     standard.A = TRUE,
+     standard.vec = TRUE,
+     sort = TRUE,
+     compare = TRUE,
+     facet = FALSE)
+```
 
-![Reactivity](./man/figures/reac.AP.tvtc.png) <!-- reactivity -->
+![](README_files/figure-gfm/unnamed-chunk-1-3.png)<!-- -->
