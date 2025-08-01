@@ -74,7 +74,7 @@
 #'     standard.vec = TRUE,
 #'     #sort = TRUE,
 #'     compare = TRUE,
-#'     facet = FALSE)
+#'     facet = TRUE)
 #'
 #'plot(AP_demres1,
 #'     listA = list(adeliepenguin[[1]]),
