@@ -1,4 +1,4 @@
-#' Plot the resulting demographic resilience metrics
+#' Plot the computed demographic resilience metrics
 #'
 #' The function `plot` calls `demres_plot` to visually inspect the resilience metric(s)
 #' along a time axis
