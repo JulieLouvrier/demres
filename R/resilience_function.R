@@ -11,9 +11,9 @@
 #' distribution ('demographic structure') used to calculate a 'case-specific' resilience metric,
 #' based on the stage- or age-structure.
 #' @param TDvector Boolean. Set to FALSE as default. Specifies whether or not the
-#' user wants to obtain a time-dependent list of initial vectors. This vector
-#' corresponds to the population stage distribution that is obtained from the projection
-#' of the population to the current time step using the specified matrix for each time step
+#' user wants to use, instead of specified population vectors, so-called "time-dependent" vectors that
+#' are obtained from the projection of the population to the current time step using
+#'  the specified matrix for each time step.
 #' @examples
 #' # load data
 #' data(adeliepenguin)
@@ -47,6 +47,18 @@
 #'     return.t = TRUE
 #'   )
 #'
+#' # an example with time-dependent population vector
+#' AP_demres_TD <-
+#'   resilience(
+#'     listA = adeliepenguin,
+#'     metrics = "all",
+#'     vector = vector_list,
+#'     TDvector = TRUE,
+#'     popname = "adelie penguin",
+#'     verbose = TRUE,
+#'     return.N = TRUE,
+#'     return.t = TRUE
+#'   )
 #'
 #' @return An object of class "resil", which is a dataframe
 #' containing the requested resilience metrics.
