@@ -77,9 +77,10 @@ plot_proj <- function(
   ) {
 
   if (isFALSE(standard.A)) {
-    ylab <- "Population"
+    ylab <- "Population size"
   } else {
-    ylab <- "Population size / density"
+    ylab <- "Population size" ## Vik: we should have also here an argument standard.vec (as for the demres_plot function) and if
+    ## it is TRUE we should display "Population density" as Y axis title
   }
 
   legend_title <- "Time step"
