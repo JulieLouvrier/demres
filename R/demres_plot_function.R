@@ -1,4 +1,4 @@
-#' Plot the computed demographic resilience metrics
+#' Plot the computed demographic resilience metrics along projected trajectories
 #'
 #' The function `plot` calls `demres_plot` to visually inspect the resilience metric(s)
 #' along a time axis
@@ -15,6 +15,10 @@
 #' @param timeproj Numeric.The number of projection intervals.
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the resilience function
+#' @param standard.vec Boolean. Set to \code{FALSE} by default so that the initial
+#' population vector is not scaled to sum up to 1, i.e. returns demographic resilience metrics
+#' in terms of number of individuals. If set to \code{TRUE} will return the demographic resilience
+#' metrics in population densities.
 #' @name demres_plot
 #' @import ggplot2
 #' @return A plot displaying the chosen metric(s) along a time axis
@@ -53,7 +57,7 @@
 #'     timeproj = 5,
 #'     #sort = TRUE,
 #'     compare = TRUE,
-#'     standard.A = TRUE,
+#'     standard.A = FALSE,
 #'     standard.vec = TRUE)
 #'
 #' # One plot to compare them all together
