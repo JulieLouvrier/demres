@@ -250,44 +250,38 @@ AP_demres_TD
 
 We can see that when using time-varying demographic vector while projecting the initial population vector forward, the population is more likely to amplify than it was when using the actually observed demographic structures for each year. We also see that the values of all resilience metrics are increasing rapidly over time and by the the year 28 we have population sizes in thousands as opposed to population sizes being below 100 when relying on the user-supplied population vectors. 
 
-When using the option `TDvector = TRUE`, the function projects the population structure for each time step using the MPM of each time-step, which can be similar to projecting a population over time with one MPM except that here the function does it with a different matrix for each time step. It is therefore expected that the population will approach asymptotic growth over time as the function projects the population over each time step, which are translated with demographic resilience metrics getting closer to 1. **VIK: I am not sure this previous statement will hold now, as we change matrices and we do not standardise by anything. JUlie please check - if in doubt, better remove this statement** The variations that we can see therefore represent the variation in the demographic rates in the MPM in comparison with a projection over time with only one matrix. 
+When using the option `TDvector = TRUE`, the function projects the population structure for each time step using the MPM of each time-step, which can be similar to projecting a population over time with one MPM except that here the function does it with a different matrix for each time step. It is therefore expected that the population will approach asymptotic growth over time as the function projects the population over each time step, which are translated with demographic resilience metrics getting closer to 1. **Vik: I am not sure this previous statement will hold now, as we change matrices and we do not standardise by anything. JUlie please check - if in doubt, better remove this statement** The variations that we can see therefore represent the variation in the demographic rates in the MPM in comparison with a projection over time with only one matrix. 
+
+# Plot 
+The function `plot` provides a visual representation of the populations trajectories obtained when starting the projection from each supplied matrix and initial vector. Let us have a look at what trajectories look like when not standardising calculation of demographic resilience metrics by scaling the matrix entry by lambda and by scaling the population vector to sum to 1.
+
+```{r, echo = -1, fig.width = 6, fig.height = 6}
+plot(AP_demres,
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5)
+```
+So we here see both long-term and short-term dynamics confounded. We see that in some years (like year 14 and 15) population is projected to increase rapidly whereas in a few years the populations are projected to decline (year 13).
+# HERE stopped
+
+NEXT: It would still be good to show all the functionality of plotting, without facettig and with; with scaling by both lambda and pop vector or only by lambda
+**Vik: I think it may be a good idea to compute lambda for each matrix and show it on the plot that shows both unstandardized lambda and pop vec?? - or at least for now for the workshop to show it separately - how majority of the pops are projected to increase and only a few to decline according to the intrisic rate of increase**
 
 
 # Assess the variation in the time-varying resilience metrics 
 
-The function `summary` calculates the distance between the resilience metrics calculated using the time-varying and the time-constant approach. The following commonly used distances can be measured: 
-residual mean squared error: 
-$$RMSE = \sqrt{mean((TV-TC)^2)}$$ 
-relative residual mean squared error: 
-$$rRMSE = \frac{\sqrt{mean((TV-TC)^2)}}{sd(TV)}$$ 
-and the mean absolute proportional error:    
-$$MAPE = \frac{mean(abs(TV-TC))}{TC}$$ 
-with $TV$: the time-varying resilience metric and $TC$ the time constant one. 
+The function `summary` calculates the requested statistics for the time-varying demographic resilience metrics. It is meant to quantify the extent to what demographic resilience metrics vary over time. By default mean and standard deviation ("sd") of resilience metrics are computed, but more user-defined summary statistics may be requested.
 
-## One variable
-Let's look at how the metrics vary in time in comparison with the time-constant approach. Looking first at `reactivity`.
-To be able to look at these distances, the metrics calculated with both time-varying and time-dependent approaches must be present in the table. 
+For example, let us compute mean, standard deviation and variance of all computed reisilience metrics using the user-supplied demographic structures for each year.
 
 ```{r echo = -1}
-# table.AP.reac <- summary(adeliepenguin.reac.tvtc)
-# 
-# table.AP.reac
+summary_AP <- summary(AP_demres, fn = list(mean, sd, var))
+summary_AP
 ```
-The lower bound has the largest value of RMSE. This means that the upper bound is the one for which the time-varying values are the most spread around the time-constant value for _reactivity_. When dividing this value by the standard deviation of the time-varying metric, it seems that all three metrics have a rRMSE below 1, which means that the value of the RMSE is below the value of the SD of the time-varying metrics, which can be interpreted as a reasonable dispersion around the time-constant metric. Finally, when looking at the MAPE, if we take 5% as the maximum threshold above which the difference between the time-varying and the time-constant approaches are considered to be important, then using the time-varying approach seems to be sensible for computing the metric at the lower and upper bounds, whereas the time-constant approach is a good enough approximation for the value computed using the specified initial vector.  
 
-## Several metrics
-Then let's look at all the resilience metrics: 
+## Vik: HERE still add short discussion of the variation observed + example of calculating coeff. of variation
 
-```{r echo = -1}
-# table.AP.all <- summary(adeliepenguin.all.tvtc)
-# 
-# table.AP.all
-```
-First, we can notice that the distance measures for _maximum attenuation_ cannot be computed because the population did not attenuate according to the time-constant approach. 
-
-Looking at the RMSE, _damping ratio_ is the metric with the largest distance value. This is due to the fact that _damping ratio_ displays values varying between 3.21 and 8.61 while its value based on the average matrix was calculated to be 4.48. This show the high variability over time of he population's capacity to converge towards an equilibrium. The second metric with the largest value of RMSE is _convergence time_. This is due to the the fact that _convergence time_ is expressed in number of time steps, therefore the values can vary greatly, and are much larger than the values of the other metrics that are around 1. Secondly, when looking at the rRMSE, all other metrics' values seem to be below (but close to) 1, meaning that the dispersion of the metrics computed with the time-varying approach is within 1 SD of the time-constant approach. However, when looking at the MAPE, we see that MAPE has values above 5% for _convergence time_ calculated based on an initial vector and its bounds, _damping ratio_,  the lower bound of _inertia_, the lower bound of _maximum attenuation_, and the lower and upper bound of _reactivity_. For these resilience metrics, we can consider that the time-varying approach is more sensible than the time-constant approach.
-
-It is now worth investigating the reasons behind the fact that the lower bound appears to be the metric that varies the most in time. 
+**Vik - note: I guess all of this below will be deleted now? So for now I just shifted the plot functionality to above - as I think it is important to show how plots work as soon as possible within the vignette - I have a feeling seeing it all makes things much clearer than trying to explain it with words at length. Please revert whatever you feel is best for the workflow of the hands-on and vignette more broadly**
 
 # Check the stage-biased vectors 
 Let's first remember the initial vector we used 
@@ -371,12 +365,4 @@ The second year is the year during which most of the demographic resilience metr
 
 Now looking at the minimum values, we can observe that the 5th year was the year during which the demographic resilience metrics were at their lowest, however with _convergence time_ at its lowest value and _damping ratio_ at its highest value, displaying a trade-off between amplification and convergence (resistance and recovery in other words). 
 
-# Plot 
-The function `plot` provides a visual representation of the time-varying and time-constant metrics that are present in the data frame returned by the function `resilience`. Depending on what the user specified as demographic distribution, the plot shows the resilience metrics computed by using  the lower bound, the upper bound, or the initial distribution vector. 
-
-```{r, echo = -1, fig.width = 6, fig.height = 6}
-# plot(adeliepenguin.all.tvtc)
-```
-
-R opened as many windows as there are metrics in the table provided. In each window is a visual representation of the demographic resilience metrics over time. 
 
