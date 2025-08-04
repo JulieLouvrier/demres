@@ -47,10 +47,10 @@ install.packages(c("devtools", "remotes"))
 remotes::install_github("JulieLouvrier/demres")
 
 # Other packages 
-library(ggplot2)
-library(dplyr)
-library(tidyr)
-library(purrr)
+# library(ggplot2)
+# library(dplyr)
+# library(tidyr)
+# library(purrr)
 
 ```
 ***  
@@ -86,26 +86,26 @@ The elements constituting the matrices are known as vital rates. These represent
 ```{r, data plot}
 # Plotting the different demographic parameters
 # Convert list of matrices into tidy data frame
-df <- map_dfr(seq_along(adeliepenguin), function(i) {
-  mat <- adeliepenguin[[i]]
-  data.frame(
-    index = i,
-    fertility = mat[1,2],
-    Sa = mat[2,2],
-    Trja = mat[2,1]
-  )
-}) %>% 
-  pivot_longer(cols = c(fertility, Sa, Trja), names_to = "Demographic_parameter")
+
+# df <- map_dfr(seq_along(adeliepenguin), function(i) {
+#   mat <- adeliepenguin[[i]]
+#   data.frame(
+#     index = i,
+#     fertility = mat[1,2],
+#     Sa = mat[2,2],
+#     Trja = mat[2,1]
+#   )
+# }) %>% pivot_longer(cols = c(fertility, Sa, Trja), names_to = "Demographic_parameter")
 
 
-# Plot using ggplot
-ggplot(df, aes(x = index, y = value, color = Demographic_parameter)) +
-  geom_line() +
-  labs(title = "Demographic parameters over time",
-       x = "Time Step",
-       y = "Demographic parameter",
-       color = "Parameter") +
-  theme_minimal() 
+# # Plot using ggplot
+# ggplot(df, aes(x = index, y = value, color = Demographic_parameter)) +
+#   geom_line() +
+#   labs(title = "Demographic parameters over time",
+#        x = "Time Step",
+#        y = "Demographic parameter",
+#        color = "Parameter") +
+#   theme_minimal() 
 
 ```
 
@@ -201,13 +201,13 @@ A __{reactivity}__ of 1.01 would mean that in the first timestep, the population
 ```{r, reac plot}
 # Plotting reactivity over time 
 # Plot using ggplot
-ggplot(AP_demres_reac_stand, aes(x = timestep, y = reac)) +
-  geom_line() +
-  labs(title = "Stadardized reactivity over time",
-       x = "Time Step",
-       y = "Reactivity") +
-  theme_minimal() +
-  geom_hline(yintercept = 1, col = "red")
+# ggplot2::ggplot(AP_demres_reac_stand, aes(x = timestep, y = reac)) +
+#   geom_line() +
+#   labs(title = "Stadardized reactivity over time",
+#        x = "Time Step",
+#        y = "Reactivity") +
+#   theme_minimal() +
+#   geom_hline(yintercept = 1, col = "red")
 
 ```
 
@@ -239,13 +239,13 @@ As for the standardized reactivity, the maximum population abundance for __{reac
 ```{r, reac abundance plot}
 # Plotting demographic resilience metrics over time 
 # Plot using ggplot
-ggplot(AP_demres_reac, aes(x = timestep, y = reac)) +
-  geom_line() +
-  labs(title = "Reactivity over time",
-       x = "Time Step",
-       y = "Reactivity") +
-  theme_minimal() +
-  geom_hline(yintercept = 60, col = "red")
+# ggplot2::ggplot(AP_demres_reac, aes(x = timestep, y = reac)) +
+#   geom_line() +
+#   labs(title = "Reactivity over time",
+#        x = "Time Step",
+#        y = "Reactivity") +
+#   theme_minimal() +
+#   geom_hline(yintercept = 60, col = "red")
 
 ```
 
@@ -297,23 +297,27 @@ AP_demres_stand
 
 
 # Plotting demographic resilience metrics over time 
-ggplot(AP_demres_stand, aes(x = timestep, y = dr)) +
-  geom_line() +
-  labs(title = "Damping ratio over time",
-       x = "Time Step",
-       y = "DR") +
-  theme_minimal() +
-  geom_hline(yintercept = 1, col = "red")
-
-ggplot(AP_demres_stand, aes(x = timestep, y = convt )) +
-  geom_line() +
-  labs(title = "Convergence time over time",
-       x = "Time Step",
-       y = "convt") +
-  theme_minimal() 
+# ggplot2::ggplot(AP_demres_stand, aes(x = timestep, y = dr)) +
+#   geom_line() +
+#   labs(title = "Damping ratio over time",
+#        x = "Time Step",
+#        y = "DR") +
+#   theme_minimal() +
+#   geom_hline(yintercept = 1, col = "red")
+# 
+# ggplot2::ggplot(AP_demres_stand, aes(x = timestep, y = convt )) +
+#   geom_line() +
+#   labs(title = "Convergence time over time",
+#        x = "Time Step",
+#        y = "convt") +
+#   theme_minimal() 
 
 ```
 
+In our case, __{reactivity}__ is equal to maxamp for the year 14 and equal to maxatt for the rest of the years. So the plot of __{reactivity}__ would be enough. 
+
+Another way to visualize it is through violin plots 
+##HERE STOP
 
 
 #Check for extreme years 
