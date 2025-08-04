@@ -2,7 +2,7 @@
 % Please edit documentation in R/demres_plot_function.R
 \name{demres_plot}
 \alias{demres_plot}
-\title{Plot the resulting demographic resilience metrics}
+\title{Plot the computed demographic resilience metrics along projected trajectories}
 \usage{
 demres_plot(
   table,
@@ -39,6 +39,11 @@ of the population to the current time step using the specified matrix for each t
 
 \item{standard.A}{Logical. Set to \code{TRUE} if projection matrices contain
 standardised asymptotic dynamics (scaled by the dominant eigenvalue).}
+
+\item{standard.vec}{Boolean. Set to \code{FALSE} by default so that the initial
+population vector is not scaled to sum up to 1, i.e. returns demographic resilience metrics
+in terms of number of individuals. If set to \code{TRUE} will return the demographic resilience
+metrics in population densities.}
 
 \item{facet}{Logical. If \code{TRUE} (default for lists), creates separate
 panels for each trajectory. If \code{FALSE}, plots all trajectories on the
@@ -103,7 +108,7 @@ plot(AP_demres,
     timeproj = 5,
     #sort = TRUE,
     compare = TRUE,
-    standard.A = TRUE,
+    standard.A = FALSE,
     standard.vec = TRUE)
 
 # One plot to compare them all together
@@ -124,9 +129,9 @@ plot(AP_demres,
     standard.vec = TRUE,
     #sort = TRUE,
     compare = TRUE,
-    facet = FALSE)
+    facet = TRUE)
 
-plot(AP_demres1,
+plot(AP_demres,
     listA = list(adeliepenguin[[1]]),
     vector = list(vector_list[[1]]),
     timeproj = 5,

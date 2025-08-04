@@ -318,7 +318,7 @@ calc_convt <- function(metrics,
       )
     }
 
-      list_res$N <- projpop[list_res$value]
+      list_res$N <- projpop[((list_res$value)+1)] #small trick to take out the first value of the projection
 
   return(list_res)
 }

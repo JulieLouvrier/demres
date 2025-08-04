@@ -43,12 +43,19 @@ You can install this package using __{remotes}__ (or __{devtools}__):
 # Install dependencies from CRAN:
 install.packages(c("devtools", "remotes"))
 
-#Installing from GitHub
+# Installing from GitHub
 remotes::install_github("JulieLouvrier/demres")
+
+# Other packages 
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(purrr)
+
 ```
 ***  
 # Matrix Population Models
-## adelie penguin models
+## Adelie penguin models
 
 We will use a list of matrix projection models (MPMs) of an Adelie penguin population (*Pygoscelis adeliae*) from the Copacabana colony on King George Island, Antarctica, from the study by Hinke et al. (2017): "Variable vital rates and the risk of population declines in Adelie
 penguins from the Antarctic Peninsula region" [^1].
@@ -76,16 +83,34 @@ data(adeliepenguin); adeliepenguin
 
 The elements constituting the matrices are known as vital rates. These represent the survival rates in a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offspring that is contributed to the population by each (st)age class), per unit of time. For Adelie penguins, the highest value of fecundity (0.75) was found in year 14 of the study (see `adeliepenguin[[14]]`), while this parameter reached its lowest value of 0.16 in year 7 of the study period (see `adeliepenguin[[7]]`). The adult survival rate varied across years with its highest value (0.98) on years 4, 9, 12 and 15 and lowest values (0.72) on the year 22. The probability to transition from a juvenile to an adult reached its highest value (0.89) on year 21 and its lowest value (0.53) on years 10 and 28. 
 
-##HERE
 ```{r, data plot}
 # Plotting the different demographic parameters
+# Convert list of matrices into tidy data frame
+df <- map_dfr(seq_along(adeliepenguin), function(i) {
+  mat <- adeliepenguin[[i]]
+  data.frame(
+    index = i,
+    fertility = mat[1,2],
+    Sa = mat[2,2],
+    Trja = mat[2,1]
+  )
+}) %>% 
+  pivot_longer(cols = c(fertility, Sa, Trja), names_to = "Demographic_parameter")
 
-# Fecundity 
-adeliepenguin[[1]][1,2]
+
+# Plot using ggplot
+ggplot(df, aes(x = index, y = value, color = Demographic_parameter)) +
+  geom_line() +
+  labs(title = "Demographic parameters over time",
+       x = "Time Step",
+       y = "Demographic parameter",
+       color = "Parameter") +
+  theme_minimal() 
 
 ```
 
 # Assess time-varying demographic resilience 
+
 The function `resilience` is made to calculate demographic resilience metrics based on a list of MPMs. It returns a `dataframe` with time-varying demographic resilience metrics with the option `time = "varying"`.
 
 The different resilience metrics that are calculated[^2] can be :         
@@ -171,9 +196,22 @@ We can see that __{reactivity}__ varies in time. The maximum values for the stan
 
 A __{reactivity}__ of 1.01 would mean that in the first timestep, the population grows 1.01 as fast as a population that grows at its asymptotic growth rate. It is therefore slightly amplifying. However, we can also see that the year 14 is the only year for which the population amplifies. The rest of the years, the population attenuates (i.e. has a reactivity below 1) with the lowest value of reactivity reached in the 26th year, with a value of 0.91. 
 
-## HERE plot of reactivity value for the 28 years
+## plot of reactivity value for the 28 years
 
-We can now look at which values take the corresponding population abundances after the first timestep. 
+```{r, reac plot}
+# Plotting reactivity over time 
+# Plot using ggplot
+ggplot(AP_demres_reac_stand, aes(x = timestep, y = reac)) +
+  geom_line() +
+  labs(title = "Stadardized reactivity over time",
+       x = "Time Step",
+       y = "Reactivity") +
+  theme_minimal() +
+  geom_hline(yintercept = 1, col = "red")
+
+```
+
+We can now look at the corresponding population abundances after the first timestep. 
 
 ```{r, reactivity abundance, echo = -1}
 # simulate an initial vector
@@ -196,7 +234,20 @@ AP_demres_reac <-
 AP_demres_reac
 ```
 
-As for the standardized reactivity, the maximum population abundances for __{reactivity}__ calculated with the provided vector was found during the 14th year of the study period, with a value of 79.26 individuals. This is the projected number of indiviuals when the population reached its maximum reactivity. And the minimum value is also reached during year 26 with 52.14 individuals. 
+As for the standardized reactivity, the maximum population abundance for __{reactivity}__ calculated with the provided vector was found during the 14th year of the study period, with a value of 79.26 individuals. This is the projected number of indiviuals when the population reached its maximum reactivity. And the minimum value is reached during year 7 with 50.64 individuals. 
+
+```{r, reac abundance plot}
+# Plotting demographic resilience metrics over time 
+# Plot using ggplot
+ggplot(AP_demres_reac, aes(x = timestep, y = reac)) +
+  geom_line() +
+  labs(title = "Reactivity over time",
+       x = "Time Step",
+       y = "Reactivity") +
+  theme_minimal() +
+  geom_hline(yintercept = 60, col = "red")
+
+```
 
 ## Calculating several metrics
 Now let's look at all the metrics possible with the option `metrics = "all"`
@@ -220,12 +271,55 @@ AP_demres
 This time we have an object of class __{resil}__ that is a dataframe with 11 columns. 
 
 ```{r echo = -1}
- colnames(AP_demres)
+colnames(AP_demres)
 ```
 
 All 5 metrics are given and for all metrics but damping ratio we show the time when the metric is reached. Showing the time when reactivity is reached is somewhat redundant (as per definition it is the population size at time step 1) but we decided to display it nevertheless, for consistency. Messages were displayed due to the fact that for some combinations of specified matrices and vectors the population either does not amplify or does not attenuate. 
 
-Given the population demographic structure specified in $\hat{\textbf{n}}_0$, it appears that the population amplifies in one of the study years only (year 14), in all other years it attenuates. Interestingly, for this year the reactivity value is exactly the same as that of maximum amplification (79.26) and maximum amplification is reached at time step 1. So, the population reachest its highest projected population size in the first time step and, in line with this, convergence time is 2 (with the same population size as for reactivity and maximum amplification). 
+Given the population demographic structure specified in $\{\textbf{n}}_0$, it appears that the population amplifies in one of the study years only (year 14), in all other years it attenuates. Interestingly, for this year the reactivity value is exactly the same as that of maximum amplification (79.26) and maximum amplification is reached at time step 1. So, the population reaches its highest projected population size in the first time step and, in line with this, convergence time is 2 (with the same population size as for reactivity and maximum amplification). 
+
+# Visualization of the different metrics 
+```{r, demographic resilience plot}
+#We want to compare also with the standardized value
+AP_demres_stand <-
+   resilience(
+     listA = adeliepenguin,
+     metrics = "all",
+     vector = vector_list,
+     TDvector = FALSE,
+     popname = "adelie penguin",
+     verbose = TRUE,
+     return.N = FALSE,
+     return.t = TRUE
+   )
+
+AP_demres_stand
+
+
+# Plotting demographic resilience metrics over time 
+ggplot(AP_demres_stand, aes(x = timestep, y = dr)) +
+  geom_line() +
+  labs(title = "Damping ratio over time",
+       x = "Time Step",
+       y = "DR") +
+  theme_minimal() +
+  geom_hline(yintercept = 1, col = "red")
+
+ggplot(AP_demres_stand, aes(x = timestep, y = convt )) +
+  geom_line() +
+  labs(title = "Convergence time over time",
+       x = "Time Step",
+       y = "convt") +
+  theme_minimal() 
+
+```
+
+
+
+#Check for extreme years 
+```{r, damping ratio}
+
+```
 
 ## Time-dependent initial vector
 It is also possible to derive a list of initial vectors starting with one vector representing the demographic structure of the population at the first time step (option `TDvector = TRUE` for Time-Dependent vector). At the first time step, the population size is projected to the next time step using the specified MPM and the given initial vector (for demographic structure). This results in proportions of individuals projected to be in each stage/age, which is then used as the demographic structure for the next time step. This process continues for as many time steps as there are.      

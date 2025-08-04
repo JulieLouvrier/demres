@@ -64,7 +64,7 @@ set.seed(125435)
 vec <- round(runif(2) * 100 )
 vector_list <- lapply(1:28, function(i) vec)
 
-#let's calculate all metrics of demographic resilience for with one initial vector
+#let's calculate all metrics of demographic resilience  with one initial vector
 AP_demres <-
    resilience(
      listA = adeliepenguin,

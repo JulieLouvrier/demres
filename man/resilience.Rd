@@ -40,9 +40,9 @@ distribution ('demographic structure') used to calculate a 'case-specific' resil
 based on the stage- or age-structure.}
 
 \item{TDvector}{Boolean. Set to FALSE as default. Specifies whether or not the
-user wants to obtain a time-dependent list of initial vectors. This vector
-corresponds to the population stage distribution that is obtained from the projection
-of the population to the current time step using the specified matrix for each time step}
+user wants to use, instead of specified population vectors, so-called "time-dependent" vectors that
+are obtained from the projection of the population to the current time step using
+the specified matrix for each time step.}
 
 \item{popname}{a character string describing the name of the population.}
 
@@ -102,5 +102,17 @@ AP_demres1 <-
     return.t = TRUE
   )
 
+# an example with time-dependent population vector
+AP_demres_TD <-
+  resilience(
+    listA = adeliepenguin,
+    metrics = "all",
+    vector = vector_list,
+    TDvector = TRUE,
+    popname = "adelie penguin",
+    verbose = TRUE,
+    return.N = TRUE,
+    return.t = TRUE
+  )
 
 }

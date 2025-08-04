@@ -80,7 +80,7 @@
 #'     compare = TRUE,
 #'     facet = TRUE)
 #'
-#'plot(AP_demres1,
+#' plot(AP_demres,
 #'     listA = list(adeliepenguin[[1]]),
 #'     vector = list(vector_list[[1]]),
 #'     timeproj = 5,
