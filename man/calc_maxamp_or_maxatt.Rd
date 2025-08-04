@@ -45,3 +45,4 @@ Internal functions used by \code{\link[=calc_resilience]{calc_resilience()}}.
 \seealso{
 \code{\link[=calc_resilience]{calc_resilience()}}
 }
+\keyword{internal}

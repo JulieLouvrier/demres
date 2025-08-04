@@ -2,7 +2,7 @@
 % Please edit documentation in R/demres_summary_function.R
 \name{summary.temp}
 \alias{summary.temp}
-\title{Calculate maxam or maxatt metric}
+\title{Internal functions used by \code{\link[=demres_summary]{demres_summary()}}.}
 \usage{
 \method{summary}{temp}(x, fn = fn)
 }
@@ -12,3 +12,4 @@ Internal functions used by \code{\link[=demres_summary]{demres_summary()}}.
 \seealso{
 \code{\link[=demres_summary]{demres_summary()}}
 }
+\keyword{internal}

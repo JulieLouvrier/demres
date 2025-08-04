@@ -223,7 +223,7 @@ A __{reactivity}__ of 1.01 would mean that in the first timestep, the population
 
 ## Plot of reactivity value for the 28 years
 
-```{r, reac plot echo = -1, fig.width = 6, fig.height = 6}
+```{r, echo = -1, fig.width = 6, fig.height = 6}
 # Plotting reactivity over time 
 # Plot using ggplot
 # First, make sure your data is sorted by timestep
@@ -393,7 +393,7 @@ The timestep 21 is the year for which the damping ratio reached its minimum valu
 
 ## Reactivity
 First let's check when the damping ration is at its minimum value
-```{r, extremes}
+```{r, extremes reac}
 AP_demres_stand[which.min(AP_demres_stand$reac),"timestep"]
 
 AP_demres_stand[which.max(AP_demres_stand$reac), "timestep"]
