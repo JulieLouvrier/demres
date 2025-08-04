@@ -145,7 +145,7 @@ The parameters to specify are:
 
 •	`metrics`: Character string. The user can specify either one or several resilience metrics of their choice, The metrics have to be specified as either `"convt"` (for _convergence time_); `"dr"` (for _damping ratio_);`"maxamp"` (for _maximum amplification_); `"maxatt"` (for _maximum attenuation_); `"reac"` (for _reactivity_); or `"all"` to compute all of the aforementioned metrics. By default set to `"all"`.   
 
-•	`vector`: Numeric. Can be a numeric vector or a list of numeric vectors describing the age/stage distribution ('demographic structure') used to calculate a 'case-specific' metric, i.e. based on the stage/age structure.            
+•	`vector`: Numeric. Can be a numeric vector or a list of numeric vectors describing the age/stage distribution ('demographic structure') used to calculate a 'case-specific' metric, i.e. based on the stage/age structure.      
 
 •	`TDvector`: Boolean. Specifies whether or not the user wants to get a Time-Dependent list of initial vectors, corresponding to the population stage distribution projection for each year with each matrix of each year. The result is a list of X initial vectors with X the number of matrices that are in the list. By default set to `FALSE`.        
 
@@ -162,9 +162,12 @@ The parameters to specify are:
 • `return.t`: Boolean. If set to `TRUE`, it will return the time at which the metric is reached. By default set to `FALSE`. 
 
 ## Calculating one resilience metric 
+
 First, let us look at __{reactivity}__, by setting `metrics = "reac". We will first set return.N = FALSE to get the value of reactivity relative to the asymptotic growth rate and with a standardized vector. The function is taken from the __{popdemo}__ package and uses the same syntax. It automatically standardizes the Matrix (i.e. divides its entries by its asymptotic growth rate {\lambda}) and the initial vector (i.e. divides its entries by its sum to get proportions between 0 and 1).       
 
 We will first create an initial vector representing the total number of inidividuals in each stage class. This is randomly generated for the sake of the example but the users can test different values of initial vectors (see section : "Initial vectors")
+
+##DON'T FORGET A SECTION ON INITIAL VECTOR
 
 The initial vector should always be a list of vectors, with the length equal to the length of the list of matrices. They can be of different values, or of the same repeated value. 
 
@@ -276,7 +279,7 @@ colnames(AP_demres)
 
 All 5 metrics are given and for all metrics but damping ratio we show the time when the metric is reached. Showing the time when reactivity is reached is somewhat redundant (as per definition it is the population size at time step 1) but we decided to display it nevertheless, for consistency. Messages were displayed due to the fact that for some combinations of specified matrices and vectors the population either does not amplify or does not attenuate. 
 
-Given the population demographic structure specified in $\{\textbf{n}}_0$, it appears that the population amplifies in one of the study years only (year 14), in all other years it attenuates. Interestingly, for this year the reactivity value is exactly the same as that of maximum amplification (79.26) and maximum amplification is reached at time step 1. So, the population reaches its highest projected population size in the first time step and, in line with this, convergence time is 2 (with the same population size as for reactivity and maximum amplification). 
+Given the population demographic structure specified in $\{\textbf{n}}_0$, it appears that the population amplifies in one of the study years only (year 14), in all other years it attenuates. Interestingly, for this year the reactivity value is exactly the same as that of maximum amplification (79.26) and maximum amplification is reached at time step 1. So, the population reaches its highest projected population size in the first time step and, in line with this, convergence time is 2. 
 
 # Visualization of the different metrics 
 ```{r, demographic resilience plot}
@@ -321,7 +324,12 @@ Another way to visualize it is through violin plots
 
 
 #Check for extreme years 
-```{r, damping ratio}
+
+First let's check when the damping ration is at its minimum value
+```{r, extremes}
+AP_demres_stand[which.min(AP_demres_stand$dr),"timestep"]
+
+which.max(AP_demres_stand$dr)
 
 ```
 

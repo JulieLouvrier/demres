@@ -205,7 +205,8 @@ calc_resilience <-
 #'
 #' @inheritParams calc_resilience
 #' @seealso [calc_resilience()]
-#'
+#' @keywords internal
+
 
 calc_maxamp_or_maxatt <- function(metrics,
                                   vector,
@@ -278,7 +279,8 @@ calc_maxamp_or_maxatt <- function(metrics,
 #'
 #' @inheritParams calc_resilience
 #' @seealso [calc_resilience()]
-#'
+#' @keywords internal
+
 calc_convt <- function(metrics,
                        vector,
                        A,

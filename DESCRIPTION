@@ -1,5 +1,5 @@
 Package: demres
-Title: Provides Time Varying and Time Constant Demographic Resilience Metrics
+Title: Provides Time Varying Demographic Resilience Metrics
 Version: 1.0
 Authors@R:
           c(person("Julie", "Louvrier", email = "julie.louvrier2@gmail.com", role = c("aut", "cre"),

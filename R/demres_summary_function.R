@@ -61,12 +61,11 @@ demres_summary <- function(table, fn = list(mean, sd)) {
 }
 
 
-#' Calculate maxam or maxatt metric
-#'
 #' Internal functions used by [demres_summary()].
 #'
 #' @inheritParams demres_summary
 #' @seealso [demres_summary()]
+#' @keywords internal
 #'
 summary.temp <- function(x, fn = fn) {
   ## special case when no list
