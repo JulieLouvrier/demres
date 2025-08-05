@@ -15,7 +15,7 @@ library(demres)
 options(digits = 4)
 ```
 
-The goal of __{demres}__ is to provide easy functions to calculate different time-varying demographic resilience metrics. It also allows plotting the resulting metrics and measuring the variability in the time-varying metrics. 
+The goal of `demres` is to provide easy functions to calculate different time-varying demographic resilience metrics. It also allows plotting the resulting metrics and measuring the variability in the time-varying metrics. 
 
 The different metrics provided are:   
 - _Convergence time_    
@@ -26,18 +26,18 @@ The different metrics provided are:
 
 It is build around one dependency:
 
-- [__{popdemo}__](https://github.com/iainmstott/popdemo)
+- [`popdemo`](https://github.com/iainmstott/popdemo)
 
-__{demres}__ aims at being compatible with both _tidyverse_ and _base_ R dialects.
+`demres` aims at being compatible with both _tidyverse_ and _base_ R dialects.
 
 ***
 # Installing `demres`
-__{demres}__ is available on [GitHub](https://github.com/JulieLouvrier/demres). 
+`demres` is available on [GitHub](https://github.com/JulieLouvrier/demres). 
 Running vignette usually requires the latest version of the package. 
 
 ## Package installation from Github
 
-You can install this package using __{remotes}__ (or __{devtools}__):
+You can install this package using `remotes` (or `devtools`):
 
 ```{r, installation, eval = FALSE}
 # Install dependencies from CRAN:
@@ -147,15 +147,15 @@ With $\lambda_1$ the dominant eigenvalue and $\lambda_2$ the largest subdominant
 
 - _**Reactivity**_ : The population density that can be reached in the first time step after disturbance. _Reactivity_ is calculated using  
 
-$$\textit{reactivity} = {P_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
+$$\textit{standardized reactivity} = {P_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
 With **A** the matrix population model and $\hat{\textbf{A}}$ the standardized population matrix which is calculated as $\hat{\textbf{A}} = \frac{\textbf{A}}{\lambda_{1}}$. The vector $\hat{\textbf{n}}_0$ represents the initial demographic distribution, standardized to sum to 1 and is calculated as $\hat{\textbf{n}}_0 = \frac{{\textbf{n}}_0}{||\textbf{n}_0||_1}$. 
 
 - _**Maximum amplification**_ : The largest population density that can be reached at any time after disturbance. This metric is calculated using:
-$$maximum\ amplification = \bar{P}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+$$standardized maximum\ amplification = \bar{P}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
 
 - _**Maximum attenuation**_ : The lowest population density that can be reached at any time after disturbance. This metric is calculated using: 
 
-$$maximum\ attenuation = \underline{P}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+$$standardized maximum\ attenuation = \underline{P}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
 _Maximum amplification_ and _maximum attenuation_ can occur at any point along the projection. Some populations only have a _maximum amplification_ due to either their demographic rates or the initial vector (because they never attenuate), some only have a _maximum attenuation_ (because they never amplify), and some have both.
 
 [^2]: [Stott, I., Hodgson, D. J., & Townley, S. (2012) Functional Ecology, Methods in Ecology & Evolution, 3(5).](https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/j.2041-210X.2012.00222.x)
@@ -174,9 +174,9 @@ The parameters to specify are:
 
 •	`popname`: Character string describing the name of the population.
 
-•	`accuracy`: Numeric. This is an option taken from the function `convt` from __{popdemo}__ to use when calculating the _convergence time_. It is a numeric value between 0  and 1 representing the  accuracy with which to determine convergence to asymptotic growth, expressed as a proportion. By default set to 0.01.      
+•	`accuracy`: Numeric. This is an option taken from the function `convt` from `popdemo` to use when calculating the _convergence time_. It is a numeric value between 0  and 1 representing the  accuracy with which to determine convergence to asymptotic growth, expressed as a proportion. By default set to 0.01.      
 
-•	`iterations`: This is an option taken from the function `convt` from __{popdemo}__ to use when calculating the _convergence time_. It represents the maximum number of iterations of the model before the code breaks. By default set to 1e+05. 
+•	`iterations`: This is an option taken from the function `convt` from `popdemo` to use when calculating the _convergence time_. It represents the maximum number of iterations of the model before the code breaks. By default set to 1e+05. 
 
 •	`verbose`: Boolean. If set to `TRUE`, it will display the messages that are produced when assessing the demographic resilience metrics. By default set to `TRUE.`   
 
@@ -186,7 +186,7 @@ The parameters to specify are:
 
 ## Calculating one resilience metric 
 
-First, let us look at __{reactivity}__, by setting `metrics = "reac". We will first set return.N = FALSE to get the value of reactivity relative to the asymptotic growth rate and with a standardized vector. The function is taken from the __{popdemo}__ package and uses the same syntax. It automatically standardizes the Matrix (i.e. divides its entries by its asymptotic growth rate {\lambda}) and the initial vector (i.e. divides its entries by its sum to get proportions between 0 and 1).       
+First, let us look at `reactivity`, by setting `metrics = "reac". We will first set return.N = FALSE to get the value of reactivity relative to the asymptotic growth rate and with a standardized vector. The function is taken from the `popdemo` package and uses the same syntax. It automatically standardizes the Matrix (i.e. divides its entries by its asymptotic growth rate {\lambda}) and the initial vector (i.e. divides its entries by its sum to get proportions between 0 and 1).       
 
 We will first create an initial vector representing the total number of inidividuals in each stage class. This is randomly generated for the sake of the example but the users can test different values of initial vectors (see section : "Initial vectors")
 
@@ -216,9 +216,9 @@ AP_demres_reac_stand
 
 ```
 
-We can see that __{reactivity}__ varies in time. The maximum values for the standardized calculation of __{reactivity}__, calculated with the provided vector was found during the 14th year of the study period. With a value of 1.0132911. 
+We can see that `reactivity` varies in time. The maximum values for the standardized calculation of `reactivity`, calculated with the provided vector was found during the 14th year of the study period. With a value of 1.0132911. 
 
-A __{reactivity}__ of 1.01 would mean that in the first timestep, the population grows 1.01 as fast as a population that grows at its asymptotic growth rate. It is therefore slightly amplifying. However, we can also see that the year 14 is the only year for which the population amplifies. The rest of the years, the population attenuates (i.e. has a reactivity below 1) with the lowest value of reactivity reached in the 26th year, with a value of 0.91. 
+A `reactivity` of 1.01 would mean that in the first timestep, the population grows 1.01 as fast as a population that grows at its asymptotic growth rate. It is therefore slightly amplifying. However, we can also see that the year 14 is the only year for which the population amplifies. The rest of the years, the population attenuates (i.e. has a reactivity below 1) with the lowest value of reactivity reached in the 26th year, with a value of 0.91. 
 
 ## Plot of reactivity value for the 28 years
 
@@ -245,7 +245,7 @@ abline(h = 1, col = "red", lty = 2)
 
 ```
 
-It is therefore important to keep in mind that each metric is calculated relative to the asymptotic growth rate. It is possible to compute it by using the function __{eigs}__ from the package __{popdemo}__ 
+It is therefore important to keep in mind that each metric is calculated relative to the asymptotic growth rate. It is possible to compute it by using the function `eigs` from the package `popdemo` 
 
 ```{r lambda}
 eigs_AP <- do.call(rbind, lapply(adeliepenguin, popdemo::eigs, what = "lambda"))
@@ -296,7 +296,7 @@ AP_demres_reac <-
 AP_demres_reac
 ```
 
-As for the standardized reactivity, the maximum population abundance for __{reactivity}__ calculated with the provided vector was found during the 14th year of the study period, with a value of 79.26 individuals. This is the projected number of indiviuals when the population reached its maximum reactivity. And the minimum value is reached during year 7 with 50.64 individuals. 
+As for the standardized reactivity, the maximum population abundance for `reactivity` calculated with the provided vector was found during the 14th year of the study period, with a value of 79.26 individuals. This is the projected number of indiviuals when the population reached its maximum reactivity. And the minimum value is reached during year 7 with 50.64 individuals. 
 
 ```{r, reac abundance plot, echo = -1, fig.width = 6, fig.height = 6}
 # Plotting demographic resilience metrics over time 
@@ -335,7 +335,7 @@ AP_demres <-
 AP_demres
 ```
 
-This time we have an object of class __{resil}__ that is a dataframe with 11 columns. 
+This time we have an object of class `resil` that is a dataframe with 11 columns. 
 
 ```{r echo = -1}
 colnames(AP_demres)
@@ -343,7 +343,7 @@ colnames(AP_demres)
 
 All 5 metrics are given and for all metrics but damping ratio we show the time when the metric is reached. Showing the time when reactivity is reached is somewhat redundant (as per definition it is the population size at time step 1) but we decided to display it nevertheless, for consistency. Messages were displayed due to the fact that for some combinations of specified matrices and vectors the population either does not amplify or does not attenuate. 
 
-Given the population demographic structure specified in $\{\textbf{n}}_0$, it appears that the population amplifies in one of the study years only (year 14), in all other years it attenuates. Interestingly, for this year the reactivity value is exactly the same as that of maximum amplification (79.26) and maximum amplification is reached at time step 1. So, the population reaches its highest projected population size in the first time step and, in line with this, convergence time is 2. 
+Given the population demographic structure specified in ${n_0}$, it appears that the population amplifies in one of the study years only (year 14), in all other years it attenuates. Interestingly, for this year the reactivity value is exactly the same as that of maximum amplification (79.26) and maximum amplification is reached at time step 1. So, the population reaches its highest projected population size in the first time step and, in line with this, convergence time is 2. 
 
 # Visualization of the different metrics 
 ```{r, demographic resilience plot, echo = -1, fig.width = 6, fig.height = 6}
@@ -364,8 +364,8 @@ AP_demres_stand
 
 # Plot the standardized reactivity over time
 plot(
-  AP_demres_reac_stand$timestep,
-  AP_demres_reac_stand$convt,
+  AP_demres_stand$timestep,
+  AP_demres_stand$convt,
   type = "l",                   
   main = "Convergence time over time",
   xlab = "Time Step",
@@ -375,15 +375,15 @@ plot(
 
 # Plot the standardized reactivity over time
 plot(
-  AP_demres_reac_stand$timestep,
-  AP_demres_reac_stand$dr,
+  AP_demres_stand$timestep,
+  AP_demres_stand$dr,
   type = "l",                   
   main = "Damping ratio over time",
   xlab = "Time Step",
   ylab = "DR",
   col = "black",                
   lwd = 2,
-  ylim = c(0.5,1.5)
+  ylim = c(0.5, 9)
 )
 
 # Add a horizontal line at y = 1
@@ -392,7 +392,7 @@ abline(h = 1, col = "red", lty = 2)  # lty = 2 for dashed line
 
 ```
 
-In our case, __{reactivity}__ is equal to maxamp for the year 14 and equal to maxatt for the rest of the years. So the plot of __{reactivity}__ would be enough. 
+In our case, `reactivity` is equal to maxamp for the year 14 and equal to maxatt for the rest of the years. So the plot of `reactivity` would be enough. 
 
 #Check for extreme years 
 ## Damping ratio
