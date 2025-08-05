@@ -77,11 +77,11 @@ data(adeliepenguin); adeliepenguin
 
 The elements constituting the matrices are known as vital rates. These represent the survival rates in a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offspring that is contributed to the population by each (st)age class), per unit of time. For Adelie penguins, the highest value of fecundity (0.75) was found in year 14 of the study (see `adeliepenguin[[14]]`), while this parameter reached its lowest value of 0.16 in year 7 of the study period (see `adeliepenguin[[7]]`). The adult survival rate varied across years with its highest value (0.98) on years 4, 9, 12 and 15 and lowest values (0.72) on the year 22. The probability to transition from a juvenile to an adult reached its highest value (0.89) on year 21 and its lowest value (0.53) on years 10 and 28. 
 
-```{r, data plot}
+```{r, data plot, echo = -1, fig.width = 6, fig.height = 6}
 # Plotting the different demographic parameters
 # Convert list of matrices into tidy data frame
 
-# Step 1: Extract data from matrices into a data frame
+# Extract data from matrices into a data frame
 n <- length(adeliepenguin)
 
 fertility <- numeric(n)
@@ -102,21 +102,20 @@ df <- data.frame(
   Trja = Trja
 )
 
-# Step 2: Convert from wide to long format manually
+# Convert from wide to long format manually
 long_df <- rbind(
   data.frame(index = df$index, value = df$fertility, Demographic_parameter = "fertility"),
   data.frame(index = df$index, value = df$Sa, Demographic_parameter = "Sa"),
   data.frame(index = df$index, value = df$Trja, Demographic_parameter = "Trja")
 )
 
-# Step 3: Plot using base R
 # Define unique parameters and assign colors
 params <- unique(long_df$Demographic_parameter)
 colors <- c("darkblue", "darkgreen", "darkorange")
 
 # Empty plot setup
 plot(
-  NA, xlim = range(long_df$index), ylim = range(long_df$value),
+  NA, xlim = range(long_df$index), ylim = c(0,1.5),
   xlab = "Time Step", ylab = "Demographic parameter",
   main = "Demographic parameters over time"
 )
@@ -257,7 +256,7 @@ eigs_AP <- data.frame(lambda = eigs_AP, timestep = c(1:nrow(eigs_AP)) )
 
 #Visual representation of the variation of values of lambda 
 
-```{r, plot lambda}
+```{r, plot lambda, echo = -1, fig.width = 6, fig.height = 6}
 plot(
   eigs_AP$timestep,
   eigs_AP$lambda,
@@ -299,7 +298,7 @@ AP_demres_reac
 
 As for the standardized reactivity, the maximum population abundance for __{reactivity}__ calculated with the provided vector was found during the 14th year of the study period, with a value of 79.26 individuals. This is the projected number of indiviuals when the population reached its maximum reactivity. And the minimum value is reached during year 7 with 50.64 individuals. 
 
-```{r, reac abundance plot}
+```{r, reac abundance plot, echo = -1, fig.width = 6, fig.height = 6}
 # Plotting demographic resilience metrics over time 
 plot(
   AP_demres_reac$timestep,
@@ -347,7 +346,7 @@ All 5 metrics are given and for all metrics but damping ratio we show the time w
 Given the population demographic structure specified in $\{\textbf{n}}_0$, it appears that the population amplifies in one of the study years only (year 14), in all other years it attenuates. Interestingly, for this year the reactivity value is exactly the same as that of maximum amplification (79.26) and maximum amplification is reached at time step 1. So, the population reaches its highest projected population size in the first time step and, in line with this, convergence time is 2. 
 
 # Visualization of the different metrics 
-```{r, demographic resilience plot}
+```{r, demographic resilience plot, echo = -1, fig.width = 6, fig.height = 6}
 #We want to compare also with the standardized value
 AP_demres_stand <-
    resilience(
