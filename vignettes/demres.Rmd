@@ -225,8 +225,7 @@ A __{reactivity}__ of 1.01 would mean that in the first timestep, the population
 
 ```{r, echo = -1, fig.width = 6, fig.height = 6}
 # Plotting reactivity over time 
-# Plot using ggplot
-# First, make sure your data is sorted by timestep
+# First, make sure data is sorted by timestep
 AP_demres_reac_stand <- AP_demres_reac_stand[order(AP_demres_reac_stand$timestep), ]
 
 # Plot the standardized reactivity over time
@@ -243,7 +242,7 @@ plot(
 )
 
 # Add a horizontal line at y = 1
-abline(h = 1, col = "red", lty = 2)  # lty = 2 for dashed line
+abline(h = 1, col = "red", lty = 2)  
 
 ```
 
@@ -302,14 +301,19 @@ As for the standardized reactivity, the maximum population abundance for __{reac
 
 ```{r, reac abundance plot}
 # Plotting demographic resilience metrics over time 
-# Plot using ggplot
-# ggplot2::ggplot(AP_demres_reac, aes(x = timestep, y = reac)) +
-#   geom_line() +
-#   labs(title = "Reactivity over time",
-#        x = "Time Step",
-#        y = "Reactivity") +
-#   theme_minimal() +
-#   geom_hline(yintercept = 60, col = "red")
+plot(
+  AP_demres_reac$timestep,
+  AP_demres_reac$reac,
+  type = "l",                   
+  main = "Reactivity over time",
+  xlab = "Time Step",
+  ylab = "Reactivity",
+  col = "black",                
+  lwd = 2
+)
+
+# Add a horizontal line at y = 60 (starting population abundance)
+abline(h = 60, col = "red", lty = 2)  
 
 ```
 
@@ -359,22 +363,33 @@ AP_demres_stand <-
 
 AP_demres_stand
 
+# Plot the standardized reactivity over time
+plot(
+  AP_demres_reac_stand$timestep,
+  AP_demres_reac_stand$convt,
+  type = "l",                   
+  main = "Convergence time over time",
+  xlab = "Time Step",
+  ylab = "Convt",
+  col = "black",                
+  lwd = 2)
 
-# Plotting demographic resilience metrics over time 
-# ggplot2::ggplot(AP_demres_stand, aes(x = timestep, y = dr)) +
-#   geom_line() +
-#   labs(title = "Damping ratio over time",
-#        x = "Time Step",
-#        y = "DR") +
-#   theme_minimal() +
-#   geom_hline(yintercept = 1, col = "red")
-# 
-# ggplot2::ggplot(AP_demres_stand, aes(x = timestep, y = convt )) +
-#   geom_line() +
-#   labs(title = "Convergence time over time",
-#        x = "Time Step",
-#        y = "convt") +
-#   theme_minimal() 
+# Plot the standardized reactivity over time
+plot(
+  AP_demres_reac_stand$timestep,
+  AP_demres_reac_stand$dr,
+  type = "l",                   
+  main = "Damping ratio over time",
+  xlab = "Time Step",
+  ylab = "DR",
+  col = "black",                
+  lwd = 2,
+  ylim = c(0.5,1.5)
+)
+
+# Add a horizontal line at y = 1
+abline(h = 1, col = "red", lty = 2)  # lty = 2 for dashed line
+
 
 ```
 
