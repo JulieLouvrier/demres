@@ -44,7 +44,7 @@ You can install this package using `remotes` (or `devtools`):
 install.packages(c("devtools", "remotes"))
 
 # Installing from GitHub
-remotes::install_github("JulieLouvrier/demres")
+remotes::install_github("JulieLouvrier/demres@V1.1")
 
 ```
 ***  
@@ -383,13 +383,12 @@ AP_demres_stand <-
 
 AP_demres_stand
 
-# Plot the standardized reactivity over time #VIK: you say here plot reactivity but hten you plot conv time and also
-## the main says "convergence time over time"? Please resolve - do you want to show resilience or conv time here?
+# Plot convergence time value over each time step 
 plot(
   AP_demres_stand$timestep,
   AP_demres_stand$convt,
   type = "l",                   
-  main = "Convergence time over time",
+  main = "Convergence time value over time",
   xlab = "Time Step",
   ylab = "Convt",
   col = "black",                
@@ -397,7 +396,7 @@ plot(
 # Add a horizontal line at y = 1
 abline(h = 1, col = "red", lty = 2)  # lty = 2 for dashed line
 
-# Plot the standardized damping ration calculated for each time step
+# Plot the damping ration calculated for each time step
 plot(
   AP_demres_stand$timestep,
   AP_demres_stand$dr,
@@ -438,169 +437,10 @@ AP_demres_stand[which.max(AP_demres_stand$reac), "timestep"]
 ```
 
 As seen before the year 14 is the year during which the population amplifies the most after the first time step, with a value of 1.0133 which is not far from 1. It is actually the only year during which the population amplifies. 
-While the year 26 is the one with the lowest value of reactivity, with a value of 0.9113. The population abundance during that year would be 52.14 individuals. So inferior to the starting abundance. This means that in addition to attenuating, the population indeed is decreasing. **Vik: I am not sure why you make such an inference. It is the first time step, so attenuating for the 1st time step automatically means 'decreasing', no? I just feel this "in addition to attenuating the pop is decreasign" may be confusing. Perhaps better to delete?**
+While the year 26 is the one with the lowest value of reactivity, with a value of 0.9113. The population abundance during that year would be 52.14 individuals. So inferior to the starting abundance. This means that in addition to attenuating, the population is decreasing. 
 
 ```{r}
 AP_demres[26,"reac"]
-```
-
-
-# Initial vectors 
-## Historically informed
-The first advantage of `demres`is its adaptability to historically informed data from the field. If demographers have the information on the population abundance in each respective (st)age class for each timestep of the study, it is possible to integrate it in the framework
-
-```{r, demographic resilience historic}
-
-vect_hist <- list(c(25,14), c(15,35), c(30,54), c(10,15), c(12, 20), 
-                  c(20,34), c(24,38), c(28,42), c(30,40), c(12, 15),
-                  c(20,21), c(12,25), c(31,50), c(17,22), c(25, 36),
-                  c(8,14), c(16,28), c(32,30), c(7,9), c(10, 20),
-                  c(12,27), c(16,19), c(25,30), c(36,40), c(40,44),
-                  c(48,54), c(41,50), c(43,54))
-
-AP_demres_hist <-
-   resilience(
-     listA = adeliepenguin,
-     metrics = "all",
-     vector = vect_hist,
-     TDvector = FALSE,
-     popname = "adelie penguin",
-     verbose = TRUE,
-     return.N = TRUE,
-     return.t = TRUE
-   )
-
-AP_demres_hist
-```
-
-
-## Same repeated value
-This is the example we have been using in the beginning of this vignette 
-```{r, repeat vector}
-# simulate an initial vector
-set.seed(125435)
-vec <- round(runif(2) * 100 )
-vector_list <- lapply(1:28, function(i) vec)
-
-AP_demres <-
-   resilience(
-     listA = adeliepenguin,
-     metrics = "all",
-     vector = vector_list,
-     TDvector = FALSE,
-     popname = "adelie penguin",
-     verbose = TRUE,
-     return.N = TRUE,
-     return.t = TRUE
-   )
-
-AP_demres
-```
-
-## Random values
-It is also possible to provide a list of vectors with random values. 
-```{r, random vector}
-# simulate an initial vector
-set.seed(125435)
-vector_random <- lapply(1:28, function(i) round(runif(2) * 100 ))
-
-AP_demres_random <-
-   resilience(
-     listA = adeliepenguin,
-     metrics = "all",
-     vector = vector_random,
-     TDvector = FALSE,
-     popname = "adelie penguin",
-     verbose = TRUE,
-     return.N = TRUE,
-     return.t = TRUE
-   )
-
-AP_demres_random
-```
-
-## Time-dependent initial vector
-It is also possible to derive a list of initial vectors starting with one vector representing the demographic structure of the population at the first time step (option `TDvector = TRUE` for Time-Dependent vector). At the first time step, the population size is projected to the next time step using the specified MPM and the given initial population vector. This results in the number of individuals projected to be in each stage/age, which is then used as the demographic structure for the next time step. This process continues for as many time steps as there are.      
-
-From here on we will set `verbose = FALSE` to avoid the display of all the messages.
-
-```{r echo = -1}
-AP_demres_TD <-
-   resilience(
-     listA = adeliepenguin,
-     metrics = "all",
-     vector = vector_list,
-     TDvector = TRUE,
-     popname = "adelie penguin",
-     verbose = FALSE,
-     return.N = TRUE,
-     return.t = TRUE
-   )
-
-AP_demres_TD
-```
-
-We can see that when using time-varying demographic vector while projecting the initial population vector forward, the population is more likely to amplify than it was when using the actually observed demographic structures for each year. We also see that the values of all resilience metrics are increasing rapidly over time and by the the year 28 we have population sizes in thousands as opposed to population sizes being below 100 when relying on the user-supplied population vectors. 
-
-When using the option `TDvector = TRUE`, the function projects the population structure for each time step using the MPM of each time-step, which can be similar to projecting a population over time with one MPM except that here the function does it with a different matrix for each time step. It is therefore expected that the population will approach asymptotic growth over time as the function projects the population over each time step, which are translated with standardized demographic resilience metrics getting closer to 1. **Vik: this is very confusing for me, sorry. I thought that the values of standardised vs nonstandardised should be the same (in terms of either both reaching "1" - initial pop size whatever it is, 80 OR both growing). But here standardised and non-standardised versions show different results (like with reactivity), so I am a bit confused. Sorry if I am mixing things up - I di dnot sleep much tonight**
-
-```{r echo = -1}
-AP_demres_TD_stand <-
-   resilience(
-     listA = adeliepenguin,
-     metrics = "all",
-     vector = vector_list,
-     TDvector = TRUE,
-     popname = "adelie penguin",
-     verbose = FALSE,
-     return.N = FALSE,
-     return.t = TRUE
-   )
-
-AP_demres_TD_stand
-```
-
-
-The variations that we can see therefore represent the variation in the demographic rates in the MPM in comparison with a projection over time with only one matrix. 
-
-## Extreme initial vectors
-Finally, it is possible to create vectors for which only one (st)age is represented. The resulting metrics therefore represent the upper and lower bounds of the possible values that the resilience metrics can take.
-
-```{r, bounds}
-vec_juv <- c(20,0)
-vec_juv_list <- lapply(1:28, function(i) vec_juv)
-
-AP_demres_juv <-
-   resilience(
-     listA = adeliepenguin,
-     metrics = "all",
-     vector = vec_juv_list,
-     TDvector = FALSE,
-     popname = "adelie penguin",
-     verbose = FALSE,
-     return.N = TRUE,
-     return.t = TRUE
-   )
-
-AP_demres_juv
-
-##Same for adults
-vec_ad <- c(0,20)
-vec_ad_list <- lapply(1:28, function(i) vec_ad)
-
-AP_demres_ad <-
-   resilience(
-     listA = adeliepenguin,
-     metrics = "all",
-     vector = vec_ad_list,
-     TDvector = FALSE,
-     popname = "adelie penguin",
-     verbose = FALSE,
-     return.N = TRUE,
-     return.t = TRUE
-   )
-
-AP_demres_ad
 ```
 
 # Plot 
@@ -716,6 +556,142 @@ plot(AP_demres,
 
 ```
 
+
+# Initial vectors 
+## Historically informed
+The first advantage of `demres`is its adaptability to historically informed data from the field. If demographers have the information on the population abundance in each respective (st)age class for each timestep of the study, it is possible to integrate it in the framework
+
+```{r, demographic resilience historic}
+
+vect_hist <- list(c(25,14), c(15,35), c(30,54), c(10,15), c(12, 20), 
+                  c(20,34), c(24,38), c(28,42), c(30,40), c(12, 15),
+                  c(20,21), c(12,25), c(31,50), c(17,22), c(25, 36),
+                  c(8,14), c(16,28), c(32,30), c(7,9), c(10, 20),
+                  c(12,27), c(16,19), c(25,30), c(36,40), c(40,44),
+                  c(48,54), c(41,50), c(43,54))
+
+AP_demres_hist <-
+   resilience(
+     listA = adeliepenguin,
+     metrics = "all",
+     vector = vect_hist,
+     TDvector = FALSE,
+     popname = "adelie penguin",
+     verbose = TRUE,
+     return.N = TRUE,
+     return.t = TRUE
+   )
+
+AP_demres_hist
+```
+
+
+## Same repeated value
+This is the example we have been using in the beginning of this vignette 
+```{r, repeat vector}
+# simulate an initial vector
+set.seed(125435)
+vec <- round(runif(2) * 100 )
+vector_list <- lapply(1:28, function(i) vec)
+
+AP_demres <-
+   resilience(
+     listA = adeliepenguin,
+     metrics = "all",
+     vector = vector_list,
+     TDvector = FALSE,
+     popname = "adelie penguin",
+     verbose = TRUE,
+     return.N = TRUE,
+     return.t = TRUE
+   )
+
+AP_demres
+```
+
+## Time-dependent initial vector
+It is also possible to derive a list of initial vectors starting with one vector representing the demographic structure of the population at the first time step (option `TDvector = TRUE` for Time-Dependent vector). At the first time step, the population size is projected to the next time step using the specified MPM and the given initial population vector. This results in the number of individuals projected to be in each stage/age, which is then used as the demographic structure for the next time step. This process continues for as many time steps as there are.      
+
+From here on we will set `verbose = FALSE` to avoid the display of all the messages.
+
+```{r echo = -1}
+AP_demres_TD <-
+   resilience(
+     listA = adeliepenguin,
+     metrics = "all",
+     vector = vector_list,
+     TDvector = TRUE,
+     popname = "adelie penguin",
+     verbose = FALSE,
+     return.N = TRUE,
+     return.t = TRUE
+   )
+
+AP_demres_TD
+```
+
+We can see that when using time-varying demographic vector while projecting the initial population vector forward, the population is more likely to amplify than it was when using the demographic structures we previously provided. We also see that the values of all resilience metrics are increasing rapidly over time and by the the year 28 we have population sizes in thousands as opposed to population sizes being below 100 when relying on the user-supplied population vectors. 
+
+```{r echo = -1}
+AP_demres_TD_stand <-
+   resilience(
+     listA = adeliepenguin,
+     metrics = "all",
+     vector = vector_list,
+     TDvector = TRUE,
+     popname = "adelie penguin",
+     verbose = FALSE,
+     return.N = FALSE,
+     return.t = TRUE
+   )
+
+AP_demres_TD_stand
+```
+
+When using the option `TDvector = TRUE`, the function projects the population structure for each time step using the MPM of each time-step, which can be similar to projecting a population over time with one MPM except that here the function does it with a different matrix for each time step. It is therefore expected that the population will approach asymptotic growth over time as the function projects the population over each time step, which are translated with standardized demographic resilience metrics getting closer to 1. 
+
+The variations that we can see therefore represent the variation in the demographic rates in the MPM in comparison with a projection over time with only one matrix. 
+
+## Extreme initial vectors
+Finally, it is possible to create vectors for which only one (st)age is represented. The resulting metrics therefore represent the upper and lower bounds of the possible values that the resilience metrics can take.
+
+```{r, bounds}
+vec_juv <- c(20,0)
+vec_juv_list <- lapply(1:28, function(i) vec_juv)
+
+AP_demres_juv <-
+   resilience(
+     listA = adeliepenguin,
+     metrics = "all",
+     vector = vec_juv_list,
+     TDvector = FALSE,
+     popname = "adelie penguin",
+     verbose = FALSE,
+     return.N = TRUE,
+     return.t = TRUE
+   )
+
+AP_demres_juv
+
+##Same for adults
+vec_ad <- c(0,20)
+vec_ad_list <- lapply(1:28, function(i) vec_ad)
+
+AP_demres_ad <-
+   resilience(
+     listA = adeliepenguin,
+     metrics = "all",
+     vector = vec_ad_list,
+     TDvector = FALSE,
+     popname = "adelie penguin",
+     verbose = FALSE,
+     return.N = TRUE,
+     return.t = TRUE
+   )
+
+AP_demres_ad
+```
+
 # Assess the variation in the time-varying resilience metrics 
 
 The function `summary` calculates the requested statistics for the time-varying demographic resilience metrics. It is meant to quantify the extent to what demographic resilience metrics vary over time. By default mean and standard deviation ("sd") of resilience metrics are computed, but more user-defined summary statistics may be requested.
@@ -727,11 +703,6 @@ summary_AP <- summary(AP_demres, fn = list(mean, sd))
 summary_AP
 ```
 The population amplifies only once so it is not possible to compute the sd for one value, therefore NAs were returned for `maxamp`and `maxamp.t`.
-
-**VIK: I would delete all this text until the line 736 - it is meaningless to compare SDs of variables whome means differ. And that is for exactly coef of variaiton was created, to comapre those things. So here I would not even try to compare them**
-Here we can see that the sd of the population abundance when convt is reached is much higher than the sd of the population abundance when reactivity is reached. This is due to the fact that reactivity and maxatt are equal and measure after the first time step. While convt.N is calculated between 1 and 4 years after the perturbation, leaving more variability due to the variabilities in the years after the perturbation happened. 
-
-While the sd of damping ratio remain low in comparison with the other values, but it is because values of damping ratio are not expected to vary as much as population abundances. To be able to account for the scaling issue of some of these parameters 
 
 It is also possible to compute your own functions, for example
 ```{r echo = -1}
