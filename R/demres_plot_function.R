@@ -19,6 +19,7 @@
 #' population vector is not scaled to sum up to 1, i.e. returns demographic resilience metrics
 #' in terms of number of individuals. If set to \code{TRUE} will return the demographic resilience
 #' metrics in population densities.
+#' @param timesteps numeric vector. Used to plot specific the specific timesteps to plot.
 #' @name demres_plot
 #' @import ggplot2
 #' @return A plot displaying the chosen metric(s) along a time axis
@@ -98,6 +99,7 @@ demres_plot <- function(table,
                         timeproj = 5,
                         standard.A = FALSE,
                         standard.vec = FALSE,
+                        timesteps = numeric(),
                         facet = NULL,
                         compare = NULL,
                         sort = FALSE,
@@ -126,19 +128,11 @@ demres_plot <- function(table,
     vector <- vec_stand
   }
 
-  if (is.list(listA) && length(listA) == 1 && length(vector) == 1) {
-    listA <- listA[[1]]
-    vector <- vector[[1]]
+  if(length(timesteps) > 0 && is.numeric(timesteps)){
+    listA <- listA[timesteps]
+    vector <- vector[timesteps]
 
-    projpopdemres <- popdemo::project(
-        listA,
-        vector,
-        standard.A = standard.A,
-        time = timeproj
-      )
   }
-
-  else {
 
  projpopdemres <- mapply(function(A, X) {
      popdemo::project(
@@ -151,7 +145,6 @@ demres_plot <- function(table,
    A = listA,
    X = vector,
    SIMPLIFY = FALSE)
-  }
 
  #now calling the plot_proj function
   pp <- plot_proj(popvec = projpopdemres,

@@ -12,6 +12,7 @@ demres_plot(
   timeproj = 5,
   standard.A = FALSE,
   standard.vec = FALSE,
+  timesteps = numeric(),
   facet = NULL,
   compare = NULL,
   sort = FALSE,
@@ -44,6 +45,8 @@ standardised asymptotic dynamics (scaled by the dominant eigenvalue).}
 population vector is not scaled to sum up to 1, i.e. returns demographic resilience metrics
 in terms of number of individuals. If set to \code{TRUE} will return the demographic resilience
 metrics in population densities.}
+
+\item{timesteps}{numeric vector. Used to plot specific the specific timesteps to plot.}
 
 \item{facet}{Logical. If \code{TRUE} (default for lists), creates separate
 panels for each trajectory. If \code{FALSE}, plots all trajectories on the
