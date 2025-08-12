@@ -117,13 +117,13 @@ demres_plot <- function(table,
     listA <- listA_stand
   }
 
- if(standard.vec){
-   vec_stand <- lapply(vector, function(x){x/sum(x)})
-   vector <- vec_stand
- }
-
   if (TDvector) {
     vector <- get_TD_vector(IV = vector[[1]], listA = listA)
+  }
+
+  if(standard.vec){
+    vec_stand <- lapply(vector, function(x){x/sum(x)})
+    vector <- vec_stand
   }
 
   if (is.list(listA) && length(listA) == 1 && length(vector) == 1) {
