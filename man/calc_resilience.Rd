@@ -13,7 +13,8 @@ calc_resilience(
   accuracy = 0.01,
   iterations = 1e+05,
   return.N = TRUE,
-  return.t = TRUE
+  return.t = TRUE,
+  target.N = NULL
 )
 }
 \arguments{
@@ -31,28 +32,34 @@ matrix projection model.\cr
 "reac": Calculates reactivity: first time step amplification
 and first time step attenuation for a matrix
 projection model.\cr
+"tt": Time to Target: if return.N = TRUE, calculates the
+number of timesteps necessary to reach a target population
+abundance. \cr
 "all": all of the above metrics are provided.}
 
 \item{vector}{a numeric vector or one-column matrix describing the age/stage
 distribution ('demographic structure') used to calculate a 'case-specific'
 resilience metric}
 
-\item{popname}{a character string describing the name of the population.}
+\item{popname}{(optional) a character string describing the name of the population.}
 
-\item{verbose}{Boolean. Set to TRUE as default. Indicates whether the messages about failure
+\item{verbose}{(optional) Boolean. Set to TRUE as default. Indicates whether the messages about failure
 to compute particular metric should be displayed or not (default = TRUE)}
 
-\item{accuracy}{option for calculating convergence time: the accuracy with which to determine convergence to asymptotic growth,
+\item{accuracy}{(optional) option for calculating convergence time: the accuracy with which to determine convergence to asymptotic growth,
 expressed as a proportion. Set to 0.01 by default.}
 
-\item{iterations}{option for calculating convergence time: the maximum number of iterations of the model. Set to 1e+05 by default. For slowly-converging models
+\item{iterations}{(optional) option for calculating convergence time: the maximum number of iterations of the model. Set to 1e+05 by default. For slowly-converging models
 and/or high specified convergence accuracy, this may need to be increased.}
 
-\item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size.
+\item{return.N}{(optional) Boolean. Set to TRUE as default. If TRUE returns population size.
 If set to FALSE, returns the standardised value of the requested metric.}
 
-\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection
+\item{return.t}{(optional) Boolean. If TRUE, returns the time at which the metric is reached in the population projection
 If FALSE does not return the time.}
+
+\item{target.N}{(optional) Numeric. Specifies the population abundance target to calculate
+the Time to Target metric}
 }
 \value{
 A vector containing all the resilience metrics

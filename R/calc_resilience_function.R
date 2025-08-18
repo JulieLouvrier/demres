@@ -20,21 +20,26 @@
 #'                 "reac": Calculates reactivity: first time step amplification
 #'                 and first time step attenuation for a matrix
 #'                 projection model.\cr
+#'                 "tt": Time to Target: if return.N = TRUE, calculates the
+#'                 number of timesteps necessary to reach a target population
+#'                 abundance. \cr
 #'                 "all": all of the above metrics are provided.
 #' @param vector a numeric vector or one-column matrix describing the age/stage
 #' distribution ('demographic structure') used to calculate a 'case-specific'
 #' resilience metric
-#' @param popname a character string describing the name of the population.
-#' @param accuracy option for calculating convergence time: the accuracy with which to determine convergence to asymptotic growth,
+#' @param popname (optional) a character string describing the name of the population.
+#' @param accuracy (optional) option for calculating convergence time: the accuracy with which to determine convergence to asymptotic growth,
 #' expressed as a proportion. Set to 0.01 by default.
-#' @param iterations option for calculating convergence time: the maximum number of iterations of the model. Set to 1e+05 by default. For slowly-converging models
+#' @param iterations (optional) option for calculating convergence time: the maximum number of iterations of the model. Set to 1e+05 by default. For slowly-converging models
 #' and/or high specified convergence accuracy, this may need to be increased.
-#' @param verbose Boolean. Set to TRUE as default. Indicates whether the messages about failure
+#' @param verbose (optional) Boolean. Set to TRUE as default. Indicates whether the messages about failure
 #' to compute particular metric should be displayed or not (default = TRUE)
-#' @param return.N Boolean. Set to TRUE as default. If TRUE returns population size.
+#' @param return.N (optional) Boolean. Set to TRUE as default. If TRUE returns population size.
 #' If set to FALSE, returns the standardised value of the requested metric.
-#' @param return.t Boolean. If TRUE, returns the time at which the metric is reached in the population projection
+#' @param return.t (optional) Boolean. If TRUE, returns the time at which the metric is reached in the population projection
 #' If FALSE does not return the time.
+#' @param target.N (optional) Numeric. Specifies the population abundance target to calculate
+#' the Time to Target metric
 #' @examples
 #' data(adeliepenguin)
 #'
@@ -60,7 +65,8 @@ calc_resilience <-
            accuracy = 0.01,
            iterations = 1e+05,
            return.N = TRUE,
-           return.t = TRUE) {
+           return.t = TRUE,
+           target.N = NULL) {
     if (is.null(A)) {
       stop("No Matrix was found")
     }
@@ -106,7 +112,7 @@ calc_resilience <-
     )
 
     if ("all" %in% metrics) {
-      metrics <- c("reac", "maxatt", "maxamp", "dr", "convt")
+      metrics <- c("reac", "maxatt", "maxamp", "dr", "convt", "tt")
     }
 
     # reac  -------------------------------------------------------------
@@ -165,12 +171,50 @@ calc_resilience <-
 
     }
 
+    #tt -----------------------------------------------------------------------
+    if ("tt" %in% metrics) {
+      if(!is.null(target.N)){
+        t <- 0
+        n <- n0
+        max_time = 10000
+        chunk = 100
+        repeat {
+          # project in chunks
+          proj <- popdemo::project(A, n, chunk, return.vec = TRUE)
+
+          # check if target is reached in this chunk
+          if (any(proj >= target)) {
+            t_hit <- which(proj >= target)[1]
+            return(t_res + t_hit)
+          }
+
+          # update for next chunk
+          n <- proj@vec[length(proj),]
+          t_res <- t_res + chunk
+
+          # stop if exceeded max_time
+          if (t_res >= max_time) {
+            message("the maximum projection time to identify the population
+                    target has been reached, NA will be returned")
+            tt_res <- 999
+          }
+        }
+      }
+      else{
+        message("You specified tt in the metrics but did not specify
+                a population abundance target in target.N, perhaps you want to specify one?")
+        tt_res <- 999
+
+      }
+
+    }
+
     # DAMPING RATIO -----------------------------------------------------------
     if ("dr" %in% metrics) {
       dat$dr <- popdemo::dr(A)
     }
 
-    # convergence time
+    # convergence time --------------------------------------------------------
     if ("convt" %in% metrics) {
       convt_res <- calc_convt(
         metrics = "convt",

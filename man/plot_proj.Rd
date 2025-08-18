@@ -8,6 +8,7 @@ plot_proj(
   popvec = NULL,
   standard.A = FALSE,
   facet = NULL,
+  baseline = NULL,
   compare = NULL,
   sort = FALSE,
   palette = NULL,
@@ -26,6 +27,19 @@ standardised asymptotic dynamics (scaled by the dominant eigenvalue).}
 \item{facet}{Logical. If \code{TRUE} (default for lists), creates separate
 panels for each trajectory. If \code{FALSE}, plots all trajectories on the
 same panel. Ignored for single trajectories.}
+
+\item{baseline}{Baseline line specification. Defaults to \code{NULL} (no baseline).
+\itemize{
+\item \code{NULL}: no baseline is drawn (default).
+\item \code{TRUE}: draws a baseline with default styling.
+\item A character string: allows custom styling. Can include:
+\itemize{
+\item \strong{color} — a single word (e.g. \code{"red"}) or a hex code (e.g. \code{"#FF0000"}).
+\item \strong{linetype} — one of \code{"solid"}, \code{"dashed"}, \code{"dotted"}, \code{"dotdash"}, \code{"longdash"}, \code{"twodash"}.
+\item \strong{linewidth} — a numeric value.
+Elements can appear in any order. Missing elements fall back to defaults (black, dashed, 0.8).
+}
+}}
 
 \item{compare}{Logical. If \code{TRUE} (default for lists), adds grey
 background lines showing all populations in each facet for comparison.
@@ -79,10 +93,17 @@ plot_proj(multi_pop)
 
 # rank trajectories and remove shaded lines
 plot_proj(multi_pop, sort = TRUE, compare = TRUE)
+
+# plot baseline
+plot_proj(multi_pop, baseline = TRUE)
+plot_proj(multi_pop, baseline = "red solid 2")
+
 # apply custom color
 plot_proj(multi_pop, palette = "red")
+
 # plot all trajectories in a single panel
 plot_proj(multi_pop, facet = FALSE)
+
 # use additional parameters from geom_line()
 plot_proj(multi_pop, linewidth = 1.5, linetype = "31")
 plot_proj(multi_pop, facet = FALSE, palette = "blue", alpha = .3)

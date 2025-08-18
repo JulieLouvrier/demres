@@ -24,6 +24,9 @@ matrix projection model.\cr
 "reac": Calculates reactivity: first time step amplification
 and first time step attenuation for a matrix
 projection model.\cr
+"tt": Time to Target: if return.N = TRUE, calculates the
+number of timesteps necessary to reach a target population
+abundance. \cr
 "all": all of the above metrics are provided.}
 
 \item{vector}{a numeric vector or one-column matrix describing the age/stage
@@ -33,10 +36,10 @@ resilience metric}
 \item{A}{a square, primitive, irreducible, non-negative numeric matrix of any
 dimension}
 
-\item{return.N}{Boolean. Set to TRUE as default. If TRUE returns population size.
+\item{return.N}{(optional) Boolean. Set to TRUE as default. If TRUE returns population size.
 If set to FALSE, returns the standardised value of the requested metric.}
 
-\item{return.t}{Boolean. If TRUE, returns the time at which the metric is reached in the population projection
+\item{return.t}{(optional) Boolean. If TRUE, returns the time at which the metric is reached in the population projection
 If FALSE does not return the time.}
 }
 \description{
