@@ -13,6 +13,14 @@
 #' @param facet Logical. If \code{TRUE} (default for lists), creates separate
 #'   panels for each trajectory. If \code{FALSE}, plots all trajectories on the
 #'   same panel. Ignored for single trajectories.
+#' @param baseline Baseline line specification. Defaults to `NULL` (no baseline).
+#'   - `NULL`: no baseline is drawn (default).
+#'   - `TRUE`: draws a baseline with default styling.
+#'   - A character string: allows custom styling. Can include:
+#'       * **color** — a single word (e.g. `"red"`) or a hex code (e.g. `"#FF0000"`).
+#'       * **linetype** — one of `"solid"`, `"dashed"`, `"dotted"`, `"dotdash"`, `"longdash"`, `"twodash"`.
+#'       * **linewidth** — a numeric value.
+#'   Elements can appear in any order. Missing elements fall back to defaults (black, dashed, 0.8).
 #' @param compare Logical. If \code{TRUE} (default for lists), adds grey
 #'   background lines showing all populations in each facet for comparison.
 #'   Only applies when \code{facet = TRUE}. Ignored for single trajectories.
@@ -56,10 +64,17 @@
 #'
 #' # rank trajectories and remove shaded lines
 #' plot_proj(multi_pop, sort = TRUE, compare = TRUE)
+#'
+#' # plot baseline
+#' plot_proj(multi_pop, baseline = TRUE)
+#' plot_proj(multi_pop, baseline = "red solid 2")
+#'
 #' # apply custom color
 #' plot_proj(multi_pop, palette = "red")
+#'
 #' # plot all trajectories in a single panel
 #' plot_proj(multi_pop, facet = FALSE)
+#'
 #' # use additional parameters from geom_line()
 #' plot_proj(multi_pop, linewidth = 1.5, linetype = "31")
 #' plot_proj(multi_pop, facet = FALSE, palette = "blue", alpha = .3)
@@ -70,44 +85,23 @@ plot_proj <- function(
     popvec = NULL,
     standard.A = FALSE,
     facet = NULL,
+    baseline = NULL,
     compare = NULL,
     sort = FALSE,
     palette = NULL,
     ...
   ) {
 
-  if (isFALSE(standard.A)) {
-    ylab <- "Population size"
-  } else {
-    ylab <- "Population size" ## Vik: we should have also here an argument standard.vec (as for the demres_plot function) and if
-    ## it is TRUE we should display "Population density" as Y axis title
-  }
-
-  legend_title <- "Time step"
-
+  # check inputs
+  stopifnot('"popvec must be of class "Projection"'= is.null(popvec) == FALSE)
   multiple <- class(popvec) == "list"
-
-  if (isTRUE(multiple)) {
-    n <- length(popvec)
-    pops <- unlist(popvec)
-    time <- 0:((length(pops)-1) / n)
-
-    if (is.null(facet)) facet <- TRUE
-    if (is.null(compare)) compare <- TRUE
-
-    dat <- data.frame(
-      id = rep(1:n, each = length(time)),
-      pop = pops,
-      time = time,
-      grp = rep(1:n, each = length(time))
-    )
-  } else {
-    dat <- data.frame(
-      pop = popvec,
-      time = 0:(length(popvec)-1),
-      grp = 1
-    )
-  }
+  if (isFALSE(multiple)) vc <- class(popvec) else vc <- class(popvec[[1]])
+  stopifnot('popvec must be a vector of an object returned from popdemo::project() or a list of the same.'= "Projection" %in% vc)
+  stopifnot('standard.A must be either TRUE or FALSE.'= is.logical(standard.A))
+  stopifnot('facet must be either NULL, TRUE or FALSE.'= is.logical(facet) | is.null(facet))
+  stopifnot('baseline must be either NULL, boolean or a string.'= is.character(baseline) | is.null(baseline) | is.logical(baseline))
+  stopifnot('compare must be either NULL, TRUE or FALSE.'= is.logical(compare) | is.null(compare))
+  stopifnot('sort must be either TRUE or FALSE.'= is.logical(sort))
 
   # display message that arguments are ignored
   drop <- c()
@@ -134,13 +128,46 @@ plot_proj <- function(
     }
   }
 
+  # set titles for y-axis and legend
+  if (isFALSE(standard.A)) {
+    ylab <- "Population size"
+  } else {
+    ylab <- "Population size" ## Vik: we should have also here an argument standard.vec (as for the demres_plot function) and if
+    ## it is TRUE we should display "Population density" as Y axis title
+  }
+
+  legend_title <- "Time step"
+
+  # define single / multi projection settings
+  multiple <- class(popvec) == "list"
+
+  if (isTRUE(multiple)) {
+    n <- length(popvec)
+    pops <- unlist(popvec)
+    time <- 0:((length(pops)-1) / n)
+
+    if (is.null(facet)) facet <- TRUE
+    if (is.null(compare)) compare <- TRUE
+
+    dat <- data.frame(
+      id = rep(1:n, each = length(time)),
+      pop = pops,
+      time = time,
+      grp = rep(1:n, each = length(time))
+    )
+  } else {
+    dat <- data.frame(
+      pop = popvec,
+      time = 0:(length(popvec)-1),
+      grp = 1
+    )
+  }
+
   # rank years by most recent population value
   if (isTRUE(sort) & isTRUE(multiple)) {
     dat_last <- dat[dat$time == max(dat$time), ]
     order <- dat_last$id[order(dat_last$pop, decreasing = TRUE)]
-
     dat$id <- factor(dat$id, levels = order)
-
     legend_title <- "Time step (ranked)"
   }
 
@@ -151,6 +178,47 @@ plot_proj <- function(
     if (length(palette) == 1) { color <- palette } else { color <- NULL }
   }
 
+  # baseline settings
+  # -> default baseline styling (if specified as TRUE or string)
+  bl <- !is.null(baseline) & !isFALSE(baseline)
+  if (bl) {
+    bl <- list(
+      y = min(dat$pop[which(dat$time == 0)]),
+      color = "black",
+      type = "dashed",
+      width = 0.8
+    )
+    if (is.character(baseline)) {
+      parts <- strsplit(trimws(baseline), "\\s+")[[1]]
+      parts <- tolower(trimws(parts))
+
+      # allowed linetypes
+      allowed_linetypes <- c("solid", "dashed", "dotted",
+                             "dotdash", "longdash", "twodash")
+
+      # helper for hex colors
+      is_hex_color <- function(x) grepl("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$", x)
+
+      # -> numeric linewidth
+      numeric_idx <- which(!is.na(suppressWarnings(as.numeric(parts))))
+      if (length(numeric_idx) > 0) {
+        bl$size <- as.numeric(parts[numeric_idx[1]])
+        parts <- parts[-numeric_idx]  # remove all numeric tokens
+      }
+
+      # -> linetype if allowed
+      lt_idx <- which(parts %in% allowed_linetypes)
+      if (length(lt_idx) > 0) {
+        bl$type <- parts[lt_idx[1]]
+        parts <- parts[-lt_idx[1]]
+      }
+
+      # -> color: first remaining token
+      if (length(parts) > 0) {
+        bl$color <- parts[1]  # treat first leftover as color (hex or named)
+      }
+    }
+  }
 
   # if (isFALSE(multiple) & !is.null(palette)) {
   #   color <- palette[1]
@@ -173,21 +241,40 @@ plot_proj <- function(
       if(isTRUE(multiple) & isTRUE(facet) & isTRUE(compare))
         ggplot2::geom_line(
           data = dat[, 2:4],
-          mapping = aes(group = grp),
+          mapping = ggplot2::aes(group = grp),
           color = "grey",
           ...,
           alpha = (1 / (n / 8)),
           linewidth = .5
         )
     } +
-    # draw line(s)
+    # draw baseline
+    {
+      if(!isFALSE(bl))
+        ggplot2::geom_hline(
+          yintercept = bl$y,
+          color = bl$color,
+          linetype = bl$type,
+          linewidth = bl$width
+        )
+    } +
+    # draw trajectory / trajectories
     {
       if(is.null(color))
-        ggplot2::geom_line(aes(group = grp), ..., linewidth = 1)
+        ggplot2::geom_line(
+          ggplot2::aes(group = grp),
+          ...,
+          linewidth = 1
+        )
     } +
     {
       if(!is.null(color))
-        ggplot2::geom_line(aes(group = grp), ..., color = color, linewidth = 1)
+        ggplot2::geom_line(
+          ggplot2::aes(group = grp),
+          ...,
+          color = color,
+          linewidth = 1
+        )
     } +
     # create small multiples
     {
