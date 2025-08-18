@@ -32,7 +32,8 @@
 #'     popname = "adelie penguin",
 #'     verbose = TRUE,
 #'     return.N = TRUE,
-#'     return.t = TRUE
+#'     return.t = TRUE,
+#'     target.N = 500
 #'   )
 #'
 #' AP_demres1 <-
@@ -74,7 +75,8 @@ resilience <- function(listA,
                        accuracy = 0.01,
                        iterations = 1e+05,
                        return.N = TRUE,
-                       return.t = TRUE) {
+                       return.t = TRUE,
+                       target.N = NULL) {
   message_varying <- character(0)
 
   if (!is.list(vector)) {
@@ -105,7 +107,8 @@ resilience <- function(listA,
       accuracy = accuracy,
       iterations = iterations,
       return.N = return.N,
-      return.t = return.t
+      return.t = return.t,
+      target.N = target.N
     )
 
     message <- data.frame(t(attr(metres, "msg")))
@@ -136,14 +139,14 @@ resilience <- function(listA,
           calc_resilience(
             A,
             metrics = metrics,
-            # bounds = bounds,
             vector = X,
             popname = popname,
             verbose = verbose,
             accuracy = accuracy,
             iterations = iterations,
             return.N = return.N,
-            return.t = return.t
+            return.t = return.t,
+            target.N = target.N
           )
         },
         A = listA,

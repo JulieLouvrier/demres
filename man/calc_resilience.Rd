@@ -77,12 +77,13 @@ data(adeliepenguin)
 
 # simulate an initial vector
 set.seed(125435)
-vec <- round(runif(2) * 100 )
+penguinvec1 <- round(runif(2) * 100 )
 
 penguin1 <- adeliepenguin[[1]]
 
 all_penguin_demres <- calc_resilience(penguin1, metrics = c("all"),
-vector = penguinvec1, popname = "adelie penguin", verbose = TRUE, return.N = TRUE, return.t = FALSE)
+vector = penguinvec1, popname = "adelie penguin", verbose = TRUE,
+return.N = TRUE, return.t = FALSE, target.N = 500)
 
 }
 \keyword{internal}

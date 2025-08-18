@@ -45,12 +45,13 @@
 #'
 #' # simulate an initial vector
 #' set.seed(125435)
-#' vec <- round(runif(2) * 100 )
+#' penguinvec1 <- round(runif(2) * 100 )
 #'
 #' penguin1 <- adeliepenguin[[1]]
 #'
 #' all_penguin_demres <- calc_resilience(penguin1, metrics = c("all"),
-#' vector = penguinvec1, popname = "adelie penguin", verbose = TRUE, return.N = TRUE, return.t = FALSE)
+#' vector = penguinvec1, popname = "adelie penguin", verbose = TRUE,
+#' return.N = TRUE, return.t = FALSE, target.N = 500)
 #'
 #' @return A vector containing all the resilience metrics
 #' @name calc_resilience
@@ -102,6 +103,8 @@ calc_resilience <-
       popname = popname,
       convt = NA,
       convt.N = NA,
+      tt = NA,
+      target.N = target.N,
       dr = NA,
       maxamp = NA,
       maxamp.t = NA,
@@ -174,38 +177,15 @@ calc_resilience <-
     #tt -----------------------------------------------------------------------
     if ("tt" %in% metrics) {
       if(!is.null(target.N)){
-        t <- 0
-        n <- n0
-        max_time = 10000
-        chunk = 100
-        repeat {
-          # project in chunks
-          proj <- popdemo::project(A, n, chunk, return.vec = TRUE)
-
-          # check if target is reached in this chunk
-          if (any(proj >= target)) {
-            t_hit <- which(proj >= target)[1]
-            return(t_res + t_hit)
-          }
-
-          # update for next chunk
-          n <- proj@vec[length(proj),]
-          t_res <- t_res + chunk
-
-          # stop if exceeded max_time
-          if (t_res >= max_time) {
-            message("the maximum projection time to identify the population
-                    target has been reached, NA will be returned")
-            tt_res <- 999
-          }
-        }
+      t_res <- time_to_target(A, vector, target.N, max_time, chunk)
       }
       else{
         message("You specified tt in the metrics but did not specify
                 a population abundance target in target.N, perhaps you want to specify one?")
-        tt_res <- 999
+        t_res <- 999
 
       }
+      dat$tt <- t_res
 
     }
 
@@ -367,4 +347,40 @@ calc_convt <- function(metrics,
       list_res$N <- projpop[((list_res$value)+1)] #small trick to take out the first value of the projection
 
   return(list_res)
+}
+
+
+#' Calculate Time to Target
+#'
+#' Internal functions used by [calc_resilience()].
+#'
+#' @inheritParams calc_resilience
+#' @seealso [calc_resilience()]
+#' @keywords internal
+time_to_target <- function(A, n0, target, max_time = 10000, chunk = 100) {
+t <- 0
+n <- n0
+max_time = 10000
+chunk = 100
+repeat {
+  # project in chunks
+  proj <- popdemo::project(A, n, chunk, return.vec = TRUE)
+
+  # check if target is reached in this chunk
+  if (any(proj >= target)) {
+    t_hit <- which(proj >= target)[1]
+    return(t + t_hit)
+  }
+
+  # update for next chunk
+  n <- proj@vec[length(proj),]
+  t <- t + chunk
+
+  # stop if exceeded max_time
+  if (t >= max_time) {
+    message("the maximum projection time to identify the population
+                    target has been reached, NA will be returned")
+    return(999)
+  }
+}
 }

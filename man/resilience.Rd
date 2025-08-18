@@ -15,7 +15,8 @@ resilience(
   accuracy = 0.01,
   iterations = 1e+05,
   return.N = TRUE,
-  return.t = TRUE
+  return.t = TRUE,
+  target.N = NULL
 )
 }
 \arguments{
@@ -63,6 +64,9 @@ If set to FALSE, returns the standardised value of the requested metric.}
 
 \item{return.t}{(optional) Boolean. If TRUE, returns the time at which the metric is reached in the population projection
 If FALSE does not return the time.}
+
+\item{target.N}{(optional) Numeric. Specifies the population abundance target to calculate
+the Time to Target metric}
 }
 \value{
 An object of class "resil", which is a dataframe
@@ -90,7 +94,8 @@ AP_demres <-
     popname = "adelie penguin",
     verbose = TRUE,
     return.N = TRUE,
-    return.t = TRUE
+    return.t = TRUE,
+    target.N = 500
   )
 
 AP_demres1 <-
