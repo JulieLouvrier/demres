@@ -32,7 +32,7 @@ popdemo::plot(
 # default for a single (non-standardized) projection:
 plot_proj(popvec = peng_proj_reg)
 
-# if you liek to adjust limits, use regular ggplot logic:
+# if you like to adjust limits, use regular ggplot logic:
 plot_proj(popvec = peng_proj_reg) +
   coord_cartesian(ylim = c(0, 300))
 
@@ -41,9 +41,10 @@ plot_proj(
   popvec = peng_proj_reg,
   standard.A = FALSE, # default
   palette = "red",
+  baseline = TRUE,
   sort = TRUE, # will be ignored
   facet = TRUE, # will be ignored
-  compare = TRUE  # will be ignored
+  compare = TRUE # will be ignored
 )
 
 
@@ -68,6 +69,12 @@ plot_proj(
   coord_cartesian(ylim = c(0, 100))
 
 
+# input handling ...............................................................
+
+plot_proj(popvec = penguinvec1)
+plot_proj(popvec = peng_proj_std, facet = "ID")
+
+
 ## MULTIPLE POPULATIONS --------------------------------------------------------
 
 pops_proj_reg <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
@@ -86,6 +93,7 @@ my_colors <- viridis::rocket(n = length(pops_proj_std), begin = .1, end = .8)
 
 my_colors_named <- my_colors
 names(my_colors_named) <- 1:28
+
 
 # absolute .....................................................................
 
@@ -137,7 +145,6 @@ plot_proj(
   palette = my_colors_named
 )
 
-
 ## we can sort them in the facet view as well:
 plot_proj(
   popvec = pops_proj_reg,
@@ -151,6 +158,29 @@ plot_proj(
   palette = "red"
 )
 
+# we can add a baseline for the initial population size:
+plot_proj(
+  popvec = pops_proj_reg,
+  baseline = TRUE,
+  palette = "red"
+)
+
+# ... and style it by passing a string:
+plot_proj(
+  popvec = pops_proj_reg,
+  baseline = "red solid"
+)
+
+plot_proj(
+  popvec = pops_proj_reg,
+  baseline = "#ff6633 dotted 1"
+)
+
+plot_proj(
+  popvec = pops_proj_reg,
+  facet = FALSE,
+  baseline = "5 dotdash"
+)
 
 # standardized .................................................................
 
