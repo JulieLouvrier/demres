@@ -99,6 +99,7 @@ plot_proj <- function(
   stopifnot('popvec must be a vector of an object returned from popdemo::project() or a list of the same.'= "Projection" %in% vc)
   stopifnot('standard.A must be either TRUE or FALSE.'= is.logical(standard.A))
   stopifnot('facet must be either NULL, TRUE or FALSE.'= is.logical(facet) | is.null(facet))
+  stopifnot('baseline must be either NULL, boolean or a string specifying the styling.'= is.logical(baseline) | is.character(baseline) | is.null(baseline))
   stopifnot('baseline must be either NULL, boolean or a string.'= is.character(baseline) | is.null(baseline) | is.logical(baseline))
   stopifnot('compare must be either NULL, TRUE or FALSE.'= is.logical(compare) | is.null(compare))
   stopifnot('sort must be either TRUE or FALSE.'= is.logical(sort))
