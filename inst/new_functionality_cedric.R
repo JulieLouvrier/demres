@@ -6,18 +6,21 @@ library(ggplot2)
 
 set.seed(1234)
 
-# pop vect generated (not standardized)
-penguinvec1 <- round(runif(2) * 100)
-
 
 ## SINGLE POPULATION -----------------------------------------------------------
 
-## projected population
+# not standardized
+penguinvec1 <- round(runif(2) * 100)
+
 peng_proj_reg <- popdemo::project(
   adeliepenguin[[1]], standard.A = FALSE, vector = penguinvec1, time = 5
 )
+
+# standardized
+penguinvec2 <- penguinvec1 / sum(penguinvec1)
+
 peng_proj_std <- popdemo::project(
-  adeliepenguin[[1]], standard.A = TRUE, vector = penguinvec1, time = 5
+  adeliepenguin[[1]], standard.A = TRUE, vector = penguinvec2, time = 5
 )
 
 
@@ -53,7 +56,7 @@ plot_proj(
 ## "original" plot
 popdemo::plot(
   peng_proj_std,
-  ylim = c(0, 100)
+  ylim = c(0, 1)
 )
 
 plot_proj(
@@ -66,7 +69,7 @@ plot_proj(
     standard.A = TRUE, # overwrite default
     palette = "royalblue"
   ) +
-  coord_cartesian(ylim = c(0, 100))
+  coord_cartesian(ylim = c(0, 1))
 
 
 # input handling ...............................................................
@@ -83,9 +86,11 @@ pops_proj_reg <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
   )
 )})
 
+# TODO: Julie adds multiple pop projections with explicit names
+
 pops_proj_std <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
   popdemo::project(
-    adeliepenguin[[x]], standard.A = TRUE, vector = penguinvec1, time = 5
+    adeliepenguin[[x]], standard.A = TRUE, vector = penguinvec2, time = 5
   )
 )})
 
@@ -180,6 +185,12 @@ plot_proj(
   popvec = pops_proj_reg,
   facet = FALSE,
   baseline = "5 dotdash"
+)
+
+plot_proj(
+  popvec = pops_proj_reg,
+  facet = FALSE,
+  baseline = "longdot dashed red 2" # ignores words that don't match type or colors
 )
 
 # standardized .................................................................
