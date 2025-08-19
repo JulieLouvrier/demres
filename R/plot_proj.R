@@ -100,7 +100,6 @@ plot_proj <- function(
   stopifnot('standard.A must be either TRUE or FALSE.'= is.logical(standard.A))
   stopifnot('facet must be either NULL, TRUE or FALSE.'= is.logical(facet) | is.null(facet))
   stopifnot('baseline must be either NULL, boolean or a string specifying the styling.'= is.logical(baseline) | is.character(baseline) | is.null(baseline))
-  stopifnot('baseline must be either NULL, boolean or a string.'= is.character(baseline) | is.null(baseline) | is.logical(baseline))
   stopifnot('compare must be either NULL, TRUE or FALSE.'= is.logical(compare) | is.null(compare))
   stopifnot('sort must be either TRUE or FALSE.'= is.logical(sort))
 
@@ -185,10 +184,11 @@ plot_proj <- function(
   if (bl) {
     bl <- list(
       y = min(dat$pop[which(dat$time == 0)]),
-      color = "black",
+      color = "firebrick",
       type = "dashed",
       width = 0.8
     )
+    # -> custom baselne settings (if specified as string)
     if (is.character(baseline)) {
       parts <- strsplit(trimws(baseline), "\\s+")[[1]]
       parts <- tolower(trimws(parts))
@@ -200,11 +200,12 @@ plot_proj <- function(
       # helper for hex colors
       is_hex_color <- function(x) grepl("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$", x)
 
-      # -> numeric linewidth
-      numeric_idx <- which(!is.na(suppressWarnings(as.numeric(parts))))
-      if (length(numeric_idx) > 0) {
-        bl$size <- as.numeric(parts[numeric_idx[1]])
-        parts <- parts[-numeric_idx]  # remove all numeric tokens
+      # -> numeric linewidth (take *first* valid one only)
+      num_val <- suppressWarnings(as.numeric(parts))
+      if (any(!is.na(num_val))) {
+        idx <- which(!is.na(num_val))[1]
+        bl$width <- num_val[idx]
+        parts <- parts[-idx]
       }
 
       # -> linetype if allowed
@@ -214,9 +215,16 @@ plot_proj <- function(
         parts <- parts[-lt_idx[1]]
       }
 
-      # -> color: first remaining token
+      is_hex_color <- function(x) grepl("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$", x)
+      valid_colors <- tolower(colors())
+      is_named_color <- function(x) x %in% valid_colors
+
+      # -> color: first valid hex or named color
       if (length(parts) > 0) {
-        bl$color <- parts[1]  # treat first leftover as color (hex or named)
+        col_idx <- which(sapply(parts, function(x) is_hex_color(x) || is_named_color(x)))
+        if (length(col_idx) > 0) {
+          bl$color <- parts[col_idx[1]]
+        }
       }
     }
   }
