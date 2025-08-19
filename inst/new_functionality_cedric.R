@@ -16,14 +16,36 @@ peng_proj_reg <- popdemo::project(
   adeliepenguin[[1]], standard.A = FALSE, vector = penguinvec1, time = 5
 )
 
-# TODO: Julie adds single undisturbed pop projection with explicit names
-
 # standardized
 penguinvec2 <- penguinvec1 / sum(penguinvec1)
 
 peng_proj_std <- popdemo::project(
   adeliepenguin[[1]], standard.A = TRUE, vector = penguinvec2, time = 5
 )
+
+
+# -----------------------------------------------------------------------
+# TODO: Julie adds single undisturbed pop projection with explicit names
+
+# Julie:
+# extracting the stable stage distributions (aka asymptotic vectors)
+# out of the right eigenvector of the matrix
+# and multiplying it by the sum of individuals we have in a population
+ss_vec1 <- popdemo::eigs(adeliepenguin[[1]])$ss*sum(penguinvec1)
+
+#project the undisturbed pop based on the asymptotic initial vectors
+projundisturbed1 <-  popdemo::project(
+    adeliepenguin,
+    vector = ss_vec,
+    standard.A = FALSE,
+    time = 5
+  )
+
+#Ju: I don't see it here necessary to name it as it is only for one matrix, or?
+
+#(works also for standardized vector)
+
+# -----------------------------------------------------------------------
 
 
 # absolute .....................................................................
@@ -88,13 +110,50 @@ pops_proj_reg <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
   )
 )})
 
-# TODO: Julie adds multiple undisturbed pop projections with explicit names
-
 pops_proj_std <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
   popdemo::project(
     adeliepenguin[[x]], standard.A = TRUE, vector = penguinvec2, time = 5
   )
 )})
+
+##Julie
+names(pops_proj_reg) <- c(1:length(listA)) #Ju:or do you need more explicit names?
+names(pops_proj_std) <- c(1:length(listA))
+
+#-------------------------------------------------------------------------------
+# TODO: Julie adds multiple undisturbed pop projections with explicit names
+# Julie:
+# extracting the stable stage distributions (aka asymptotic vectors)
+# out of the right eigenvector of each matrix
+# and multiplying it by the sum of individuals we have in a population
+ss_vec <- mapply(function(A, X) {
+  (popdemo::eigs(A)$ss)*sum(X)
+},
+A = adeliepenguin,
+X = penguinvec1,
+SIMPLIFY = FALSE)
+
+#project the undisturbed pop based on the asymptotic initial vectors
+projundisturbed <- mapply(function(A, X) {
+  popdemo::project(
+    A,
+    vector = X,
+    standard.A = FALSE,
+    time = timeproj
+  )
+},
+A = adeliepenguin,
+X = ss_vec,
+SIMPLIFY = FALSE)
+
+# default naming (in the demres_plot function there is the option to select
+# only specific matrices and naming them accordingly)
+names(projundisturbed) <- c(1:length(listA)) #Ju:or do you need more explicit names?
+
+#(works also for standardized vector)
+
+#-------------------------------------------------------------------------------
+
 
 my_colors <- viridis::rocket(n = length(pops_proj_std), begin = .1, end = .8)
 

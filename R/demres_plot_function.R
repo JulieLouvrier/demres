@@ -14,12 +14,15 @@
 #' of the population to the current time step using the specified matrix for each time step
 #' @param timeproj Numeric.The number of projection intervals.
 #' @param table A dataframe containing all the resilience metrics calculated
-#' with the resilience function
+#' with the resilience function.
 #' @param standard.vec Boolean. Set to \code{FALSE} by default so that the initial
 #' population vector is not scaled to sum up to 1, i.e. returns demographic resilience metrics
 #' in terms of number of individuals. If set to \code{TRUE} will return the demographic resilience
 #' metrics in population densities.
-#' @param timesteps numeric vector. Used to plot specific the specific timesteps to plot.
+#' @param timesteps numeric vector. Used to plot specific specific timesteps.
+#' @param undisturbed (optional) Boolean. Set to \code{FALSE} by default. If set to
+#' \code{TRUE} will plot the trajectory of the undisturbed population, meaning a population that is at
+#' its asymptotic equilibrium, with its stable stage structure defined by the eigenvector of its matrix.
 #' @name demres_plot
 #' @import ggplot2
 #' @return A plot displaying the chosen metric(s) along a time axis
@@ -100,6 +103,7 @@ demres_plot <- function(table,
                         standard.A = FALSE,
                         standard.vec = FALSE,
                         timesteps = numeric(),
+                        undisturbed = FALSE,
                         facet = NULL,
                         compare = NULL,
                         sort = FALSE,
@@ -131,7 +135,6 @@ demres_plot <- function(table,
   if(length(timesteps) > 0 && is.numeric(timesteps)){
     listA <- listA[timesteps]
     vector <- vector[timesteps]
-
   }
 
  projpopdemres <- mapply(function(A, X) {
@@ -145,6 +148,48 @@ demres_plot <- function(table,
    A = listA,
    X = vector,
    SIMPLIFY = FALSE)
+
+ #default naming
+ names(projpopdemres) <- c(1:length(listA))
+
+ #if selected matrices
+ if(length(timesteps) > 0 && is.numeric(timesteps)){
+   names(projpopdemres) <- timesteps
+
+ }
+
+ #undisturbed pop
+ if(undisturbed) {
+   ss_vec <- mapply(function(A, X) {
+     (popdemo::eigs(A)$ss)*sum(X)
+   },
+   A = listA,
+   X = vector,
+   SIMPLIFY = FALSE)
+
+   #project the undisturbed pop
+   projundisturbed <- mapply(function(A, X) {
+     popdemo::project(
+       A,
+       vector = X,
+       standard.A = standard.A,
+       time = timeproj
+     )
+   },
+   A = listA,
+   X = ss_vec,
+   SIMPLIFY = FALSE)
+
+   #default naming
+   names(projundisturbed) <- c(1:length(listA))
+
+   #if selected matrices
+   if(length(timesteps) > 0 && is.numeric(timesteps)){
+     names(projundisturbed) <- timesteps
+
+   }
+
+ }
 
  # now calling the plot_proj function
   pp <- plot_proj(popvec = projpopdemres,
