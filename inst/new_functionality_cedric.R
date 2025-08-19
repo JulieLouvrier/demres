@@ -16,6 +16,8 @@ peng_proj_reg <- popdemo::project(
   adeliepenguin[[1]], standard.A = FALSE, vector = penguinvec1, time = 5
 )
 
+# TODO: Julie adds single undisturbed pop projection with explicit names
+
 # standardized
 penguinvec2 <- penguinvec1 / sum(penguinvec1)
 
@@ -86,7 +88,7 @@ pops_proj_reg <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
   )
 )})
 
-# TODO: Julie adds multiple pop projections with explicit names
+# TODO: Julie adds multiple undisturbed pop projections with explicit names
 
 pops_proj_std <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
   popdemo::project(
