@@ -13,6 +13,7 @@ demres_plot(
   standard.A = FALSE,
   standard.vec = FALSE,
   timesteps = numeric(),
+  undisturbed = FALSE,
   facet = NULL,
   compare = NULL,
   sort = FALSE,
@@ -22,7 +23,7 @@ demres_plot(
 }
 \arguments{
 \item{table}{A dataframe containing all the resilience metrics calculated
-with the resilience function}
+with the resilience function.}
 
 \item{listA}{a list of square, primitive, irreducible, non-negative numeric
 matrices of any dimension}
@@ -46,7 +47,11 @@ population vector is not scaled to sum up to 1, i.e. returns demographic resilie
 in terms of number of individuals. If set to \code{TRUE} will return the demographic resilience
 metrics in population densities.}
 
-\item{timesteps}{numeric vector. Used to plot specific the specific timesteps to plot.}
+\item{timesteps}{numeric vector. Used to plot specific specific timesteps.}
+
+\item{undisturbed}{(optional) Boolean. Set to \code{FALSE} by default. If set to
+\code{TRUE} will plot the trajectory of the undisturbed population, meaning a population that is at
+its asymptotic equilibrium, with its stable stage structure defined by the eigenvector of its matrix.}
 
 \item{facet}{Logical. If \code{TRUE} (default for lists), creates separate
 panels for each trajectory. If \code{FALSE}, plots all trajectories on the
@@ -100,47 +105,47 @@ AP_demres <-
 
 # Facet plot with comparison with the other trajectories, ordered by matrices order
 plot(AP_demres,
-    listA = adeliepenguin,
-    vector = vector_list,
-    timeproj = 5)
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5)
 
 # Facet plot with comparison with the other trajectories, ordered by decreasing order
 plot(AP_demres,
-    listA = adeliepenguin,
-    vector = vector_list,
-    timeproj = 5,
-    #sort = TRUE,
-    compare = TRUE,
-    standard.A = FALSE,
-    standard.vec = TRUE)
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5,
+     #sort = TRUE,
+     compare = TRUE,
+     standard.A = FALSE,
+     standard.vec = TRUE)
 
 # One plot to compare them all together
 plot(AP_demres,
-    listA = adeliepenguin,
-    vector = vector_list,
-    timeproj = 5,
-    #sort = TRUE,
-    compare = TRUE,
-    facet = FALSE)
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5,
+     #sort = TRUE,
+     compare = TRUE,
+     facet = FALSE)
 
 # Compare with the standardized value
 plot(AP_demres,
-    listA = adeliepenguin,
-    vector = vector_list,
-    timeproj = 5,
-    standard.A = TRUE,
-    standard.vec = TRUE,
-    #sort = TRUE,
-    compare = TRUE,
-    facet = TRUE)
+     listA = adeliepenguin,
+     vector = vector_list,
+     timeproj = 5,
+     standard.A = TRUE,
+     standard.vec = TRUE,
+     #sort = TRUE,
+     compare = TRUE,
+     facet = TRUE)
 
 plot(AP_demres,
-    listA = list(adeliepenguin[[1]]),
-    vector = list(vector_list[[1]]),
-    timeproj = 5,
-    standard.A = TRUE,
-    standard.vec = TRUE,
-    #sort = TRUE,
-    #compare = TRUE,
-    facet = FALSE)
+     listA = list(adeliepenguin[[1]]),
+     vector = list(vector_list[[1]]),
+     timeproj = 5,
+     standard.A = TRUE,
+     standard.vec = TRUE,
+     #sort = TRUE,
+     #compare = TRUE,
+     facet = FALSE)
 }
