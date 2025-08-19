@@ -47,49 +47,49 @@
 #'
 #' # Facet plot with comparison with the other trajectories, ordered by matrices order
 #' plot(AP_demres,
-#'     listA = adeliepenguin,
-#'     vector = vector_list,
-#'     timeproj = 5)
+#'      listA = adeliepenguin,
+#'      vector = vector_list,
+#'      timeproj = 5)
 #'
 #' # Facet plot with comparison with the other trajectories, ordered by decreasing order
 #' plot(AP_demres,
-#'     listA = adeliepenguin,
-#'     vector = vector_list,
-#'     timeproj = 5,
-#'     #sort = TRUE,
-#'     compare = TRUE,
-#'     standard.A = FALSE,
-#'     standard.vec = TRUE)
+#'      listA = adeliepenguin,
+#'      vector = vector_list,
+#'      timeproj = 5,
+#'      #sort = TRUE,
+#'      compare = TRUE,
+#'      standard.A = FALSE,
+#'      standard.vec = TRUE)
 #'
 #' # One plot to compare them all together
 #' plot(AP_demres,
-#'     listA = adeliepenguin,
-#'     vector = vector_list,
-#'     timeproj = 5,
-#'     #sort = TRUE,
-#'     compare = TRUE,
-#'     facet = FALSE)
+#'      listA = adeliepenguin,
+#'      vector = vector_list,
+#'      timeproj = 5,
+#'      #sort = TRUE,
+#'      compare = TRUE,
+#'      facet = FALSE)
 #'
 #' # Compare with the standardized value
-#'plot(AP_demres,
-#'     listA = adeliepenguin,
-#'     vector = vector_list,
-#'     timeproj = 5,
-#'     standard.A = TRUE,
-#'     standard.vec = TRUE,
-#'     #sort = TRUE,
-#'     compare = TRUE,
-#'     facet = TRUE)
+#' plot(AP_demres,
+#'      listA = adeliepenguin,
+#'      vector = vector_list,
+#'      timeproj = 5,
+#'      standard.A = TRUE,
+#'      standard.vec = TRUE,
+#'      #sort = TRUE,
+#'      compare = TRUE,
+#'      facet = TRUE)
 #'
 #' plot(AP_demres,
-#'     listA = list(adeliepenguin[[1]]),
-#'     vector = list(vector_list[[1]]),
-#'     timeproj = 5,
-#'     standard.A = TRUE,
-#'     standard.vec = TRUE,
-#'     #sort = TRUE,
-#'     #compare = TRUE,
-#'     facet = FALSE)
+#'      listA = list(adeliepenguin[[1]]),
+#'      vector = list(vector_list[[1]]),
+#'      timeproj = 5,
+#'      standard.A = TRUE,
+#'      standard.vec = TRUE,
+#'      #sort = TRUE,
+#'      #compare = TRUE,
+#'      facet = FALSE)
 
 
 demres_plot <- function(table,
@@ -146,7 +146,7 @@ demres_plot <- function(table,
    X = vector,
    SIMPLIFY = FALSE)
 
- #now calling the plot_proj function
+ # now calling the plot_proj function
   pp <- plot_proj(popvec = projpopdemres,
             standard.A = standard.A,
             facet = facet,
