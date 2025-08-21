@@ -1,5 +1,5 @@
 load("./data/adeliepenguin.rda")
-#devtools::load_all()
+devtools::load_all()
 
 library(popdemo)
 library(ggplot2)
@@ -31,7 +31,7 @@ peng_proj_std <- popdemo::project(
 # extracting the stable stage distributions (aka asymptotic vectors)
 # out of the right eigenvector of the matrix
 # and multiplying it by the sum of individuals we have in a population
-ss_vec1 <- popdemo::eigs(adeliepenguin[[1]])$ss*sum(penguinvec1)
+ss_vec1 <- popdemo::eigs(adeliepenguin[[1]])$ss*sum(penguinvec1) # CED: doesnt work for me
 
 #project the undisturbed pop based on the asymptotic initial vectors
 projundisturbed1 <-  popdemo::project(
@@ -117,8 +117,8 @@ pops_proj_std <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
 )})
 
 ##Julie
-names(pops_proj_reg) <- c(1:length(listA)) #Ju:or do you need more explicit names?
-names(pops_proj_std) <- c(1:length(listA))
+names(pops_proj_reg) <- paste("ID", c(1:length(adeliepenguin)))
+names(pops_proj_std) <- paste("ID", c(1:length(adeliepenguin)))
 
 #-------------------------------------------------------------------------------
 # TODO: Julie adds multiple undisturbed pop projections with explicit names
@@ -139,7 +139,7 @@ projundisturbed <- mapply(function(A, X) {
     A,
     vector = X,
     standard.A = FALSE,
-    time = timeproj
+    time = timeproj # CED: timeproj is not defined
   )
 },
 A = adeliepenguin,
@@ -148,7 +148,7 @@ SIMPLIFY = FALSE)
 
 # default naming (in the demres_plot function there is the option to select
 # only specific matrices and naming them accordingly)
-names(projundisturbed) <- c(1:length(listA)) #Ju:or do you need more explicit names?
+names(projundisturbed) <- paste("ID", c(1:length(adeliepenguin)))
 
 #(works also for standardized vector)
 
