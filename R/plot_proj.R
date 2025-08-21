@@ -13,6 +13,10 @@
 #' @param facet Logical. If \code{TRUE} (default for lists), creates separate
 #'   panels for each trajectory. If \code{FALSE}, plots all trajectories on the
 #'   same panel. Ignored for single trajectories.
+#' @param refline Specification for the undisturbed population. Defaults to
+#'   `NULL` (no reference line). Provide a vector of population abundance over
+#'   time (length must match the popvec) to draw a reference line showing
+#'   the undisturbed population projection.
 #' @param baseline Baseline line specification. Defaults to `NULL` (no baseline).
 #'   - `NULL`: no baseline is drawn (default).
 #'   - `TRUE`: draws a baseline with default styling.
@@ -86,6 +90,8 @@ plot_proj <- function(
     standard.A = FALSE,
     facet = NULL,
     baseline = NULL,
+    refline = NULL,
+    unpopvec = NULL,
     compare = NULL,
     sort = FALSE,
     palette = NULL,
@@ -146,14 +152,20 @@ plot_proj <- function(
     pops <- unlist(popvec)
     time <- 0:((length(pops)-1) / n)
 
+    if (is.null(names(popvec))) {
+      grps <- factor(1:n)
+    } else {
+      grps <- names(popvec)
+    }
+
     if (is.null(facet)) facet <- TRUE
     if (is.null(compare)) compare <- TRUE
 
     dat <- data.frame(
-      id = rep(1:n, each = length(time)),
+      id = rep(grps, each = length(time)),
       pop = pops,
       time = time,
-      grp = rep(1:n, each = length(time))
+      grp = rep(factor(1:n), each = length(time))
     )
   } else {
     dat <- data.frame(
@@ -243,7 +255,7 @@ plot_proj <- function(
     # add color encoding if required or specified
     {
       if((isTRUE(multiple) & isFALSE(facet)) | length(palette) > 1)
-        ggplot2::aes(x = time, y = pop, color = factor(id))
+        ggplot2::aes(x = time, y = pop, color = id)
     } +
     # add shaded lines to facets for comparison
     {
