@@ -36,7 +36,7 @@ ss_vec1 <- popdemo::eigs(adeliepenguin[[1]])$ss*sum(penguinvec1) # CED: doesnt w
 #project the undisturbed pop based on the asymptotic initial vectors
 projundisturbed1 <-  popdemo::project(
     adeliepenguin,
-    vector = ss_vec,
+    vector = ss_vec1,
     standard.A = FALSE,
     time = 5
   )
