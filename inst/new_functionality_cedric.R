@@ -133,6 +133,8 @@ A = adeliepenguin,
 X = penguinvec1,
 SIMPLIFY = FALSE)
 
+timeproj = 5
+
 #project the undisturbed pop based on the asymptotic initial vectors
 projundisturbed <- mapply(function(A, X) {
   popdemo::project(
