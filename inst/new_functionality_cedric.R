@@ -25,9 +25,9 @@ peng_proj_std <- popdemo::project(
 
 
 # -----------------------------------------------------------------------
-# TODO: Julie adds single undisturbed pop projection with explicit names
 
-# Julie:
+# undisturbed population
+
 # extracting the stable stage distributions (aka asymptotic vectors)
 # out of the right eigenvector of the matrix
 # and multiplying it by the sum of individuals we have in a population
@@ -41,11 +41,8 @@ projundisturbed1 <-  popdemo::project(
     time = 5
   )
 
-#Ju: I don't see it here necessary to name it as it is only for one matrix, or?
 
-#(works also for standardized vector)
-
-# -----------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 
 # absolute .....................................................................
@@ -121,8 +118,9 @@ names(pops_proj_reg) <- paste("ID", c(1:length(adeliepenguin)))
 names(pops_proj_std) <- paste("ID", c(1:length(adeliepenguin)))
 
 #-------------------------------------------------------------------------------
-# TODO: Julie adds multiple undisturbed pop projections with explicit names
-# Julie:
+
+# undisturbed populations
+
 # extracting the stable stage distributions (aka asymptotic vectors)
 # out of the right eigenvector of each matrix
 # and multiplying it by the sum of individuals we have in a population
@@ -224,6 +222,22 @@ plot_proj(
   popvec = pops_proj_reg,
   sort = TRUE,
   palette = "red"
+)
+
+# a vector specifying the reference pop can be passed as well:
+plot_proj(
+  popvec = pops_proj_reg,
+  reference = projundisturbed,
+  compare = FALSE
+)
+
+plot_proj(
+  popvec = pops_proj_reg,
+  reference = projundisturbed,
+  reference_opts = "cyan4 dashed 0.3",
+  sort = TRUE,
+  palette = "royalblue",
+  compare = FALSE
 )
 
 # we can add a baseline for the initial population size:
