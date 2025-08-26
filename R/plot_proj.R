@@ -13,18 +13,28 @@
 #' @param facet Logical. If \code{TRUE} (default for lists), creates separate
 #'   panels for each trajectory. If \code{FALSE}, plots all trajectories on the
 #'   same panel. Ignored for single trajectories.
-#' @param refline Specification for the undisturbed population. Defaults to
-#'   `NULL` (no reference line). Provide a vector of population abundance over
-#'   time (length must match the popvec) to draw a reference line showing
-#'   the undisturbed population projection.
-#' @param baseline Baseline line specification. Defaults to `NULL` (no baseline).
+#' @param reference Specification for the undisturbed population or other
+#'   reference lines. Defaults to `NULL` (no reference line and ribbon). Provide
+#'   a vector of population abundance over time (length must match that of
+#'   popvec) to draw a reference line showing the undisturbed population
+#'   projection and a ribbon highlighting the differences.
+#' @param reference_opts Reference line and ribbon specification. Defaults to
+#' `NULL`.
+#'   - `NULL`: no reference is drawn (default).
+#'   - `TRUE`: draws a reference line and ribbon with default styling.
+#'   - A character string: allows custom styling. Can include:
+#'       * **color** — a single word (e.g. `"red"`) or a hex code (e.g. `"#FF0000"`). Sets the color of the line and the fill of the ribbon (with a transparency of 67%)
+#'       * **linetype** — one of `"solid"`, `"dashed"`, `"dotted"`, `"dotdash"`, `"longdash"`, `"twodash"`.
+#'       * **linewidth** — a numeric value.
+#'   Elements can appear in any order. Missing elements fall back to defaults (grey60, solid, 0.4).
+##' @param baseline Baseline line specification. Defaults to `NULL`.
 #'   - `NULL`: no baseline is drawn (default).
 #'   - `TRUE`: draws a baseline with default styling.
 #'   - A character string: allows custom styling. Can include:
 #'       * **color** — a single word (e.g. `"red"`) or a hex code (e.g. `"#FF0000"`).
 #'       * **linetype** — one of `"solid"`, `"dashed"`, `"dotted"`, `"dotdash"`, `"longdash"`, `"twodash"`.
 #'       * **linewidth** — a numeric value.
-#'   Elements can appear in any order. Missing elements fall back to defaults (black, dashed, 0.8).
+#'   Elements can appear in any order. Missing elements fall back to defaults (black, dashed, 0.6).
 #' @param compare Logical. If \code{TRUE} (default for lists), adds grey
 #'   background lines showing all populations in each facet for comparison.
 #'   Only applies when \code{facet = TRUE}. Ignored for single trajectories.
@@ -53,7 +63,12 @@
 #' # Single trajectory
 #' single_pop <- c(100, 105, 120, 160, 200, 270)
 #' plot_proj(single_pop)
+#'
+#' # Add other ggplot2 components
 #' plot_proj(single_pop, palette = "blue") + coord_cartesian(ylim = c(0, 300))
+#'
+#' # plot reference
+#' plot_proj(single_pop, reference = single_pop + 10)
 #'
 #' # Multiple trajectories
 #' multi_pop <- list(
@@ -90,8 +105,8 @@ plot_proj <- function(
     standard.A = FALSE,
     facet = NULL,
     baseline = NULL,
-    refline = NULL,
-    unpopvec = NULL,
+    reference = NULL,
+    reference_opts = NULL,
     compare = NULL,
     sort = FALSE,
     palette = NULL,
@@ -106,6 +121,11 @@ plot_proj <- function(
   stopifnot('standard.A must be either TRUE or FALSE.'= is.logical(standard.A))
   stopifnot('facet must be either NULL, TRUE or FALSE.'= is.logical(facet) | is.null(facet))
   stopifnot('baseline must be either NULL, boolean or a string specifying the styling.'= is.logical(baseline) | is.character(baseline) | is.null(baseline))
+  if (isFALSE(multiple)) rc <- class(reference) else rc <- class(reference[[1]])
+  if (!is.null(reference)) stopifnot('reference must match the popvec object.'= vc == rc)
+  stopifnot('reference must be a vector of an object returned from popdemo::project() or a list of the same.'= "Projection" %in% rc | is.null(reference))
+  stopifnot('Names and order of list elements of reference must match those of popvec.'= names(popvec) == names(reference))
+  stopifnot('reference_opts must be either NULL, boolean or a string specifying the styling.'= is.logical(reference_opts) | is.character(reference_opts) | is.null(reference_opts))
   stopifnot('compare must be either NULL, TRUE or FALSE.'= is.logical(compare) | is.null(compare))
   stopifnot('sort must be either TRUE or FALSE.'= is.logical(sort))
 
@@ -132,6 +152,14 @@ plot_proj <- function(
         )
       )
     }
+  }
+
+  if (!is.null(reference) & isTRUE(multiple) & isFALSE(facet)) {
+    message("reference lines are not plotted for multiple projections when facet = FALSE.")
+  }
+
+  if (!is.null(reference) & isTRUE(multiple) & isTRUE(facet)) {
+    message("It is recommended to set compare = FALSE when plotting reference ribbons.")
   }
 
   # set titles for y-axis and legend
@@ -175,12 +203,25 @@ plot_proj <- function(
     )
   }
 
+  # define single / multi reference settings
+  if (!is.null(reference)) {
+    if (isTRUE(multiple)) {
+      dat$ref <- unlist(reference)
+    } else {
+      dat$ref <- reference
+    }
+  }
+
   # rank years by most recent population value
   if (isTRUE(sort) & isTRUE(multiple)) {
     dat_last <- dat[dat$time == max(dat$time), ]
     order <- dat_last$id[order(dat_last$pop, decreasing = TRUE)]
     dat$id <- factor(dat$id, levels = order)
     legend_title <- "Time step (ranked)"
+
+    if (!is.null(reference)) {
+      dat_ref$id <- factor(dat_ref$id, levels = order)
+    }
   }
 
   # color handling for single trajectories or unique line color
@@ -188,6 +229,47 @@ plot_proj <- function(
     if (!is.null(palette)) { color <- palette[1] } else { color <- "black" }
   } else {
     if (length(palette) == 1) { color <- palette } else { color <- NULL }
+  }
+
+  # function to determine line settings
+  set_line_opts <- function(arg, out) {
+    parts <- strsplit(trimws(arg), "\\s+")[[1]]
+    parts <- tolower(trimws(parts))
+
+    # allowed linetypes
+    allowed_linetypes <- c("solid", "dashed", "dotted",
+                           "dotdash", "longdash", "twodash")
+
+    # helper for hex colors
+    is_hex_color <- function(x) grepl("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$", x)
+
+    # -> numeric linewidth (take *first* valid one only)
+    num_val <- suppressWarnings(as.numeric(parts))
+    if (any(!is.na(num_val))) {
+      idx <- which(!is.na(num_val))[1]
+      out$width <- num_val[idx]
+      parts <- parts[-idx]
+    }
+
+    # -> linetype if allowed
+    lt_idx <- which(parts %in% allowed_linetypes)
+    if (length(lt_idx) > 0) {
+      out$type <- parts[lt_idx[1]]
+      parts <- parts[-lt_idx[1]]
+    }
+
+    is_hex_color <- function(x) grepl("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$", x)
+    valid_colors <- tolower(colors())
+    is_named_color <- function(x) x %in% valid_colors
+
+    # -> color: first valid hex or named color
+    if (length(parts) > 0) {
+      col_idx <- which(sapply(parts, function(x) is_hex_color(x) || is_named_color(x)))
+      if (length(col_idx) > 0) {
+        out$color <- parts[col_idx[1]]
+      }
+    }
+    return(out)
   }
 
   # baseline settings
@@ -200,54 +282,26 @@ plot_proj <- function(
       type = "dashed",
       width = 0.8
     )
-    # -> custom baselne settings (if specified as string)
+    # -> custom baseline settings (if specified as string)
     if (is.character(baseline)) {
-      parts <- strsplit(trimws(baseline), "\\s+")[[1]]
-      parts <- tolower(trimws(parts))
-
-      # allowed linetypes
-      allowed_linetypes <- c("solid", "dashed", "dotted",
-                             "dotdash", "longdash", "twodash")
-
-      # helper for hex colors
-      is_hex_color <- function(x) grepl("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$", x)
-
-      # -> numeric linewidth (take *first* valid one only)
-      num_val <- suppressWarnings(as.numeric(parts))
-      if (any(!is.na(num_val))) {
-        idx <- which(!is.na(num_val))[1]
-        bl$width <- num_val[idx]
-        parts <- parts[-idx]
-      }
-
-      # -> linetype if allowed
-      lt_idx <- which(parts %in% allowed_linetypes)
-      if (length(lt_idx) > 0) {
-        bl$type <- parts[lt_idx[1]]
-        parts <- parts[-lt_idx[1]]
-      }
-
-      is_hex_color <- function(x) grepl("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$", x)
-      valid_colors <- tolower(colors())
-      is_named_color <- function(x) x %in% valid_colors
-
-      # -> color: first valid hex or named color
-      if (length(parts) > 0) {
-        col_idx <- which(sapply(parts, function(x) is_hex_color(x) || is_named_color(x)))
-        if (length(col_idx) > 0) {
-          bl$color <- parts[col_idx[1]]
-        }
-      }
+      bl <- set_line_opts(baseline, out = bl)
     }
   }
 
-  # if (isFALSE(multiple) & !is.null(palette)) {
-  #   color <- palette[1]
-  # } else if (isTRUE(multiple) & length(palette) == 1) {
-  #   color <- palette
-  # } else {
-  #   color <- "black"
-  # }
+  # reference line settings
+  # -> default reference line styling (if specified as TRUE or string)
+  rl <- !is.null(reference)
+  if (rl) {
+    rl <- list(
+      color = "grey60",
+      type = "solid",
+      width = .6
+    )
+    # -> custom reference line settings (if specified as string)
+    if (is.character(reference_opts)) {
+      rl <- set_line_opts(reference_opts, out = rl)
+    }
+  }
 
   # visualization
   plot <- ggplot2::ggplot(data = dat) +
@@ -277,6 +331,26 @@ plot_proj <- function(
           color = bl$color,
           linetype = bl$type,
           linewidth = bl$width
+        )
+    } +
+    # draw reference line
+    {
+      if(!is.null(reference) & isFALSE(multiple) | !is.null(reference) & isTRUE(multiple)& isTRUE(facet))
+        c(
+          ggplot2::geom_ribbon(
+            ggplot2::aes(
+              ymin = ref,
+              ymax = pop
+            ),
+            fill = rl$color,
+            alpha = .33
+          ),
+          ggplot2::geom_line(
+            ggplot2::aes(y = ref),
+            color = rl$color,
+            linetype = rl$type,
+            linewidth = rl$width
+          )
         )
     } +
     # draw trajectory / trajectories
