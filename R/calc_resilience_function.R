@@ -150,7 +150,7 @@ calc_resilience <-
       dat$maxamp.t <- maxamp_res$timestep
       if (return.t == FALSE)
       {
-        dat$maxamp.t <- 999 # V: this has to be set to NULL, imo
+        dat$maxamp.t <- 999
       }
       msg <- paste(msg, maxamp_res$msg)
     }
@@ -177,7 +177,25 @@ calc_resilience <-
     #tt -----------------------------------------------------------------------
     if ("tt" %in% metrics) {
       if(!is.null(target.N)){
-      t_res <- time_to_target(A, vector, target.N, max_time, chunk)
+        t_res <- list(value = 999,
+                         msg = character(0))
+        msg.tt <- character(0)
+        tt.warning.tt <-
+          tryCatch(
+            tt_warn<- time_to_target(A, vector, target.N, max_time, chunk),
+            warning = function(w)
+              w
+          )
+        if (methods::is(tt.warning.tt, "warning")) {
+          msg.tt <- cbind(msg.tt, (
+                    tt.warning.tt[1]$message
+          ))
+
+          t_res <- 999
+        }
+        else {
+          t_res <- time_to_target(A, vector, target.N, max_time, chunk)
+          }
       }
       else{
         message("You specified tt in the metrics but did not specify
@@ -185,7 +203,9 @@ calc_resilience <-
         t_res <- 999
 
       }
+
       dat$tt <- t_res
+      msg <- paste(msg, msg.tt)
 
     }
 
@@ -378,8 +398,7 @@ repeat {
 
   # stop if exceeded max_time
   if (t >= max_time) {
-    message("the maximum projection time to identify the population
-                    target has been reached, NA will be returned")
+    warning("The maximum projection time to identify the population target has been reached, NA will be returned")
     return(999)
   }
 }
