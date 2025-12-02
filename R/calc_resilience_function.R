@@ -67,7 +67,7 @@ calc_resilience <-
            iterations = 1e+05,
            return.N = TRUE,
            return.t = TRUE,
-           target.N = NULL) {
+           target.N = NA) {
     if (is.null(A)) {
       stop("No Matrix was found")
     }
@@ -125,7 +125,7 @@ calc_resilience <-
                                 return.N = return.N)
       if(return.N ==TRUE)
       {
-      dat$reac <- reac_res$N
+        dat$reac <- reac_res$N
       }
       else(dat$reac <- reac_res)
 
@@ -176,9 +176,9 @@ calc_resilience <-
 
     #tt -----------------------------------------------------------------------
     if ("tt" %in% metrics) {
-      if(!is.null(target.N)){
+      if(!is.na(target.N)){
         t_res <- list(value = 999,
-                         msg = character(0))
+                      msg = character(0))
         msg.tt <- character(0)
         tt.warning.tt <-
           tryCatch(
@@ -188,14 +188,15 @@ calc_resilience <-
           )
         if (methods::is(tt.warning.tt, "warning")) {
           msg.tt <- cbind(msg.tt, (
-                    tt.warning.tt[1]$message
+            tt.warning.tt[1]$message
           ))
 
           t_res <- 999
         }
         else {
           t_res <- time_to_target(A, vector, target.N, max_time, chunk)
-          }
+          msg <- paste(msg, msg.tt)  # shift the message here because later on it is not produced
+        }
       }
       else{
         message("You specified tt in the metrics but did not specify
@@ -205,7 +206,7 @@ calc_resilience <-
       }
 
       dat$tt <- t_res
-      msg <- paste(msg, msg.tt)
+
 
     }
 
@@ -241,6 +242,7 @@ calc_resilience <-
 
     return(dat)
   }
+
 
 
 #' Calculate maxamp or maxatt metric
@@ -338,33 +340,33 @@ calc_convt <- function(metrics,
   list_res <- list(value = 999, N = 999)
 
 
-    list_res$value <- popdemo::convt(A,
-                                     vector = vector,
-                                     accuracy = accuracy,
-                                     iterations = iterations)
+  list_res$value <- popdemo::convt(A,
+                                   vector = vector,
+                                   accuracy = accuracy,
+                                   iterations = iterations)
 
 
-    if (return.N == TRUE) {
-      maxconvt <- max(list_res$value)
-      projpop <- popdemo::project(
-        A,
-        standard.A = FALSE,
-        vector = vector,
-        time = (maxconvt + 1)
-      )
+  if (return.N == TRUE) {
+    maxconvt <- max(list_res$value)
+    projpop <- popdemo::project(
+      A,
+      standard.A = FALSE,
+      vector = vector,
+      time = (maxconvt + 1)
+    )
 
-    }
-    if (return.N == FALSE) {
-      maxconvt <- max(list_res$value)
-      projpop <- popdemo::project(
-        A,
-        standard.A = TRUE,
-        vector = vector / sum(vector),
-        time = (maxconvt + 1)
-      )
-    }
+  }
+  if (return.N == FALSE) {
+    maxconvt <- max(list_res$value)
+    projpop <- popdemo::project(
+      A,
+      standard.A = TRUE,
+      vector = vector / sum(vector),
+      time = (maxconvt + 1)
+    )
+  }
 
-      list_res$N <- projpop[((list_res$value)+1)] #small trick to take out the first value of the projection
+  list_res$N <- projpop[((list_res$value)+1)] #small trick to take out the first value of the projection
 
   return(list_res)
 }
@@ -378,28 +380,28 @@ calc_convt <- function(metrics,
 #' @seealso [calc_resilience()]
 #' @keywords internal
 time_to_target <- function(A, n0, target, max_time = 10000, chunk = 100) {
-t <- 0
-n <- n0
-max_time = 10000
-chunk = 100
-repeat {
-  # project in chunks
-  proj <- popdemo::project(A, n, chunk, return.vec = TRUE)
+  t <- 0
+  n <- n0
+  max_time = 10000
+  chunk = 100
+  repeat {
+    # project in chunks
+    proj <- popdemo::project(A, n, chunk, return.vec = TRUE)
 
-  # check if target is reached in this chunk
-  if (any(proj >= target)) {
-    t_hit <- which(proj >= target)[1]
-    return(t + t_hit)
+    # check if target is reached in this chunk
+    if (any(proj >= target)) {
+      t_hit <- which(proj >= target)[1]
+      return(t + t_hit)
+    }
+
+    # update for next chunk
+    n <- proj@vec[length(proj),]
+    t <- t + chunk
+
+    # stop if exceeded max_time
+    if (t >= max_time) {
+      warning("The maximum projection time to identify the population target has been reached, NA will be returned")
+      return(999)
+    }
   }
-
-  # update for next chunk
-  n <- proj@vec[length(proj),]
-  t <- t + chunk
-
-  # stop if exceeded max_time
-  if (t >= max_time) {
-    warning("The maximum projection time to identify the population target has been reached, NA will be returned")
-    return(999)
-  }
-}
 }

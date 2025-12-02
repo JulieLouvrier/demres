@@ -76,7 +76,7 @@ resilience <- function(listA,
                        iterations = 1e+05,
                        return.N = TRUE,
                        return.t = TRUE,
-                       target.N = NULL) {
+                       target.N = NA) {
   message_varying <- character(0)
 
   if (!is.list(vector)) {
