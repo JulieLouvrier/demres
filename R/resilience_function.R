@@ -157,7 +157,12 @@ resilience <- function(listA,
         attr(e, "msg"))
 
       n.obs <- sapply(message_varying_temp, length)
-      message_varying_temp <- lapply(message_varying_temp, FUN = function(x){ifelse(is.null(x), x[1] <- NA, x[1] <- x[1])} )
+      message_varying_temp <- lapply(
+        message_varying_temp,
+        FUN = function(x) {
+          ifelse(is.null(x), x[1] <- NA, x[1] <- x[1])
+        }
+      )
       seq.max <- seq_len(max(n.obs))
       if (length(seq.max) > 0) {
         message_varying <- data.frame(sapply(message_varying_temp, "[", i = seq.max))
@@ -187,7 +192,7 @@ resilience <- function(listA,
     }
   }
 
-  if(return.t == FALSE) {
+  if (return.t == FALSE) {
     if ('maxatt' %in% metrics) {
       colnames_remove <- paste0(colnames(metres)[colnames(metres) %in% c('maxatt')], '.t')
       metres <- metres[, setdiff(colnames(AP_demres), col_rem)]
@@ -228,7 +233,7 @@ print.resil <- function(x, ...) {
 #' @seealso [demres_summary()] for details
 #'
 summary.resil <- function(object, ...) {
-  demres_summary(object, ... )
+  demres_summary(object, ...)
 }
 
 #' Plotting method for objects of class resil

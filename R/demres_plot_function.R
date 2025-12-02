@@ -45,7 +45,8 @@
 #'     popname = "adelie penguin",
 #'     verbose = TRUE,
 #'     return.N = TRUE,
-#'     return.t = TRUE
+#'     return.t = TRUE,
+#'     target.N = 500
 #'   )
 #'
 #' # Facet plot with comparison with the other trajectories, ordered by matrices order
@@ -93,6 +94,10 @@
 #'      #sort = TRUE,
 #'      #compare = TRUE,
 #'      facet = FALSE)
+#'
+#'
+#'
+#'
 
 
 demres_plot <- function(table,
