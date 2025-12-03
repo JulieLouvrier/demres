@@ -21,8 +21,9 @@
 #' # simulate an initial vector
 #' set.seed(125435)
 #' vec <- round(runif(2) * 100 )
-#' vector_list <- lapply(1:28, function(i) vec)
+#' vector_list <- lapply(1:28, function(i) vec) # repeating the initial vector 28 times, for each matrix
 #'
+#' # All metrics combined
 #' AP_demres <-
 #'   resilience(
 #'     listA = adeliepenguin,
@@ -36,6 +37,7 @@
 #'     target.N = 500
 #'   )
 #'
+#' # only for one year
 #' AP_demres1 <-
 #'   resilience(
 #'     listA = list(adeliepenguin[[1]]),
@@ -45,10 +47,13 @@
 #'     popname = "adelie penguin",
 #'     verbose = TRUE,
 #'     return.N = TRUE,
-#'     return.t = TRUE
+#'     return.t = TRUE,
+#'     target.N = 500
 #'   )
 #'
+#' # demres also allows using Time-Dependent vectors
 #' # an example with time-dependent population vector
+#'
 #' AP_demres_TD <-
 #'   resilience(
 #'     listA = adeliepenguin,
@@ -58,7 +63,8 @@
 #'     popname = "adelie penguin",
 #'     verbose = TRUE,
 #'     return.N = TRUE,
-#'     return.t = TRUE
+#'     return.t = TRUE,
+#'     target.N = 500
 #'   )
 #'
 #' @return An object of class "resil", which is a dataframe

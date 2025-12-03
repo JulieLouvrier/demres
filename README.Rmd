@@ -20,7 +20,8 @@ knitr::opts_chunk$set(
 The goal of __{demres}__ is to provide easy functions to calculate different time-varying and time-constant demographic resilience metrics. It also allows plotting the resulting metrics and measuring the discrepancy between the time-varying and the time-constant approach. 
 
 The different metrics provided are:   
-- Convergence time    
+- Convergence time   
+- Time to abundance target
 - Damping ratio    
 - Reactivity   
 - Maximum amplification   
@@ -62,7 +63,7 @@ The function `resilience` is made to calculate demographic resilience metrics ba
 # Create initial vector
 set.seed(125435)
 vec <- round(runif(2) * 100 )
-vector_list <- lapply(1:28, function(i) vec)
+vector_list <- lapply(1:28, function(i) vec) # repeating the initial vector 28 times, for each matrix
 
 #let's calculate all metrics of demographic resilience  with one initial vector
 AP_demres <-
@@ -74,7 +75,8 @@ AP_demres <-
      popname = "adelie penguin",
      verbose = FALSE,
      return.N = TRUE,
-     return.t = TRUE
+     return.t = TRUE,
+     target.N = 500
    )
 
 #let's take a look at what we got
