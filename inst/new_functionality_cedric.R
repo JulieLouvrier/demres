@@ -90,14 +90,20 @@ plot_proj(
     standard.A = TRUE, # overwrite default
     palette = "royalblue"
   ) +
-  coord_cartesian(ylim = c(0, 1))
+  coord_cartesian(ylim = c(0, 1.3))
 
 
 # input handling ...............................................................
 
+# V: this throws an error because as a popvec you are expected to use not the
+# dem structure i.e. penguinvec1 as was done here but, rahter
+# a vector returned from popdemo::project function, so the projection itself
+# So it will work with peng_proj_reg
 plot_proj(popvec = penguinvec1)
-plot_proj(popvec = peng_proj_std, facet = "ID")
-
+plot_proj(popvec = peng_proj_reg)
+plot_proj(popvec = peng_proj_std, facet = "ID") # this correctly throws an error -
+# FACET can't be ID
+plot_proj(popvec = peng_proj_std, facet = NULL)
 
 ## MULTIPLE POPULATIONS --------------------------------------------------------
 
