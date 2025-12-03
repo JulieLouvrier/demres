@@ -220,7 +220,7 @@ plot_proj <- function(
     legend_title <- "Time step (ranked)"
 
     if (!is.null(reference)) {
-      dat_ref$id <- factor(dat_ref$id, levels = order)
+      dat$id <- factor(dat$id, levels = order) #V: changed dat_ref to dat - seems like that was an old object naming?
     }
   }
 
