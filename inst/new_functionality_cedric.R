@@ -172,7 +172,7 @@ names(projasymtot) <- paste("ID", c(1:length(adeliepenguin)))
 my_colors <- viridis::rocket(n = length(pops_proj_std), begin = .1, end = .8)
 
 my_colors_named <- my_colors
-names(my_colors_named) <- 1:28
+names(my_colors_named) <- paste("ID", 1:28)
 
 
 # absolute .....................................................................
@@ -238,17 +238,17 @@ plot_proj(
   palette = "red"
 )
 
-# a vector specifying the reference pop can be passed as well:
+# a vector specifying the asymptotic pop can be passed as well:
 plot_proj(
   popvec = pops_proj_reg,
-  reference = projasymtot,
+  asymptotic = projasymtot,
   compare = FALSE
 )
 
 plot_proj(
   popvec = pops_proj_reg,
-  reference = projasymtot,
-  reference_opts = "cyan4 dashed 0.3",
+  asymptotic = projasymtot,
+  asymptotic_opts = "cyan4 dashed 0.3",
   sort = TRUE,
   palette = "royalblue",
   compare = FALSE

@@ -13,15 +13,16 @@
 #' @param facet Logical. If \code{TRUE} (default for lists), creates separate
 #'   panels for each trajectory. If \code{FALSE}, plots all trajectories on the
 #'   same panel. Ignored for single trajectories.
-#' @param reference Specification for the undisturbed population or other
-#'   reference lines. Defaults to `NULL` (no reference line and ribbon). Provide
-#'   a vector of population abundance over time (length must match that of
-#'   popvec) to draw a reference line showing the undisturbed population
-#'   projection and a ribbon highlighting the differences.
-#' @param reference_opts Reference line and ribbon specification. Defaults to
+#' @param asymptotic Specification for the undisturbed, aysymptotic population
+#'   or other reference lines. Defaults to `NULL` (no reference line and
+#'   ribbon). Providea vector of population abundance over time (length must
+#'   match that of popvec) to draw a line showing the undisturbed, asymptotic
+#'   population projection and a ribbon highlighting the difference.
+#' @param asymptotic_opts Line and ribbon specification for indicator of
+#'   the asymptotic population projection. Defaults to
 #' `NULL`.
-#'   - `NULL`: no reference is drawn (default).
-#'   - `TRUE`: draws a reference line and ribbon with default styling.
+#'   - `NULL`: no line is drawn (default).
+#'   - `TRUE`: draws a line and ribbon with default styling.
 #'   - A character string: allows custom styling. Can include:
 #'       * **color** — a single word (e.g. `"red"`) or a hex code (e.g.
 #' `"#FF0000"`). Sets the color of the line and the fill of the ribbon (with a
@@ -73,7 +74,9 @@
 #' plot_proj(single_pop)
 #'
 #' # Add other ggplot2 components
-#' plot_proj(single_pop, palette = "blue") + coord_cartesian(ylim = c(0, 300))
+#' plot_proj(single_pop, palette = "blue") +
+#'   coord_cartesian(ylim = c(0, 300)) +
+#'   labs(title = "Projected population trend")
 #'
 #' # plot asymptotic growth
 #' # extracting the stable stage distributions (aka asymptotic vectors)
@@ -88,7 +91,7 @@
 #'   time = 6
 #' )
 #'
-#' plot_proj(single_pop, reference = projasymptot1) ## Ju : here reference should called "asymptotic"
+#' plot_proj(single_pop, asymptotic = projasymptot1)
 #'
 #' # Multiple trajectories
 #' multi_pop <- lapply(c(1:length(adeliepenguin)), FUN = function(x) {
@@ -102,22 +105,30 @@
 #'
 #' plot_proj(multi_pop)
 #'
-#' # rank trajectories and remove shaded lines
-#' plot_proj(multi_pop, sort = TRUE, compare = TRUE)
+#' # order facets based on most recent population value
+#' plot_proj(multi_pop, sort = TRUE)
+#'
+#'remove shaded lines
+#' plot_proj(multi_pop, compare = FALSE)
+#'
+#' # apply custom color
+#' plot_proj(multi_pop, palette = "red")
 #'
 #' # plot n0
 #' plot_proj(multi_pop, n0 = TRUE)
 #' plot_proj(multi_pop, n0 = "red solid 2")
 #'
-#' # apply custom color
-#' plot_proj(multi_pop, palette = "red")
-#'
 #' # plot all trajectories in a single panel
 #' plot_proj(multi_pop, facet = FALSE)
 #'
-#' # use additional parameters from geom_line()
+#' # plot all trajectories in a single panel and encode by color
+#' plot_proj(multi_pop, facet = FALSE, sort = TRUE)
+#'
+#' # use additional parameters from geom_line() such as
+#' # linewidth and linetype
 #' plot_proj(multi_pop, linewidth = 1.5, linetype = "31")
-#' plot_proj(multi_pop, facet = FALSE, palette = "blue", alpha = .3)
+#' # alpha
+#' plot_proj(multi_pop, facet = FALSE, palette = "blue", alpha = .2)
 #'
 #' @export
 
@@ -126,8 +137,8 @@ plot_proj <- function(
     standard.A = FALSE,
     facet = NULL,
     n0 = NULL,
-    reference = NULL,
-    reference_opts = NULL,
+    asymptotic = NULL,
+    asymptotic_opts = NULL,
     compare = NULL,
     sort = FALSE,
     palette = NULL,
@@ -140,11 +151,11 @@ plot_proj <- function(
   stopifnot("standard.A must be either TRUE or FALSE." = is.logical(standard.A))
   stopifnot("facet must be either NULL, TRUE or FALSE." = is.logical(facet) | is.null(facet))
   stopifnot("n0 must be either NULL, boolean or a string specifying the styling." = is.logical(n0) | is.character(n0) | is.null(n0))
-  if (isFALSE(multiple)) rc <- class(reference) else rc <- class(reference[[1]])
-  if (!is.null(reference)) stopifnot("reference must match the popvec object." = vc == rc)
-  stopifnot("reference must be a vector of an object returned from popdemo::project() or a list of the same." = "Projection" %in% rc | is.null(reference))
-  stopifnot("Names and order of list elements of reference must match those of popvec." = names(popvec) == names(reference))
-  stopifnot("reference_opts must be either NULL, boolean or a string specifying the styling." = is.logical(reference_opts) | is.character(reference_opts) | is.null(reference_opts))
+  if (isFALSE(multiple)) rc <- class(asymptotic) else rc <- class(asymptotic[[1]])
+  if (!is.null(asymptotic)) stopifnot("asymptotic must match the popvec object." = vc == rc)
+  stopifnot("asymptotic must be a vector of an object returned from popdemo::project() or a list of the same." = "Projection" %in% rc | is.null(asymptotic))
+  stopifnot("Names and order of list elements of asymptotic must match those of popvec." = names(popvec) == names(asymptotic))
+  stopifnot("asymptotic_opts must be either NULL, boolean or a string specifying the styling." = is.logical(asymptotic_opts) | is.character(asymptotic_opts) | is.null(asymptotic_opts))
   stopifnot("compare must be either NULL, TRUE or FALSE." = is.logical(compare) | is.null(compare))
   stopifnot("sort must be either TRUE or FALSE." = is.logical(sort))
 
@@ -179,12 +190,12 @@ plot_proj <- function(
     }
   }
 
-  if (!is.null(reference) & isTRUE(multiple) & isFALSE(facet)) {
-    message("Reference lines are not plotted for multiple projections when facet = FALSE.")
+  if (!is.null(asymptotic) & isTRUE(multiple) & isFALSE(facet)) {
+    message("asymptotic lines are not plotted for multiple projections when facet = FALSE.")
   }
 
-  if (!is.null(reference) & isTRUE(multiple) & isTRUE(facet)) {
-    message("It is recommended to set compare = FALSE when plotting reference ribbons.")
+  if (!is.null(asymptotic) & isTRUE(multiple) & isTRUE(facet)) {
+    message("It is recommended to set compare = FALSE when plotting asymptotic ribbons.")
   }
 
   # set titles for y-axis and legend
@@ -228,24 +239,24 @@ plot_proj <- function(
     )
   }
 
-  # define single / multi reference settings
-  if (!is.null(reference)) {
+  # define single / multi asymptotic settings
+  if (!is.null(asymptotic)) {
     if (isTRUE(multiple)) {
-      dat$ref <- unlist(reference)
+      dat$ref <- unlist(asymptotic)
     } else {
-      dat$ref <- reference
+      dat$ref <- asymptotic
     }
   }
 
-  # rank years by most recent population value
+  # rank by most recent population value
   if (isTRUE(sort) & isTRUE(multiple)) {
     dat_last <- dat[dat$time == max(dat$time), ]
     order <- dat_last$id[order(dat_last$pop, decreasing = TRUE)]
     dat$id <- factor(dat$id, levels = order)
     legend_title <- "Time step (ranked)"
 
-    if (!is.null(reference)) {
-      dat$id <- factor(dat$id, levels = order) # V: changed dat_ref to dat - seems like that was an old object naming?
+    if (!is.null(asymptotic)) {
+      dat$id <- factor(dat$id, levels = order)
     }
   }
 
@@ -321,18 +332,18 @@ plot_proj <- function(
     }
   }
 
-  # reference line settings
-  # -> default reference line styling (if specified as TRUE or string)
-  rl <- !is.null(reference)
+  # asymptotic line settings
+  # -> default asymptotic line styling (if specified as TRUE or string)
+  rl <- !is.null(asymptotic)
   if (rl) {
     rl <- list(
       color = "grey60",
       type = "solid",
       width = .6
     )
-    # -> custom reference line settings (if specified as string)
-    if (is.character(reference_opts)) {
-      rl <- set_line_opts(reference_opts, out = rl)
+    # -> custom asymptotic line settings (if specified as string)
+    if (is.character(asymptotic_opts)) {
+      rl <- set_line_opts(asymptotic_opts, out = rl)
     }
   }
 
@@ -369,9 +380,9 @@ plot_proj <- function(
         )
       }
     } +
-    # draw reference line
+    # draw asymptotic line
     {
-      if (!is.null(reference) & isFALSE(multiple) | !is.null(reference) & isTRUE(multiple) & isTRUE(facet)) {
+      if (!is.null(asymptotic) & isFALSE(multiple) | !is.null(asymptotic) & isTRUE(multiple) & isTRUE(facet)) {
         c(
           ggplot2::geom_ribbon(
             ggplot2::aes(
