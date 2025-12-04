@@ -125,27 +125,24 @@ names(pops_proj_std) <- paste("ID", c(1:length(adeliepenguin)))
 
 #-------------------------------------------------------------------------------
 
-# undisturbed populations
+# asymptotic growth
 
 # extracting the stable stage distributions (aka asymptotic vectors)
 # out of the right eigenvector of each matrix
 # and multiplying it by the sum of individuals we have in a population
-ss_vec <- mapply(function(A, X) {
-  (popdemo::eigs(A)$ss)*sum(X)
-},
-A = adeliepenguin,
-X = penguinvec1,
-SIMPLIFY = FALSE)
+ss_vec <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
+  round(popdemo::eigs(adeliepenguin[[x]])$ss*sum(penguinvec1)))
+})
 
 timeproj = 5
 
-#project the undisturbed pop based on the asymptotic initial vectors
-projundisturbed <- mapply(function(A, X) {
+#project the asymptotic pop based on the asymptotic initial vectors
+projasymtot <- mapply(function(A, X) {
   popdemo::project(
     A,
     vector = X,
     standard.A = FALSE,
-    time = timeproj # CED: timeproj is not defined
+    time = timeproj
   )
 },
 A = adeliepenguin,
@@ -154,7 +151,7 @@ SIMPLIFY = FALSE)
 
 # default naming (in the demres_plot function there is the option to select
 # only specific matrices and naming them accordingly)
-names(projundisturbed) <- paste("ID", c(1:length(adeliepenguin)))
+names(projasymtot) <- paste("ID", c(1:length(adeliepenguin)))
 
 #(works also for standardized vector)
 
@@ -233,13 +230,13 @@ plot_proj(
 # a vector specifying the reference pop can be passed as well:
 plot_proj(
   popvec = pops_proj_reg,
-  reference = projundisturbed,
+  reference = projasymtot,
   compare = FALSE
 )
 
 plot_proj(
   popvec = pops_proj_reg,
-  reference = projundisturbed,
+  reference = projasymtot,
   reference_opts = "cyan4 dashed 0.3",
   sort = TRUE,
   palette = "royalblue",

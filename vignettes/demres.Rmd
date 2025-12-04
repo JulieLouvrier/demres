@@ -24,6 +24,8 @@ The different metrics provided are:
 - _Maximum attenuation_   
 - _Reactivity_   
 
+#Julie: include image with resilience from the paper
+
 It is build around one dependency:
 
 - [`popdemo`](https://github.com/iainmstott/popdemo)

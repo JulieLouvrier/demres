@@ -65,31 +65,45 @@
 #'
 #' @examples
 #' # Single trajectory
-#' single_pop <- c(100, 105, 120, 160, 200, 270)
+#' data(adeliepenguin)
+#' set.seed(1234)
+#' penguinvec1 <- round(runif(2) * 100)
+#'
+#' single_pop <- popdemo::project(adeliepenguin[[1]], standard.A = FALSE, vector = penguinvec1, time = 6 )
 #' plot_proj(single_pop)
 #'
 #' # Add other ggplot2 components
 #' plot_proj(single_pop, palette = "blue") + coord_cartesian(ylim = c(0, 300))
 #'
-#' # plot reference
-#' plot_proj(single_pop, reference = single_pop + 10)
+#' # plot asymptotic growth
+#' # extracting the stable stage distributions (aka asymptotic vectors)
+#' # out of the right eigenvector of the matrix
+#' # and multiplying it by the sum of individuals we have in a population
+#' ss_vec1 <- round(popdemo::eigs(adeliepenguin[[1]])$ss*sum(penguinvec1))
+#'
+#' #project the undisturbed pop based on the asymptotic initial vectors
+#' projasymptot1 <-  popdemo::project(adeliepenguin[[1]],
+#' vector = ss_vec1,
+#' standard.A = FALSE,
+#' time = 6
+#' )
+#'
+#' plot_proj(single_pop, reference = projasymptot1) ## Ju : here reference should called "asymptotic"
 #'
 #' # Multiple trajectories
-#' multi_pop <- list(
-#'   `1` = c(100, 110, 130, 160),
-#'   `2` = c(100, 90, 80, 75),
-#'   `3` = c(100, 105, 120, 130),
-#'   `4` = c(100, 95, 90, 80),
-#'   `5` = c(100, 105, 115, 150),
-#'   `6` = c(100, 105, 110, 125)
+#' multi_pop <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
+#' popdemo::project(
+#'   adeliepenguin[[x]], standard.A = FALSE, vector = penguinvec1, time = 5
 #' )
+#' )})
+#'
 #' plot_proj(multi_pop)
 #'
 #' # rank trajectories and remove shaded lines
 #' plot_proj(multi_pop, sort = TRUE, compare = TRUE)
 #'
 #' # plot baseline
-#' plot_proj(multi_pop, baseline = TRUE)
+#' plot_proj(multi_pop, baseline = TRUE) #Ju : here changing "baseline" into "n0"
 #' plot_proj(multi_pop, baseline = "red solid 2")
 #'
 #' # apply custom color
