@@ -8,9 +8,9 @@ plot_proj(
   popvec = NULL,
   standard.A = FALSE,
   facet = NULL,
-  baseline = NULL,
-  reference = NULL,
-  reference_opts = NULL,
+  n0 = NULL,
+  asymptotic = NULL,
+  asymptotic_opts = NULL,
   compare = NULL,
   sort = FALSE,
   palette = NULL,
@@ -30,10 +30,10 @@ standardised asymptotic dynamics (scaled by the dominant eigenvalue).}
 panels for each trajectory. If \code{FALSE}, plots all trajectories on the
 same panel. Ignored for single trajectories.}
 
-\item{baseline}{Baseline line specification. Defaults to \code{NULL}.
+\item{n0}{Line specification for n0 indicator. Defaults to \code{NULL}.
 \itemize{
-\item \code{NULL}: no baseline is drawn (default).
-\item \code{TRUE}: draws a baseline with default styling.
+\item \code{NULL}: no line is drawn (default).
+\item \code{TRUE}: draws a line with default styling.
 \item A character string: allows custom styling. Can include:
 \itemize{
 \item \strong{color} — a single word (e.g. \code{"red"}) or a hex code (e.g. \code{"#FF0000"}).
@@ -43,17 +43,18 @@ Elements can appear in any order. Missing elements fall back to defaults (black,
 }
 }}
 
-\item{reference}{Specification for the undisturbed population or other
-reference lines. Defaults to \code{NULL} (no reference line and ribbon). Provide
-a vector of population abundance over time (length must match that of
-popvec) to draw a reference line showing the undisturbed population
-projection and a ribbon highlighting the differences.}
+\item{asymptotic}{Specification for the undisturbed, aysymptotic population
+or other reference lines. Defaults to \code{NULL} (no reference line and
+ribbon). Providea vector of population abundance over time (length must
+match that of popvec) to draw a line showing the undisturbed, asymptotic
+population projection and a ribbon highlighting the difference.}
 
-\item{reference_opts}{Reference line and ribbon specification. Defaults to
+\item{asymptotic_opts}{Line and ribbon specification for indicator of
+the asymptotic population projection. Defaults to
 \code{NULL}.
 \itemize{
-\item \code{NULL}: no reference is drawn (default).
-\item \code{TRUE}: draws a reference line and ribbon with default styling.
+\item \code{NULL}: no line is drawn (default).
+\item \code{TRUE}: draws a line and ribbon with default styling.
 \item A character string: allows custom styling. Can include:
 \itemize{
 \item \strong{color} — a single word (e.g. \code{"red"}) or a hex code (e.g.
@@ -102,41 +103,68 @@ When arguments are not applicable for single trajectories (applies to
 }
 \examples{
 # Single trajectory
-single_pop <- c(100, 105, 120, 160, 200, 270)
+data(adeliepenguin)
+set.seed(1234)
+penguinvec1 <- round(runif(2) * 100)
+
+single_pop <- popdemo::project(adeliepenguin[[1]], standard.A = FALSE, vector = penguinvec1, time = 6)
 plot_proj(single_pop)
 
 # Add other ggplot2 components
-plot_proj(single_pop, palette = "blue") + coord_cartesian(ylim = c(0, 300))
+plot_proj(single_pop, palette = "blue") +
+  coord_cartesian(ylim = c(0, 300)) +
+  labs(title = "Projected population trend")
 
-# plot reference
-plot_proj(single_pop, reference = single_pop + 10)
+# plot asymptotic growth
+# extracting the stable stage distributions (aka asymptotic vectors)
+# out of the right eigenvector of the matrix
+# and multiplying it by the sum of individuals we have in a population
+ss_vec1 <- round(popdemo::eigs(adeliepenguin[[1]])$ss * sum(penguinvec1))
+
+# project the undisturbed pop based on the asymptotic initial vectors
+projasymptot1 <- popdemo::project(adeliepenguin[[1]],
+  vector = ss_vec1,
+  standard.A = FALSE,
+  time = 6
+)
+
+plot_proj(single_pop, asymptotic = projasymptot1)
 
 # Multiple trajectories
-multi_pop <- list(
-  `1` = c(100, 110, 130, 160),
-  `2` = c(100, 90, 80, 75),
-  `3` = c(100, 105, 120, 130),
-  `4` = c(100, 95, 90, 80),
-  `5` = c(100, 105, 115, 150),
-  `6` = c(100, 105, 110, 125)
-)
+multi_pop <- lapply(c(1:length(adeliepenguin)), FUN = function(x) {
+  (
+    popdemo::project(
+      adeliepenguin[[x]],
+      standard.A = FALSE, vector = penguinvec1, time = 5
+    )
+  )
+})
+
 plot_proj(multi_pop)
 
-# rank trajectories and remove shaded lines
-plot_proj(multi_pop, sort = TRUE, compare = TRUE)
+# order facets based on most recent population value
+plot_proj(multi_pop, sort = TRUE)
 
-# plot baseline
-plot_proj(multi_pop, baseline = TRUE)
-plot_proj(multi_pop, baseline = "red solid 2")
+# remove shaded lines
+plot_proj(multi_pop, compare = FALSE)
 
 # apply custom color
 plot_proj(multi_pop, palette = "red")
 
+# plot n0
+plot_proj(multi_pop, n0 = TRUE)
+plot_proj(multi_pop, n0 = "red solid 2")
+
 # plot all trajectories in a single panel
 plot_proj(multi_pop, facet = FALSE)
 
-# use additional parameters from geom_line()
+# plot all trajectories in a single panel and encode by color
+plot_proj(multi_pop, facet = FALSE, sort = TRUE)
+
+# use additional parameters from geom_line() such as
+# linewidth and linetype
 plot_proj(multi_pop, linewidth = 1.5, linetype = "31")
-plot_proj(multi_pop, facet = FALSE, palette = "blue", alpha = .3)
+# alpha
+plot_proj(multi_pop, facet = FALSE, palette = "blue", alpha = .2)
 
 }
