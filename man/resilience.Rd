@@ -16,7 +16,7 @@ resilience(
   iterations = 1e+05,
   return.N = TRUE,
   return.t = TRUE,
-  target.N = NULL
+  target.N = NA
 )
 }
 \arguments{
@@ -83,8 +83,9 @@ data(adeliepenguin)
 # simulate an initial vector
 set.seed(125435)
 vec <- round(runif(2) * 100 )
-vector_list <- lapply(1:28, function(i) vec)
+vector_list <- lapply(1:28, function(i) vec) # repeating the initial vector 28 times, for each matrix
 
+# All metrics combined
 AP_demres <-
   resilience(
     listA = adeliepenguin,
@@ -98,6 +99,7 @@ AP_demres <-
     target.N = 500
   )
 
+# only for one year
 AP_demres1 <-
   resilience(
     listA = list(adeliepenguin[[1]]),
@@ -107,10 +109,13 @@ AP_demres1 <-
     popname = "adelie penguin",
     verbose = TRUE,
     return.N = TRUE,
-    return.t = TRUE
+    return.t = TRUE,
+    target.N = 500
   )
 
+# demres also allows using Time-Dependent vectors
 # an example with time-dependent population vector
+
 AP_demres_TD <-
   resilience(
     listA = adeliepenguin,
@@ -120,7 +125,8 @@ AP_demres_TD <-
     popname = "adelie penguin",
     verbose = TRUE,
     return.N = TRUE,
-    return.t = TRUE
+    return.t = TRUE,
+    target.N = 500
   )
 
 }

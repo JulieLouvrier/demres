@@ -14,7 +14,7 @@ calc_resilience(
   iterations = 1e+05,
   return.N = TRUE,
   return.t = TRUE,
-  target.N = NULL
+  target.N = NA
 )
 }
 \arguments{

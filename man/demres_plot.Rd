@@ -100,7 +100,8 @@ AP_demres <-
     popname = "adelie penguin",
     verbose = TRUE,
     return.N = TRUE,
-    return.t = TRUE
+    return.t = TRUE,
+    target.N = 500
   )
 
 # Facet plot with comparison with the other trajectories, ordered by matrices order
@@ -148,4 +149,8 @@ plot(AP_demres,
      #sort = TRUE,
      #compare = TRUE,
      facet = FALSE)
+
+
+
+
 }
