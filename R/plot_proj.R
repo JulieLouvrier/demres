@@ -31,9 +31,9 @@
 #'       * **linewidth** — a numeric value.
 #'
 #' Elements can appear in any order. Missing elements fall back to defaults (grey60, solid, 0.4).
-#' @param baseline Baseline line specification. Defaults to `NULL`.
-#'   - `NULL`: no baseline is drawn (default).
-#'   - `TRUE`: draws a baseline with default styling.
+#' @param n0 Line specification for n0 indicator. Defaults to `NULL`.
+#'   - `NULL`: no line is drawn (default).
+#'   - `TRUE`: draws a line with default styling.
 #'   - A character string: allows custom styling. Can include:
 #'       * **color** — a single word (e.g. `"red"`) or a hex code (e.g. `"#FF0000"`).
 #'       * **linetype** — one of `"solid"`, `"dashed"`, `"dotted"`, `"dotdash"`, `"longdash"`, `"twodash"`.
@@ -69,7 +69,7 @@
 #' set.seed(1234)
 #' penguinvec1 <- round(runif(2) * 100)
 #'
-#' single_pop <- popdemo::project(adeliepenguin[[1]], standard.A = FALSE, vector = penguinvec1, time = 6 )
+#' single_pop <- popdemo::project(adeliepenguin[[1]], standard.A = FALSE, vector = penguinvec1, time = 6)
 #' plot_proj(single_pop)
 #'
 #' # Add other ggplot2 components
@@ -79,32 +79,35 @@
 #' # extracting the stable stage distributions (aka asymptotic vectors)
 #' # out of the right eigenvector of the matrix
 #' # and multiplying it by the sum of individuals we have in a population
-#' ss_vec1 <- round(popdemo::eigs(adeliepenguin[[1]])$ss*sum(penguinvec1))
+#' ss_vec1 <- round(popdemo::eigs(adeliepenguin[[1]])$ss * sum(penguinvec1))
 #'
-#' #project the undisturbed pop based on the asymptotic initial vectors
-#' projasymptot1 <-  popdemo::project(adeliepenguin[[1]],
-#' vector = ss_vec1,
-#' standard.A = FALSE,
-#' time = 6
+#' # project the undisturbed pop based on the asymptotic initial vectors
+#' projasymptot1 <- popdemo::project(adeliepenguin[[1]],
+#'   vector = ss_vec1,
+#'   standard.A = FALSE,
+#'   time = 6
 #' )
 #'
 #' plot_proj(single_pop, reference = projasymptot1) ## Ju : here reference should called "asymptotic"
 #'
 #' # Multiple trajectories
-#' multi_pop <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
-#' popdemo::project(
-#'   adeliepenguin[[x]], standard.A = FALSE, vector = penguinvec1, time = 5
-#' )
-#' )})
+#' multi_pop <- lapply(c(1:length(adeliepenguin)), FUN = function(x) {
+#'   (
+#'     popdemo::project(
+#'       adeliepenguin[[x]],
+#'       standard.A = FALSE, vector = penguinvec1, time = 5
+#'     )
+#'   )
+#' })
 #'
 #' plot_proj(multi_pop)
 #'
 #' # rank trajectories and remove shaded lines
 #' plot_proj(multi_pop, sort = TRUE, compare = TRUE)
 #'
-#' # plot baseline
-#' plot_proj(multi_pop, baseline = TRUE) #Ju : here changing "baseline" into "n0"
-#' plot_proj(multi_pop, baseline = "red solid 2")
+#' # plot n0
+#' plot_proj(multi_pop, n0 = TRUE)
+#' plot_proj(multi_pop, n0 = "red solid 2")
 #'
 #' # apply custom color
 #' plot_proj(multi_pop, palette = "red")
@@ -122,7 +125,7 @@ plot_proj <- function(
     popvec = NULL,
     standard.A = FALSE,
     facet = NULL,
-    baseline = NULL,
+    n0 = NULL,
     reference = NULL,
     reference_opts = NULL,
     compare = NULL,
@@ -136,7 +139,7 @@ plot_proj <- function(
   stopifnot("popvec must be a vector of an object returned from popdemo::project() or a list of the same." = "Projection" %in% vc)
   stopifnot("standard.A must be either TRUE or FALSE." = is.logical(standard.A))
   stopifnot("facet must be either NULL, TRUE or FALSE." = is.logical(facet) | is.null(facet))
-  stopifnot("baseline must be either NULL, boolean or a string specifying the styling." = is.logical(baseline) | is.character(baseline) | is.null(baseline))
+  stopifnot("n0 must be either NULL, boolean or a string specifying the styling." = is.logical(n0) | is.character(n0) | is.null(n0))
   if (isFALSE(multiple)) rc <- class(reference) else rc <- class(reference[[1]])
   if (!is.null(reference)) stopifnot("reference must match the popvec object." = vc == rc)
   stopifnot("reference must be a vector of an object returned from popdemo::project() or a list of the same." = "Projection" %in% rc | is.null(reference))
@@ -302,9 +305,9 @@ plot_proj <- function(
     return(out)
   }
 
-  # baseline settings
-  # -> default baseline styling (if specified as TRUE or string)
-  bl <- !is.null(baseline) & !isFALSE(baseline)
+  # n0 settings
+  # -> default n0 styling (if specified as TRUE or string)
+  bl <- !is.null(n0) & !isFALSE(n0)
   if (bl) {
     bl <- list(
       y = min(dat$pop[which(dat$time == 0)]),
@@ -312,9 +315,9 @@ plot_proj <- function(
       type = "dashed",
       width = 0.8
     )
-    # -> custom baseline settings (if specified as string)
-    if (is.character(baseline)) {
-      bl <- set_line_opts(baseline, out = bl)
+    # -> custom n0 settings (if specified as string)
+    if (is.character(n0)) {
+      bl <- set_line_opts(n0, out = bl)
     }
   }
 
@@ -355,7 +358,7 @@ plot_proj <- function(
         )
       }
     } +
-    # draw baseline
+    # draw n0
     {
       if (!isFALSE(bl)) {
         ggplot2::geom_hline(

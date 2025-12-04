@@ -13,14 +13,16 @@ set.seed(1234)
 penguinvec1 <- round(runif(2) * 100)
 
 peng_proj_reg <- popdemo::project(
-  adeliepenguin[[1]], standard.A = FALSE, vector = penguinvec1, time = 5
+  adeliepenguin[[1]],
+  standard.A = FALSE, vector = penguinvec1, time = 5
 )
 
 # standardized
 penguinvec2 <- penguinvec1 / sum(penguinvec1)
 
 peng_proj_std <- popdemo::project(
-  adeliepenguin[[1]], standard.A = TRUE, vector = penguinvec2, time = 5
+  adeliepenguin[[1]],
+  standard.A = TRUE, vector = penguinvec2, time = 5
 )
 
 
@@ -31,15 +33,15 @@ peng_proj_std <- popdemo::project(
 # extracting the stable stage distributions (aka asymptotic vectors)
 # out of the right eigenvector of the matrix
 # and multiplying it by the sum of individuals we have in a population
-ss_vec1 <- popdemo::eigs(adeliepenguin[[1]])$ss*sum(penguinvec1) # CED: doesnt work for me
+ss_vec1 <- popdemo::eigs(adeliepenguin[[1]])$ss * sum(penguinvec1) # CED: doesnt work for me
 
-#project the undisturbed pop based on the asymptotic initial vectors
-projundisturbed1 <-  popdemo::project(
-    adeliepenguin,
-    vector = ss_vec1,
-    standard.A = FALSE,
-    time = 5
-  )
+# project the undisturbed pop based on the asymptotic initial vectors
+projundisturbed1 <- popdemo::project(
+  adeliepenguin,
+  vector = ss_vec1,
+  standard.A = FALSE,
+  time = 5
+)
 
 
 # ------------------------------------------------------------------------------
@@ -65,7 +67,7 @@ plot_proj(
   popvec = peng_proj_reg,
   standard.A = FALSE, # default
   palette = "red",
-  baseline = TRUE,
+  n0 = TRUE,
   sort = TRUE, # will be ignored
   facet = TRUE, # will be ignored
   compare = TRUE # will be ignored
@@ -86,10 +88,10 @@ plot_proj(
 )
 
 plot_proj(
-    popvec = peng_proj_std,
-    standard.A = TRUE, # overwrite default
-    palette = "royalblue"
-  ) +
+  popvec = peng_proj_std,
+  standard.A = TRUE, # overwrite default
+  palette = "royalblue"
+) +
   coord_cartesian(ylim = c(0, 1.3))
 
 
@@ -107,19 +109,25 @@ plot_proj(popvec = peng_proj_std, facet = NULL)
 
 ## MULTIPLE POPULATIONS --------------------------------------------------------
 
-pops_proj_reg <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
-  popdemo::project(
-    adeliepenguin[[x]], standard.A = FALSE, vector = penguinvec1, time = 5
+pops_proj_reg <- lapply(c(1:length(adeliepenguin)), FUN = function(x) {
+  (
+    popdemo::project(
+      adeliepenguin[[x]],
+      standard.A = FALSE, vector = penguinvec1, time = 5
+    )
   )
-)})
+})
 
-pops_proj_std <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
-  popdemo::project(
-    adeliepenguin[[x]], standard.A = TRUE, vector = penguinvec2, time = 5
+pops_proj_std <- lapply(c(1:length(adeliepenguin)), FUN = function(x) {
+  (
+    popdemo::project(
+      adeliepenguin[[x]],
+      standard.A = TRUE, vector = penguinvec2, time = 5
+    )
   )
-)})
+})
 
-##Julie
+## Julie
 names(pops_proj_reg) <- paste("ID", c(1:length(adeliepenguin)))
 names(pops_proj_std) <- paste("ID", c(1:length(adeliepenguin)))
 
@@ -130,30 +138,33 @@ names(pops_proj_std) <- paste("ID", c(1:length(adeliepenguin)))
 # extracting the stable stage distributions (aka asymptotic vectors)
 # out of the right eigenvector of each matrix
 # and multiplying it by the sum of individuals we have in a population
-ss_vec <- lapply(c(1:length(adeliepenguin)), FUN = function( x ) {(
-  round(popdemo::eigs(adeliepenguin[[x]])$ss*sum(penguinvec1)))
+ss_vec <- lapply(c(1:length(adeliepenguin)), FUN = function(x) {
+  (
+    round(popdemo::eigs(adeliepenguin[[x]])$ss * sum(penguinvec1)))
 })
 
-timeproj = 5
+timeproj <- 5
 
-#project the asymptotic pop based on the asymptotic initial vectors
-projasymtot <- mapply(function(A, X) {
-  popdemo::project(
-    A,
-    vector = X,
-    standard.A = FALSE,
-    time = timeproj
-  )
-},
-A = adeliepenguin,
-X = ss_vec,
-SIMPLIFY = FALSE)
+# project the asymptotic pop based on the asymptotic initial vectors
+projasymtot <- mapply(
+  function(A, X) {
+    popdemo::project(
+      A,
+      vector = X,
+      standard.A = FALSE,
+      time = timeproj
+    )
+  },
+  A = adeliepenguin,
+  X = ss_vec,
+  SIMPLIFY = FALSE
+)
 
 # default naming (in the demres_plot function there is the option to select
 # only specific matrices and naming them accordingly)
 names(projasymtot) <- paste("ID", c(1:length(adeliepenguin)))
 
-#(works also for standardized vector)
+# (works also for standardized vector)
 
 #-------------------------------------------------------------------------------
 
@@ -243,34 +254,34 @@ plot_proj(
   compare = FALSE
 )
 
-# we can add a baseline for the initial population size:
+# we can add a line to indicate the initial population size:
 plot_proj(
   popvec = pops_proj_reg,
-  baseline = TRUE,
+  n0 = TRUE,
   palette = "red"
 )
 
 # ... and style it by passing a string:
 plot_proj(
   popvec = pops_proj_reg,
-  baseline = "red solid"
+  n0 = "red solid"
 )
 
 plot_proj(
   popvec = pops_proj_reg,
-  baseline = "#ff6633 dotted 1"
-)
-
-plot_proj(
-  popvec = pops_proj_reg,
-  facet = FALSE,
-  baseline = "5 dotdash"
+  n0 = "#ff6633 dotted 1"
 )
 
 plot_proj(
   popvec = pops_proj_reg,
   facet = FALSE,
-  baseline = "longdot dashed red 2" # ignores words that don't match type or colors
+  n0 = "5 dotdash"
+)
+
+plot_proj(
+  popvec = pops_proj_reg,
+  facet = FALSE,
+  n0 = "longdot dashed red 2" # ignores words that don't match type or colors
 )
 
 # standardized .................................................................
@@ -327,4 +338,3 @@ AP_demres <- resilience(
 #   facet = FALSE,
 #   sort = TRUE
 # )
-
