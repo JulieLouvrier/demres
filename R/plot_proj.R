@@ -396,7 +396,7 @@ plot_proj <- function(
     # create small multiples
     {
       if (isTRUE(multiple) & isTRUE(facet)) {
-        ggplot2::facet_wrap(vars(id))
+        ggplot2::facet_wrap(ggplot2::vars(id))
       }
     } +
     # add padding to top and bottom
