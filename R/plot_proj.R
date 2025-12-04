@@ -406,12 +406,14 @@ plot_proj <- function(
     # use custom color palette
     {
       if (isTRUE(multiple) & !is.null(palette)) {
-        ggplot2::scale_color_manual(values = palette)
+        ggplot2::scale_color_manual(values = palette, name = legend_title)
       }
     } +
     {
       if (isTRUE(multiple) & is.null(palette)) {
-        ggplot2::scale_color_viridis_d(option = "mako", begin = .1, end = .8)
+        ggplot2::scale_color_viridis_d(
+          option = "mako", begin = .1, end = .8, name = legend_title
+        )
       }
     } +
     # style visualization
@@ -420,7 +422,7 @@ plot_proj <- function(
         ggplot2::guides(color = ggplot2::guide_none())
       }
     } +
-    ggplot2::labs(x = "Time intervals", y = ylab, color = legend_title) +
+    ggplot2::labs(x = "Time intervals", y = ylab) +
     ggplot2::theme_bw() +
     ggplot2::theme(
       panel.grid.minor = ggplot2::element_blank(),
