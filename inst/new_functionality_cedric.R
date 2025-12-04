@@ -306,3 +306,28 @@ AP_demres <- resilience(
   return.N = TRUE,
   return.t = TRUE
 )
+# V: Julie, do you not find it strange that the population size increases
+# over time with your TD vector? That would be worth to test properly
+
+## adding target.N to the arguments, as otherwise it does not make much
+# sense to ask for tt
+AP_demres <- resilience(
+  listA = adeliepenguin,
+  metrics = "all",
+  vector = vector_list,
+  TDvector = TRUE,
+  popname = "adelie penguin",
+  verbose = FALSE,
+  return.N = TRUE,
+  return.t = TRUE,
+  target.N = 300
+)
+
+# and now using this AP_demres to plot - use a different function
+# ->resilience.plot
+# plot_proj(
+#   popvec = AP_demres,
+#   facet = FALSE,
+#   sort = TRUE
+# )
+
