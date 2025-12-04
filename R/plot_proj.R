@@ -23,11 +23,15 @@
 #'   - `NULL`: no reference is drawn (default).
 #'   - `TRUE`: draws a reference line and ribbon with default styling.
 #'   - A character string: allows custom styling. Can include:
-#'       * **color** — a single word (e.g. `"red"`) or a hex code (e.g. `"#FF0000"`). Sets the color of the line and the fill of the ribbon (with a transparency of 67%)
-#'       * **linetype** — one of `"solid"`, `"dashed"`, `"dotted"`, `"dotdash"`, `"longdash"`, `"twodash"`.
+#'       * **color** — a single word (e.g. `"red"`) or a hex code (e.g.
+#' `"#FF0000"`). Sets the color of the line and the fill of the ribbon (with a
+#' transparency of 67%)
+#'       * **linetype** — one of `"solid"`, `"dashed"`, `"dotted"`, `"dotdash"`,
+#' `"longdash"`, `"twodash"`.
 #'       * **linewidth** — a numeric value.
-#'   Elements can appear in any order. Missing elements fall back to defaults (grey60, solid, 0.4).
-##' @param baseline Baseline line specification. Defaults to `NULL`.
+#'
+#' Elements can appear in any order. Missing elements fall back to defaults (grey60, solid, 0.4).
+#' @param baseline Baseline line specification. Defaults to `NULL`.
 #'   - `NULL`: no baseline is drawn (default).
 #'   - `TRUE`: draws a baseline with default styling.
 #'   - A character string: allows custom styling. Can include:
@@ -110,32 +114,36 @@ plot_proj <- function(
     compare = NULL,
     sort = FALSE,
     palette = NULL,
-    ...
-  ) {
-
+    ...) {
   # check inputs
-  stopifnot('"popvec must be of class "Projection"'= is.null(popvec) == FALSE)
+  stopifnot('"popvec must be of class "Projection"' = is.null(popvec) == FALSE)
   multiple <- class(popvec) == "list"
   if (isFALSE(multiple)) vc <- class(popvec) else vc <- class(popvec[[1]])
-  stopifnot('popvec must be a vector of an object returned from popdemo::project() or a list of the same.'= "Projection" %in% vc)
-  stopifnot('standard.A must be either TRUE or FALSE.'= is.logical(standard.A))
-  stopifnot('facet must be either NULL, TRUE or FALSE.'= is.logical(facet) | is.null(facet))
-  stopifnot('baseline must be either NULL, boolean or a string specifying the styling.'= is.logical(baseline) | is.character(baseline) | is.null(baseline))
+  stopifnot("popvec must be a vector of an object returned from popdemo::project() or a list of the same." = "Projection" %in% vc)
+  stopifnot("standard.A must be either TRUE or FALSE." = is.logical(standard.A))
+  stopifnot("facet must be either NULL, TRUE or FALSE." = is.logical(facet) | is.null(facet))
+  stopifnot("baseline must be either NULL, boolean or a string specifying the styling." = is.logical(baseline) | is.character(baseline) | is.null(baseline))
   if (isFALSE(multiple)) rc <- class(reference) else rc <- class(reference[[1]])
-  if (!is.null(reference)) stopifnot('reference must match the popvec object.'= vc == rc)
-  stopifnot('reference must be a vector of an object returned from popdemo::project() or a list of the same.'= "Projection" %in% rc | is.null(reference))
-  stopifnot('Names and order of list elements of reference must match those of popvec.'= names(popvec) == names(reference))
-  stopifnot('reference_opts must be either NULL, boolean or a string specifying the styling.'= is.logical(reference_opts) | is.character(reference_opts) | is.null(reference_opts))
-  stopifnot('compare must be either NULL, TRUE or FALSE.'= is.logical(compare) | is.null(compare))
-  stopifnot('sort must be either TRUE or FALSE.'= is.logical(sort))
+  if (!is.null(reference)) stopifnot("reference must match the popvec object." = vc == rc)
+  stopifnot("reference must be a vector of an object returned from popdemo::project() or a list of the same." = "Projection" %in% rc | is.null(reference))
+  stopifnot("Names and order of list elements of reference must match those of popvec." = names(popvec) == names(reference))
+  stopifnot("reference_opts must be either NULL, boolean or a string specifying the styling." = is.logical(reference_opts) | is.character(reference_opts) | is.null(reference_opts))
+  stopifnot("compare must be either NULL, TRUE or FALSE." = is.logical(compare) | is.null(compare))
+  stopifnot("sort must be either TRUE or FALSE." = is.logical(sort))
 
   # display message that arguments are ignored
   drop <- c()
 
   if (isFALSE(multiple)) {
-    if (isTRUE(facet))   { drop <- c(drop, "facet") }
-    if (isTRUE(compare)) { drop <- c(drop, "compare") }
-    if (isTRUE(sort))    { drop <- c(drop, "sort") }
+    if (isTRUE(facet)) {
+      drop <- c(drop, "facet")
+    }
+    if (isTRUE(compare)) {
+      drop <- c(drop, "compare")
+    }
+    if (isTRUE(sort)) {
+      drop <- c(drop, "sort")
+    }
 
     if (length(drop) == 1) {
       message(
@@ -178,7 +186,7 @@ plot_proj <- function(
   if (isTRUE(multiple)) {
     n <- length(popvec)
     pops <- unlist(popvec)
-    time <- 0:((length(pops)-1) / n)
+    time <- 0:((length(pops) - 1) / n)
 
     if (is.null(names(popvec))) {
       grps <- factor(1:n)
@@ -198,7 +206,7 @@ plot_proj <- function(
   } else {
     dat <- data.frame(
       pop = popvec,
-      time = 0:(length(popvec)-1),
+      time = 0:(length(popvec) - 1),
       grp = 1
     )
   }
@@ -220,15 +228,23 @@ plot_proj <- function(
     legend_title <- "Time step (ranked)"
 
     if (!is.null(reference)) {
-      dat$id <- factor(dat$id, levels = order) #V: changed dat_ref to dat - seems like that was an old object naming?
+      dat$id <- factor(dat$id, levels = order) # V: changed dat_ref to dat - seems like that was an old object naming?
     }
   }
 
   # color handling for single trajectories or unique line color
   if (isFALSE(multiple)) {
-    if (!is.null(palette)) { color <- palette[1] } else { color <- "black" }
+    if (!is.null(palette)) {
+      color <- palette[1]
+    } else {
+      color <- "black"
+    }
   } else {
-    if (length(palette) == 1) { color <- palette } else { color <- NULL }
+    if (length(palette) == 1) {
+      color <- palette
+    } else {
+      color <- NULL
+    }
   }
 
   # function to determine line settings
@@ -237,11 +253,10 @@ plot_proj <- function(
     parts <- tolower(trimws(parts))
 
     # allowed linetypes
-    allowed_linetypes <- c("solid", "dashed", "dotted",
-                           "dotdash", "longdash", "twodash")
-
-    # helper for hex colors
-    is_hex_color <- function(x) grepl("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$", x)
+    allowed_linetypes <- c(
+      "solid", "dashed", "dotted",
+      "dotdash", "longdash", "twodash"
+    )
 
     # -> numeric linewidth (take *first* valid one only)
     num_val <- suppressWarnings(as.numeric(parts))
@@ -258,6 +273,7 @@ plot_proj <- function(
       parts <- parts[-lt_idx[1]]
     }
 
+    # helper for hex colors
     is_hex_color <- function(x) grepl("^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$", x)
     valid_colors <- tolower(colors())
     is_named_color <- function(x) x %in% valid_colors
@@ -308,12 +324,13 @@ plot_proj <- function(
     ggplot2::aes(x = time, y = pop) +
     # add color encoding if required or specified
     {
-      if((isTRUE(multiple) & isFALSE(facet)) | length(palette) > 1)
+      if ((isTRUE(multiple) & isFALSE(facet)) | length(palette) > 1) {
         ggplot2::aes(x = time, y = pop, color = id)
+      }
     } +
     # add shaded lines to facets for comparison
     {
-      if(isTRUE(multiple) & isTRUE(facet) & isTRUE(compare))
+      if (isTRUE(multiple) & isTRUE(facet) & isTRUE(compare)) {
         ggplot2::geom_line(
           data = dat[, 2:4],
           mapping = ggplot2::aes(group = grp),
@@ -322,20 +339,22 @@ plot_proj <- function(
           alpha = (1 / (n / 8)),
           linewidth = .5
         )
+      }
     } +
     # draw baseline
     {
-      if(!isFALSE(bl))
+      if (!isFALSE(bl)) {
         ggplot2::geom_hline(
           yintercept = bl$y,
           color = bl$color,
           linetype = bl$type,
           linewidth = bl$width
         )
+      }
     } +
     # draw reference line
     {
-      if(!is.null(reference) & isFALSE(multiple) | !is.null(reference) & isTRUE(multiple)& isTRUE(facet))
+      if (!is.null(reference) & isFALSE(multiple) | !is.null(reference) & isTRUE(multiple) & isTRUE(facet)) {
         c(
           ggplot2::geom_ribbon(
             ggplot2::aes(
@@ -352,29 +371,33 @@ plot_proj <- function(
             linewidth = rl$width
           )
         )
+      }
     } +
     # draw trajectory / trajectories
     {
-      if(is.null(color))
+      if (is.null(color)) {
         ggplot2::geom_line(
           ggplot2::aes(group = grp),
           ...,
           linewidth = 1
         )
+      }
     } +
     {
-      if(!is.null(color))
+      if (!is.null(color)) {
         ggplot2::geom_line(
           ggplot2::aes(group = grp),
           ...,
           color = color,
           linewidth = 1
         )
+      }
     } +
     # create small multiples
     {
-      if(isTRUE(multiple) & isTRUE(facet))
+      if (isTRUE(multiple) & isTRUE(facet)) {
         ggplot2::facet_wrap(vars(id))
+      }
     } +
     # add padding to top and bottom
     ggplot2::scale_y_continuous(
@@ -382,17 +405,20 @@ plot_proj <- function(
     ) +
     # use custom color palette
     {
-      if(isTRUE(multiple) & !is.null(palette))
+      if (isTRUE(multiple) & !is.null(palette)) {
         ggplot2::scale_color_manual(values = palette)
+      }
     } +
     {
-      if(isTRUE(multiple) & is.null(palette))
+      if (isTRUE(multiple) & is.null(palette)) {
         ggplot2::scale_color_viridis_d(option = "mako", begin = .1, end = .8)
+      }
     } +
     # style visualization
     {
-      if(!is.null(palette) & isTRUE(facet))
+      if (!is.null(palette) & isTRUE(facet)) {
         ggplot2::guides(color = ggplot2::guide_none())
+      }
     } +
     ggplot2::labs(x = "Time intervals", y = ylab, color = legend_title) +
     ggplot2::theme_bw() +
