@@ -37,13 +37,14 @@ AP_demres <-
     popname = "adelie penguin",
     verbose = TRUE,
     return.N = TRUE,
-    return.t = TRUE
+    return.t = TRUE,
+    target.N = 500
   )
 
 
 summary_AP <- summary(AP_demres, fn = list(mean, sd, var))
 
-It is also possible to compute your own functions, for example
+# It is also possible to compute your own functions, for example
 
 coeffvar <- function(data, na.rm = TRUE){ # have to specify na.rm = TRUE here
 CV <- sd(data, na.rm = TRUE) / mean(data, na.rm = TRUE) * 100

@@ -77,7 +77,7 @@ plot_proj(
 ## "original" plot
 popdemo::plot(
   peng_proj_std,
-  ylim = c(0, 1)
+  ylim = c(0, 1.5)
 )
 
 plot_proj(

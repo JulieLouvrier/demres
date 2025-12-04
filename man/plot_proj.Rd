@@ -9,6 +9,8 @@ plot_proj(
   standard.A = FALSE,
   facet = NULL,
   baseline = NULL,
+  reference = NULL,
+  reference_opts = NULL,
   compare = NULL,
   sort = FALSE,
   palette = NULL,
@@ -28,7 +30,7 @@ standardised asymptotic dynamics (scaled by the dominant eigenvalue).}
 panels for each trajectory. If \code{FALSE}, plots all trajectories on the
 same panel. Ignored for single trajectories.}
 
-\item{baseline}{Baseline line specification. Defaults to \code{NULL} (no baseline).
+\item{baseline}{Baseline line specification. Defaults to \code{NULL}.
 \itemize{
 \item \code{NULL}: no baseline is drawn (default).
 \item \code{TRUE}: draws a baseline with default styling.
@@ -37,9 +39,33 @@ same panel. Ignored for single trajectories.}
 \item \strong{color} — a single word (e.g. \code{"red"}) or a hex code (e.g. \code{"#FF0000"}).
 \item \strong{linetype} — one of \code{"solid"}, \code{"dashed"}, \code{"dotted"}, \code{"dotdash"}, \code{"longdash"}, \code{"twodash"}.
 \item \strong{linewidth} — a numeric value.
-Elements can appear in any order. Missing elements fall back to defaults (black, dashed, 0.8).
+Elements can appear in any order. Missing elements fall back to defaults (black, dashed, 0.6).
 }
 }}
+
+\item{reference}{Specification for the undisturbed population or other
+reference lines. Defaults to \code{NULL} (no reference line and ribbon). Provide
+a vector of population abundance over time (length must match that of
+popvec) to draw a reference line showing the undisturbed population
+projection and a ribbon highlighting the differences.}
+
+\item{reference_opts}{Reference line and ribbon specification. Defaults to
+\code{NULL}.
+\itemize{
+\item \code{NULL}: no reference is drawn (default).
+\item \code{TRUE}: draws a reference line and ribbon with default styling.
+\item A character string: allows custom styling. Can include:
+\itemize{
+\item \strong{color} — a single word (e.g. \code{"red"}) or a hex code (e.g.
+\code{"#FF0000"}). Sets the color of the line and the fill of the ribbon (with a
+transparency of 67\%)
+\item \strong{linetype} — one of \code{"solid"}, \code{"dashed"}, \code{"dotted"}, \code{"dotdash"},
+\code{"longdash"}, \code{"twodash"}.
+\item \strong{linewidth} — a numeric value.
+}
+}
+
+Elements can appear in any order. Missing elements fall back to defaults (grey60, solid, 0.4).}
 
 \item{compare}{Logical. If \code{TRUE} (default for lists), adds grey
 background lines showing all populations in each facet for comparison.
@@ -78,7 +104,12 @@ When arguments are not applicable for single trajectories (applies to
 # Single trajectory
 single_pop <- c(100, 105, 120, 160, 200, 270)
 plot_proj(single_pop)
+
+# Add other ggplot2 components
 plot_proj(single_pop, palette = "blue") + coord_cartesian(ylim = c(0, 300))
+
+# plot reference
+plot_proj(single_pop, reference = single_pop + 10)
 
 # Multiple trajectories
 multi_pop <- list(
