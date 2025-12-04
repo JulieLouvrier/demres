@@ -108,7 +108,7 @@
 #' # order facets based on most recent population value
 #' plot_proj(multi_pop, sort = TRUE)
 #'
-#'remove shaded lines
+#' # remove shaded lines
 #' plot_proj(multi_pop, compare = FALSE)
 #'
 #' # apply custom color
