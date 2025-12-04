@@ -163,7 +163,7 @@ plot_proj <- function(
   }
 
   if (!is.null(reference) & isTRUE(multiple) & isFALSE(facet)) {
-    message("reference lines are not plotted for multiple projections when facet = FALSE.")
+    message("Reference lines are not plotted for multiple projections when facet = FALSE.")
   }
 
   if (!is.null(reference) & isTRUE(multiple) & isTRUE(facet)) {
