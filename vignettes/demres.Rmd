@@ -23,8 +23,7 @@ The different metrics provided are:
 - _Maximum amplification_   
 - _Maximum attenuation_   
 - _Reactivity_   
-
-#Julie: include image with resilience from the paper
+- _Time to target_
 
 It is build around one dependency:
 
@@ -50,17 +49,62 @@ remotes::install_github("JulieLouvrier/demres@V1.1")
 
 ```
 ***  
+
+# Introduction of the framework of demres
+Demographic resilience has been defined as "the ability of populations to resist and recover from perturbations that alter their demographic structure" (Capdevila et al. 2020[^1]). This framework has provided important insights into how life history and environmental stochasticity shape population responses to disturbances (Capdevila et al. 2022[^2]; Cant et al. 2023[^3]).
+
+To date, most applications of demographic resilience have focused on comparative analyses, where demographic rates are _standardized_ and _averaged over time_ to facilitate comparison across species or populations.
+
+# From comparative to applied demographic resilience
+
+The original demographic resilience framework standardizes matrix population models (MPMs) and demographic structures in order to isolate transient dynamics and allow comparisons across populations (Stott et al. 2011[^4]; Capdevila et al. 2020[^1]). While essential for comparative studies, such standardization may be insufficient for applied questions.
+
+![Destandardizing resilience measures.](figures/figure1.png)
+**Figure 1.** Conceptual workflow of the demres package. 
+
+For conservation and management, it is often critical to:
+
+- estimate absolute population abundance, which is directly interpretable and often linked to management goals;
+
+- assess long-term population trends, such as persistent decline or increase;
+
+- assess resilience in response to actual, historically observed disturbances.
+
+Moreover, demographic rates in wild populations are rarely constant. Long-term studies demonstrate substantial temporal variation driven by environmental variability, anthropogenic pressures, and episodic disturbance events. Averaging demographic rates across time can therefore overlook the signals that are most relevant for management.
+
+![Time-varying deomgraphic rates.](figures/figure2.png)
+![Destandardizing resilience measures.](figures/figure3.png)
+
+The demres package adopts an explicitly applied perspective by quantifying resilience at each time step, using the demographic rates observed at these time steps. In doing so, demres provides a phenomenological approach to identifying years associated with unusually high or low resilience, which may correspond to disturbance events or favorable conditions.
+
+The R package `demres` was developed to address this need. It extends _transient demographic analysis_ to allow the quantification of time-varying demographic resilience, thereby leveraging temporal variation in demographic data rather than averaging it. This vignette introduces the conceptual background of `demres` and provides a step-by-step guide to its application in conservation and management contexts.
+
+##ICI !! 
+[^1]
+[^2]
+[^3]
+[^4]
+
+The `demres` workflow consists of four main steps based on a list of matrix population models for one or more time steps:
+
+1- Specify the demographic structure of the population
+
+2- Project population dynamics basedd on the demographic structure
+
+3- Quantify demographic resilience metrics
+
+4- Vizualise and summarize temporal variation in resilience
+
 # Matrix Population Models
 ## Adelie penguin models
 
-We will use a list of matrix projection models (MPMs) of an Adelie penguin population (*Pygoscelis adeliae*) from the Copacabana colony on King George Island, Antarctica, from the study by Hinke et al. (2017): "Variable vital rates and the risk of population declines in Adelie penguins from the Antarctic Peninsula region" [^1].
+We will use a list of matrix projection models (MPMs) of an Adelie penguin population (*Pygoscelis adeliae*) from the Copacabana colony on King George Island, Antarctica, from the study by Hinke et al. (2017): "Variable vital rates and the risk of population declines in Adelie penguins from the Antarctic Peninsula region" [^5].
 
 The MPMs were extracted from the COMADRE database (https://compadre-db.org/). The data is a list of 28 matrices of dimension 2 x 2. The 2 stage classes have been defined based on age and are the following:     
 - "Juveniles" - ages 0–2      
 - "Adults" - ages 3+         
-   
 
-[^1]: [Hinke et al. 2017 Ecosphere, 8(1), e01666.](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecs2.1666)
+[^5]: [Hinke et al. 2017 Ecosphere, 8(1), e01666.](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecs2.1666)
 
 ```{r echo = FALSE}
 penguinpic <- magick::image_read("https://upload.wikimedia.org/wikipedia/commons/1/12/Pygoscelis_adeliae.png")
