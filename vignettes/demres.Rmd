@@ -221,7 +221,7 @@ _Maximum amplification_ and _maximum attenuation_ can occur at any point along t
 
 [^2]: [Stott, I., Hodgson, D. J., & Townley, S. (2012) Functional Ecology, Methods in Ecology & Evolution, 3(5).](https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/j.2041-210X.2012.00222.x)
 
-The function `resilience` can compute each of the aforementioned metrics, calculated for each matrix that was made at each time step of the period of the study. This function by default does not standardise neither the matrix (by dividing it by ${\lambda_{max}}$) nor does it scale the population vector to sum up to 1. These two standardisations were necessary within the comparative framework of demographic resilience as introduced by Capdevilla et al. (2020). The user can apply each standardisation by setting the respective argument `return.N` to `FALSE` (see below for details). 
+The function `resilience` can compute each of the aforementioned metrics, calculated for each matrix prepared for each time step of the study period. This function by default does not standardise neither the matrix (by dividing it by ${\lambda_{max}}$) nor does it scale the population structure to sum up to 1. The user can apply each standardisation by setting the respective argument `return.N` to `FALSE` (see below for details). 
 
 The parameters to specify are:
 
