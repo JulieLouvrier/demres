@@ -50,10 +50,12 @@ remotes::install_github("JulieLouvrier/demres@V1.1")
 ```
 ***  
 
-# Introduction of the framework of demres
+# Introduction to the demres framework
 Demographic resilience has been defined as "the ability of populations to resist and recover from perturbations that alter their demographic structure" (Capdevila et al. 2020[^1]). This framework has provided important insights into how life history and environmental stochasticity shape population responses to disturbances (Capdevila et al. 2022[^2]; Cant et al. 2023[^3]).
 
 The framework was developed to support comparative analyses across species or populations. Therefore, to allow for a fair comparison, the analyses were conducted with several standardisations that are explained in detail below.
+
+*VIK: I think here we should explain what are the main resilience metrics, how they are computed (formulas) and visualize them as in Capdevila et al. So, this is just a "recap" that, as we discussed during the meeting in Erkner is super-important as many people are not aware of these metrics. So, before introducing the time-varying approach it is essential to explain what metrics are used in the current approach (sensu Capdevila et al)*
 
 # From comparative framework to applied focus on demographic resilience
 
@@ -126,7 +128,7 @@ data(adeliepenguin); adeliepenguin
 
 ```
 
-The elements constituting the matrices are known as vital rates. These represent the survival rates of a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offspring that is contributed to the population by each (st)age class), per unit of time. For Adelie penguins, the _highest_ value of fecundity (0.75) was found in _year 14_ of the study (see `adeliepenguin[[14]]`), while this demographic rate reached its _lowest_ value of 0.16 in _year 7_ of the study period (see `adeliepenguin[[7]]`). The adult survival rate varied across years with its _highest_ value (0.98) on _years 4, 9, 12 and 15_ and _lowest_ values (0.72) on the _year 22_. The probability to transition from a juvenile to an adult reached its _highest_ value (0.89) on year 21 and its _lowest_ value (0.53) on _years 10 and 28_. 
+The elements constituting the matrices are known as demographic rates. These represent the survival rates of a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offspring that is contributed to the population by each (st)age class), per unit of time. For Adelie penguins, the _highest_ value of fecundity (0.75) was found in _year 14_ of the study (see `adeliepenguin[[14]]`), while this demographic rate reached its _lowest_ value of 0.16 in _year 7_ of the study period (see `adeliepenguin[[7]]`). The adult survival rate varied across years with its _highest_ value (0.98) on _years 4, 9, 12 and 15_ and _lowest_ values (0.72) on the _year 22_. The probability to transition from a juvenile to an adult reached its _highest_ value (0.89) on year 21 and its _lowest_ value (0.53) on _years 10 and 28_. 
 
 ```{r, data plot, echo = -1, fig.width = 6, fig.height = 6}
 # Plotting the different demographic parameters
@@ -189,7 +191,10 @@ legend("topright", legend = params, col = colors, lty = 1, pch = 1, lwd = 2, tit
 
 The function `resilience` is made to calculate demographic resilience metrics based on a list of MPMs. It returns a `dataframe` with time-varying demographic resilience metrics with the option `time = "varying"`.
 
-The different resilience metrics that are calculated can be :         
+*VIK: please shift this up to the very beginning - see my comment there. Especially because you here give formulas that for !!standardised!! metrics. Best would be to give the resilience metrics that are calculated with standardisation at the very begin and here to supply the formulas for !!non-standardised!! versions*
+
+The different resilience metrics that can be calculated:  
+
 - _**Convergence time**_ : Time to convergence of a population to asymptotic growth rate obtained from the model projection.         
 
 - _**Damping ratio**_ : Dimensionless measure of convergence to stable growth. Ranges from 1 to infinity. Smaller numbers represent slower convergence. _Damping ratio_ is calculated using 
