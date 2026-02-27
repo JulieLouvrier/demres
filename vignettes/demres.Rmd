@@ -53,7 +53,7 @@ remotes::install_github("JulieLouvrier/demres@V1.1")
 # Introduction of the framework of demres
 Demographic resilience has been defined as "the ability of populations to resist and recover from perturbations that alter their demographic structure" (Capdevila et al. 2020[^1]). This framework has provided important insights into how life history and environmental stochasticity shape population responses to disturbances (Capdevila et al. 2022[^2]; Cant et al. 2023[^3]).
 
-To date, most applications of demographic resilience have focused on comparative analyses, where demographic rates are _standardized_ and _averaged over time_ to facilitate comparison across species or populations.
+The framework was developed to support comparative analyses across species or populations, and thereforeto allow for a fair comparison analyses were conducted with several standardisations that are explained in detail below.
 
 # From comparative to applied demographic resilience
 
@@ -250,7 +250,7 @@ The initial vector should always be a list of vectors, with its length equal to 
 
 We can look at the stable age structure from the function `popdemo::eigs` and create a scenario in which the demographic structure would differ from its stable structure. Here in that case we decided to have an under representation of juveniles and over representation of adults in a population of 60 individuals. 
 
-```{r, reactivity standardized, echo = -1}
+```{r, stableAgeStructure, echo = -1}
 #checking the ss 
 do.call(rbind, lapply(adeliepenguin, popdemo::eigs, what = "ss"))*60
 ```
@@ -438,9 +438,9 @@ that `reactivity` is equal to maxamp when the population amplifies or maxatt whe
 ## Damping ratio
 First let's check when the damping ration is at its minimum value
 ```{r, extremes}
-AP_demres_stand[which.min(AP_demres_stand$dr),"timestep"]
+AP_demres[which.min(AP_demres$dr),"timestep"]
 
-AP_demres_stand[which.max(AP_demres_stand$dr), "timestep"]
+AP_demres[which.max(AP_demres$dr), "timestep"]
 ```
 
 The _time step 21_ is the year for which the damping ratio reached its _minimum value_ with a value of 3.206. While the _year 7_ is the year with the highest value of damping ratio, with a value of _8.606_. This means that the population will converge the fastest during this year. 
@@ -449,9 +449,9 @@ Again, fecundity reached its _lowest_ value of 0.16 in _year 7_
 ## Reactivity
 Then let's check the extremes of `reactivity` 
 ```{r, extremes reac}
-AP_demres_stand[which.min(AP_demres_stand$reac),"timestep"]
+AP_demres[which.min(AP_demres$reac),"timestep"]
 
-AP_demres_stand[which.max(AP_demres_stand$reac), "timestep"]
+AP_demres[which.max(AP_demres$reac), "timestep"]
 ```
 
 As seen before the _year 14_ is the year during which the population _amplifies the most_ after the first time step, with a value of 1.0133 which is not far from 1. It is actually the only year during which the population amplifies. 
