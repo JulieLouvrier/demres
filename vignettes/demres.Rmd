@@ -53,14 +53,16 @@ remotes::install_github("JulieLouvrier/demres@V1.1")
 # Introduction of the framework of demres
 Demographic resilience has been defined as "the ability of populations to resist and recover from perturbations that alter their demographic structure" (Capdevila et al. 2020[^1]). This framework has provided important insights into how life history and environmental stochasticity shape population responses to disturbances (Capdevila et al. 2022[^2]; Cant et al. 2023[^3]).
 
-The framework was developed to support comparative analyses across species or populations, and thereforeto allow for a fair comparison analyses were conducted with several standardisations that are explained in detail below.
+The framework was developed to support comparative analyses across species or populations. Therefore, to allow for a fair comparison, the analyses were conducted with several standardisations that are explained in detail below.
 
 # From comparative framework to applied focus on demographic resilience
 
-The original demographic resilience framework standardizes matrix population models (MPMs) and demographic structures in order to isolate transient dynamics and allow comparisons across populations or species (Stott et al. 2011[^4]; Capdevila et al. 2020[^1]). Standardizing consists in (i) standardizing the matrix A by dividing A by its long term asymptotic growth rate ${\lambda_{max}}$ to disentangle long-term asymptotic behavior from transient behavior, and (ii) standardizing the initial population structure ${\textbf{n}}_0$ by the total abundance, to compare resilience between populations that differ in their initial population sizes. While essential for comparative studies, such standardization may not be needed or even misleading for applied questions.
+The original demographic resilience framework standardizes matrix population models (MPMs) and demographic structures in order to isolate transient dynamics and allow comparisons across populations or species (Stott et al. 2011[^4]; Capdevila et al. 2020[^1]). Standardizing consists in (i) standardizing the matrix A by dividing A by its long-term asymptotic growth rate ${\lambda_{max}}$ to disentangle long-term asymptotic behavior from transient behavior, and (ii) standardizing the initial population structure ${\textbf{n}}_0$ by the total abundance, to compare resilience of populations that differ in their initial population sizes (Fig. 1). While essential for comparative studies, such standardization may not be needed or even misleading for applied questions.
 
 ![Destandardizing resilience measures.](figures/figure1.png)
 **Figure 1.** Destandardizing resilience measures in two steps:  Destandardizing allows to (i) go back from $\hat{\textbf{n}}_0$ (population density) to ${\textbf{n}_0}$ (population abundance) (second panel) and (ii) include long term asymptotic behavior into the demographic resilience measure (third panel)
+
+*VIK: it would be good to add the lablels to the panels, so they can be referred to directly. Also, consider adding 'Integrating both transient and long-term dynamics' above the third panel. + this figure is too large currently, would be good to modify how it shows up, I guess you can play around for that with some arguments when inserting the figure into rmd*
 
 For conservation and management, it is often critical to:
 
@@ -70,7 +72,7 @@ For conservation and management, it is often critical to:
 
 - assess demographic resilience in response to actual, historically observed disturbances.
 
-Moreover, demographic rates in wild populations are rarely constant. Long-term studies demonstrate substantial temporal variation driven by environmental variability, anthropogenic pressures, and episodic disturbance events. Averaging demographic rates across time can therefore overlook the signals that are most relevant for management.
+Moreover, demographic rates in wild populations are rarely constant. Long-term studies demonstrate substantial temporal variation in demographic rates (Fig. 2). This variation is driven by a combination of environmental stochasticity and intrinsic population dynamics. Environmental stochasticity encompasses impacts of anthropogenic pressures, natural disturbances and stochastic events. Averaging demographic rates across time can therefore overlook the signals that are most relevant for management.
 
 ![Representation of a theoretical time-varying deomgraphic rate, here adult survival illustrated.](figures/figure2.png)
 **Figure 2.** Example of a theoretical demographic rate, here adult survival that varies in time. 
