@@ -15,7 +15,7 @@ library(demres)
 options(digits = 4)
 ```
 
-The goal of `demres` is to provide easy functions to calculate different time-varying demographic resilience metrics. It also allows plotting the resulting metrics and measuring the variability in the time-varying metrics. 
+The goal of `demres` is to provide functions to calculate a set of time-varying demographic resilience metrics. It also allows plotting the metrics and measuring the variability in the time-varying metrics. 
 
 The different metrics provided are:   
 - _Convergence time_    
@@ -34,7 +34,7 @@ It is build around one dependency:
 ***
 # Installing `demres`
 `demres` is available on [GitHub](https://github.com/JulieLouvrier/demres). 
-Running vignette usually requires the latest version of the package. 
+Running vignette requires the latest version of the package. 
 
 ## Package installation from Github
 
@@ -79,9 +79,9 @@ Moreover, demographic rates in wild populations are rarely constant. Long-term s
 
 
 ![Time-varying demographic resilience measures.](figures/figure3.png)
-**Figure 3.** Illustration of projections and demographic resilience measures from a population that has demographic rates varying in time. On the left panel are the measures based on the standardized approach while on the right panel are the same measures based on the destandardized approach.
+**Figure 3.** Illustration of projections and demographic resilience measures for a population with demographic rates that are varying in time. On the left-hand side are resilience metrics based on the standardized approach while on the right-hand side the metrics based on the destandardized approach.
 
-The R package `demres` package adopts an explicitly applied perspective by quantifying resilience at each time step, using the demographic rates observed at these time steps. In doing so, demres provides a phenomenological approach to identifying years associated with unusually high or low resilience, which may correspond to disturbance events or favorable conditions. `demres` was developed to address this need. It extends _transient demographic analysis_ to allow the quantification of time-varying demographic resilience, thereby leveraging temporal variation in demographic data rather than averaging it. This vignette introduces the conceptual background of `demres` and provides a step-by-step guide to its application in conservation and management contexts.
+The R package `demres` quantifies resilience at each time step, by using the demographic rates observed at these time steps. By doing so, demres provides a phenomenological approach to identifying years associated with unusually high or low resilience, which may correspond to disturbance events or favorable conditions. `demres` thus extends _transient demographic analysis_ to allow the quantification of time-varying resilience in terms of population abundance. It also allows looking at either transient or the overall dynamics (transient and long-term dynamics combined), which we hope will assist decisions for conservation and management. This vignette introduces the conceptual background of `demres` and provides a step-by-step guide to its application in conservation and management contexts.
 
 [^1]: [Capdevila et al. 2020 Trends Ecol Evol, 35(9), 776-786.](https://pubmed.ncbi.nlm.nih.gov/32482368/)
 
