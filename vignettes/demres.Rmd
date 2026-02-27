@@ -55,9 +55,9 @@ Demographic resilience has been defined as "the ability of populations to resist
 
 The framework was developed to support comparative analyses across species or populations, and thereforeto allow for a fair comparison analyses were conducted with several standardisations that are explained in detail below.
 
-# From comparative to applied demographic resilience
+# From comparative framework to applied focus on demographic resilience
 
-The original demographic resilience framework standardizes matrix population models (MPMs) and demographic structures in order to isolate transient dynamics and allow comparisons across populations (Stott et al. 2011[^4]; Capdevila et al. 2020[^1]). Standardizing consists in (i) standardizing the matrix A by dividing A with its long term asymptotic growth rate ${\lambda_{max}}$ to detangle log term asymptotic behavior to the transient behavior, and (ii) standardizing the initial population structure ${\textbf{n}}_0$ with its total sum, to compare resilience between populations. While essential for comparative studies, such standardization may be insufficient for applied questions.
+The original demographic resilience framework standardizes matrix population models (MPMs) and demographic structures in order to isolate transient dynamics and allow comparisons across populations or species (Stott et al. 2011[^4]; Capdevila et al. 2020[^1]). Standardizing consists in (i) standardizing the matrix A by dividing A by its long term asymptotic growth rate ${\lambda_{max}}$ to disentangle long-term asymptotic behavior from transient behavior, and (ii) standardizing the initial population structure ${\textbf{n}}_0$ by the total abundance, to compare resilience between populations that differ in their initial population sizes. While essential for comparative studies, such standardization may not be needed or even misleading for applied questions.
 
 ![Destandardizing resilience measures.](figures/figure1.png)
 **Figure 1.** Destandardizing resilience measures in two steps:  Destandardizing allows to (i) go back from $\hat{\textbf{n}}_0$ (population density) to ${\textbf{n}_0}$ (population abundance) (second panel) and (ii) include long term asymptotic behavior into the demographic resilience measure (third panel)
