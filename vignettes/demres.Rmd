@@ -51,15 +51,54 @@ remotes::install_github("JulieLouvrier/demres@V1.1")
 ***  
 
 # Introduction to the demres framework
+
 Demographic resilience has been defined as "the ability of populations to resist and recover from perturbations that alter their demographic structure" (Capdevila et al. 2020[^1]). This framework has provided important insights into how life history and environmental stochasticity shape population responses to disturbances (Capdevila et al. 2022[^2]; Cant et al. 2023[^3]).
 
 The framework was developed to support comparative analyses across species or populations. Therefore, to allow for a fair comparison, the analyses were conducted with several standardisations that are explained in detail below.
 
-*VIK: I think here we should explain what are the main resilience metrics, how they are computed (formulas) and visualize them as in Capdevila et al. So, this is just a "recap" that, as we discussed during the meeting in Erkner is super-important as many people are not aware of these metrics. So, before introducing the time-varying approach it is essential to explain what metrics are used in the current approach (sensu Capdevila et al)*
+# Standardized demographic resilience for comparative studies
+
+The original demographic resilience framework is based on two elements: A Matrix population Model, denoted $A$ and an initial demographic distribution, summarized in a vector, denoted ${\textbf{n}}_0$. 
+
+The elements of $A$ (known as vital rates) define, per unit of time, survival rates in a given (st)age, transition probabilities from one (st)age to another, and fecundity (i.e. per-capita number of offspring that is contributed to the population by each (st)age). 
+
+	The second element required by transient analyses is the initial demographic distribution, which represents the abundance of individuals in each (st)age class by a vector ${\textbf{n}}_0$. Such demographic distributions can be specified by using: i) a known (st)age-class distribution that is representative of the studied population ; or ii) stage-biased vectors that represent the most extreme cases where only one (st)age class is represented in the population, whereas abundances of all others are set to “0”. 
+	The original demographic resilience framework standardizes matrix population models (MPMs) and initial demographic distribution in order to isolate transient dynamics and allow comparisons across populations or species (Stott et al. 2011[^4]; Capdevila et al. 2020[^1]). Standardizing consists in (i) standardizing the matrix $A$ by dividing $A$ by its long-term asymptotic growth rate ${\lambda_{max}}$ to disentangle long-term asymptotic behavior from transient behavior, and (ii) standardizing the initial demographic distribution ${\textbf{n}}_0$ by the total abundance, to compare resilience of populations that differ in their initial population sizes (Fig. 1). While essential for comparative studies, such standardization may not be needed or even misleading for applied questions.
+
+  The resulting standardised matrix $A$ is then denoted $\hat{A}$ and the standardized initial vector ${\hat{\textbf{n}}_0}$. 
+  
+  To assess demographic resilience using these two elements, the population is then projected and its transient behaviour is quantified before it reaches asymptotic growth.
+  
+  Using the `popdemo` package (Stott et al. 2012 [^5]), it is then possible to assess the following demographic resilience metrics: 
+  
+  The different resilience metrics that can be calculated:  
+
+- _**Convergence time**_ : Time to convergence of a population to asymptotic growth rate obtained from the model projection. Convergence time is calculated by simulating the given model and manually determining growth when convergence to a given accuracy is reached       
+
+- _**Damping ratio**_ : Dimensionless measure of convergence to stable growth. Ranges from 1 to infinity. Smaller numbers represent slower convergence. _Damping ratio_ is calculated using 
+
+$$\textit{Damping ratio} = {\rho} = \frac{\lambda_1}{||\lambda_2||}$$
+With $\lambda_1$ the dominant eigenvalue and $\lambda_2$ the largest subdominant eigenvalue.
+
+- _**Reactivity**_ : The population density that can be reached in the first time step after disturbance. _Reactivity_ is calculated using  
+
+$$\textit{Standardized reactivity} = {P_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
+
+With $A$ the matrix population model and $\hat{\textbf{A}}$ the standardized population matrix which is calculated as $\hat{\textbf{A}} = \frac{\textbf{A}}{\lambda_{1}}$. The vector $\hat{\textbf{n}}_0$ represents the initial demographic distribution, standardized to sum to 1 and is calculated as $\hat{\textbf{n}}_0 = \frac{{\textbf{n}}_0}{||\textbf{n}_0||_1}$. 
+
+With ${||m||_1}$ representing the one-norm of a vector ${m}$ (i.e. sum of the absolute values of its entries)
+
+- _**Maximum amplification**_ : The largest population density that can be reached at any time after disturbance. This metric is calculated using:
+$$Standardized\ maximum\ amplification = \bar{P}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+
+- _**Maximum attenuation**_ : The lowest population density that can be reached at any time after disturbance. This metric is calculated using: 
+
+$$standardized\ maximum\ attenuation = \underline{P}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+_Maximum amplification_ and _maximum attenuation_ can occur at any point along the projection. Some populations only have a _maximum amplification_ due to either their demographic rates or the initial vector (because they never attenuate), some only have a _maximum attenuation_ (because they never amplify), and some have both.
+
 
 # From comparative framework to applied focus on demographic resilience
 
-The original demographic resilience framework standardizes matrix population models (MPMs) and demographic structures in order to isolate transient dynamics and allow comparisons across populations or species (Stott et al. 2011[^4]; Capdevila et al. 2020[^1]). Standardizing consists in (i) standardizing the matrix A by dividing A by its long-term asymptotic growth rate ${\lambda_{max}}$ to disentangle long-term asymptotic behavior from transient behavior, and (ii) standardizing the initial population structure ${\textbf{n}}_0$ by the total abundance, to compare resilience of populations that differ in their initial population sizes (Fig. 1). While essential for comparative studies, such standardization may not be needed or even misleading for applied questions.
 
 ![Destandardizing resilience measures.](figures/figure1.png)
 **Figure 1.** Destandardizing resilience measures in two steps:  Destandardizing allows to (i) go back from $\hat{\textbf{n}}_0$ (population density) to ${\textbf{n}_0}$ (population abundance) (second panel) and (ii) include long term asymptotic behavior into the demographic resilience measure (third panel)
@@ -87,17 +126,19 @@ The R package `demres` quantifies resilience at each time step, by using the dem
 
 [^1]: [Capdevila et al. 2020 Trends Ecol Evol, 35(9), 776-786.](https://pubmed.ncbi.nlm.nih.gov/32482368/)
 
-[^2]: [Capdevila et al. 2022 Ecol letters, 25(1), 240-251.](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.14004)
+[^2]: [Capdevila et al. 2022 Ecol lett, 25(1), 240-251.](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.14004)
 
-[^3]: [Cant et al. 2023 Ecol Letters, 26(7), 1186-1199.](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.14234)
+[^3]: [Cant et al. 2023 Ecol Lett, 26(7), 1186-1199.](https://onlinelibrary.wiley.com/doi/full/10.1111/ele.14234)
 
-[^4]: [Stott et al. 2011 Ecol Letters, 14(9), 959-970.](https://onlinelibrary.wiley.com/doi/full/10.1111/j.1461-0248.2011.01659.x)
+[^4]: [Stott et al. 2011 Ecol Lett, 14(9), 959-970.](https://onlinelibrary.wiley.com/doi/full/10.1111/j.1461-0248.2011.01659.x)
+
+[^5]: [Stott et al. 2012 Methods Ecol Evol, 3: 797-802.](https://doi.org/10.1111/j.2041-210X.2012.00222.x)
 
 The `demres` workflow consists of four main steps based on a list of matrix population models for one or more time steps:
 
-1- Specify the demographic structure of the population
+1- Specify the initial demographic distribution of the population
 
-2- Project population dynamics based on the demographic structure
+2- Project population dynamics based on the initial demographic distribution
 
 3- Quantify demographic resilience metrics
 
@@ -106,13 +147,13 @@ The `demres` workflow consists of four main steps based on a list of matrix popu
 # Matrix Population Models
 ## Adelie penguin models
 
-We will use a list of matrix projection models (MPMs) of an Adelie penguin population (*Pygoscelis adeliae*) from the Copacabana colony on King George Island, Antarctica, from the study by Hinke et al. (2017): "Variable vital rates and the risk of population declines in Adelie penguins from the Antarctic Peninsula region" [^5].
+We will use a list of matrix projection models (MPMs) of an Adelie penguin population (*Pygoscelis adeliae*) from the Copacabana colony on King George Island, Antarctica, from the study by Hinke et al. (2017): "Variable vital rates and the risk of population declines in Adelie penguins from the Antarctic Peninsula region" [^6].
 
 The MPMs were extracted from the COMADRE database (https://compadre-db.org/). The data is a list of 28 matrices of dimension 2 x 2. The 2 stage classes have been defined based on age and are the following:     
 - "Juveniles" - ages 0–2      
 - "Adults" - ages 3+         
 
-[^5]: [Hinke et al. 2017 Ecosphere, 8(1), e01666.](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecs2.1666)
+[^6]: [Hinke et al. 2017 Ecosphere, 8(1), e01666.](https://esajournals.onlinelibrary.wiley.com/doi/epdf/10.1002/ecs2.1666)
 
 ```{r echo = FALSE}
 penguinpic <- magick::image_read("https://upload.wikimedia.org/wikipedia/commons/1/12/Pygoscelis_adeliae.png")
@@ -221,7 +262,7 @@ _Maximum amplification_ and _maximum attenuation_ can occur at any point along t
 
 [^2]: [Stott, I., Hodgson, D. J., & Townley, S. (2012) Functional Ecology, Methods in Ecology & Evolution, 3(5).](https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/j.2041-210X.2012.00222.x)
 
-The function `resilience` can compute each of the aforementioned metrics, calculated for each matrix prepared for each time step of the study period. This function by default does not standardise neither the matrix (by dividing it by ${\lambda_{max}}$) nor does it scale the population structure to sum up to 1. The user can apply each standardisation by setting the respective argument `return.N` to `FALSE` (see below for details). 
+The function `resilience` can compute each of the aforementioned metrics, calculated for each matrix prepared for each time step of the study period. This function by default does not standardise neither the matrix (by dividing it by ${\lambda_{max}}$) nor does it scale the initial demographic distribution to sum up to 1. The user can apply each standardisation by setting the respective argument `return.N` to `FALSE` (see below for details). 
 
 The parameters to specify are:
 
@@ -229,7 +270,7 @@ The parameters to specify are:
 
 •	`metrics`: Character string. The user can specify either one or several resilience metrics of their choice, The metrics have to be specified as either `"convt"` (for _convergence time_); `"dr"` (for _damping ratio_);`"maxamp"` (for _maximum amplification_); `"maxatt"` (for _maximum attenuation_); `"reac"` (for _reactivity_); `"tt"` (for _Time to Target_) or `"all"` to compute all of the aforementioned metrics. By default set to `"all"`.   
 
-•	`vector`: Numeric. Can be a numeric vector or a list of numeric vectors describing the age/stage distribution ('demographic structure') used to calculate a 'case-specific' metric, i.e. based on the stage/age structure.      
+•	`vector`: Numeric. Can be a numeric vector or a list of numeric vectors describing the age/stage distribution ('initial demographic distribution') used to calculate a 'case-specific' metric, i.e. based on the stage/age structure.      
 
 •	`TDvector`: Boolean. Specifies whether or not the user wants to get a Time-Dependent list of initial vectors that are obtained by projecting the population trajectory in the future using the initial population vector. The result is a list of X initial vectors with X the number of matrices that are in the list. By default set to `FALSE`.        
 
@@ -255,7 +296,7 @@ We will first create an initial vector representing the total number of inidivid
 
 The initial vector should always be a list of vectors, with its length equal to the length of the list of matrices. Each vector in the list can be unique or one single vector can be repeated as many times as their matrices. 
 
-We can look at the stable age structure from the function `popdemo::eigs` and create a scenario in which the demographic structure would differ from its stable structure. Here in that case we decided to have an under representation of juveniles and over representation of adults in a population of 60 individuals. 
+We can look at the stable age structure from the function `popdemo::eigs` and create a scenario in which the initial demographic distribution would differ from its stable structure. Here in that case we decided to have an under representation of juveniles and over representation of adults in a population of 60 individuals. 
 
 ```{r, stableAgeStructure, echo = -1}
 #checking the ss 
@@ -438,7 +479,7 @@ colnames(AP_demres)
 
 All 5 metrics are given and for all metrics (but damping ratio) we show the time step when the metric is reached. Showing the time step when reactivity is reached is somewhat redundant (as per definition it is the population size at time step 1 after disturbance) but we decided to display it nevertheless, for consistency. Messages were displayed due to the fact that for some combinations of specified matrices and vectors the population either does not amplify or does not attenuate. 
 
-Given the population demographic structure specified in ${n_0}$, it appears
+Given the initial demographic distribution specified in ${n_0}$, it appears
 that `reactivity` is equal to maxamp when the population amplifies or maxatt when the population attenuates. So the plot of `reactivity` would be enough as it encompasses both `maxamp` and `maxatt`. 
 
 #Check for extreme years 
@@ -623,7 +664,7 @@ If no empirical values are available, it is possible to simulate some and test f
 This is the example we have been using in the beginning of this vignette 
 
 ## Time-dependent initial vector
-It is also possible to derive a list of initial vectors starting with one vector representing the demographic structure of the population at the first time step (option `TDvector = TRUE` for Time-Dependent vector). At the first time step, the population size is projected to the next time step using the specified MPM and the given initial population vector. This results in the number of individuals projected to be in each stage/age, which is then used as the demographic structure for the next time step. This process continues for as many time steps as there are.      
+It is also possible to derive a list of initial vectors starting with one vector representing the demographic distribution of the population at the first time step (option `TDvector = TRUE` for Time-Dependent vector). At the first time step, the population size is projected to the next time step using the specified MPM and the given initial population vector. This results in the number of individuals projected to be in each stage/age, which is then used as the demographic distribution for the next time step. This process continues for as many time steps as there are.      
 
 From here on we will set `verbose = FALSE` to avoid the display of all the messages.
 
@@ -643,7 +684,7 @@ AP_demres_TD <-
 AP_demres_TD
 ```
 
-We can see that when using time-varying demographic vector while projecting the initial population vector forward, the population is more likely to amplify than it was when using the demographic structures we previously provided. We also see that the values of all resilience metrics are increasing rapidly over time and by the the year 28 we have population sizes in thousands as opposed to population sizes being below 100 when relying on the user-supplied population vectors. 
+We can see that when using time-varying demographic vector while projecting the initial population vector forward, the population is more likely to amplify than it was when using the initial demographic distribution we previously provided. We also see that the values of all resilience metrics are increasing rapidly over time and by the the year 28 we have population sizes in thousands as opposed to population sizes being below 100 when relying on the user-supplied population vectors. 
 
 ## Extreme initial vectors
 Finally, it is possible to create vectors for which only one (st)age is represented. The resulting metrics therefore represent the upper and lower bounds of the possible values that the resilience metrics can take.
@@ -689,7 +730,7 @@ AP_demres_ad
 
 The function `summary` calculates the requested statistics for the time-varying demographic resilience metrics. It is meant to quantify the extent to what demographic resilience metrics vary over time. By default mean and standard deviation ("sd") of resilience metrics are computed, but more user-defined summary statistics may be requested.
 
-For example, let us compute mean and standard deviation of all computed resilience metrics using the user-supplied demographic structures for each year.
+For example, let us compute mean and standard deviation of all computed resilience metrics using the user-supplied initial demographic distribution for each year.
 
 ```{r echo = -1}
 summary_AP <- summary(AP_demres, fn = list(mean, sd))
