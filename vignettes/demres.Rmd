@@ -10,7 +10,7 @@ editor_options:
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = "##  ", collapse = TRUE, fig.align = "center")
+knitr::opts_chunk$set(echo = TRUE, comment = "##  ", collapse = TRUE, fig.align = "center", out.width="60%")
 library(demres)
 options(digits = 4)
 ```
@@ -71,7 +71,7 @@ The elements of $A$ (known as vital rates) define, per unit of time, survival ra
   
   Using the `popdemo` package (Stott et al. 2012 [^5]), it is then possible to assess the following demographic resilience metrics: 
   
-  The different resilience metrics that can be calculated:  
+  The different resilience metrics are calculated based on the standardized matrix and initial vector and they can be calculated:  
 
 - _**Convergence time**_ : Time to convergence of a population to asymptotic growth rate obtained from the model projection. Convergence time is calculated by simulating the given model and manually determining growth when convergence to a given accuracy is reached       
 
@@ -82,28 +82,30 @@ With $\lambda_1$ the dominant eigenvalue and $\lambda_2$ the largest subdominant
 
 - _**Reactivity**_ : The population density that can be reached in the first time step after disturbance. _Reactivity_ is calculated using  
 
-$$\textit{Standardized reactivity} = {P_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
+$$\textit{Standardized reactivity} = \hat{P_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
 
 With $A$ the matrix population model and $\hat{\textbf{A}}$ the standardized population matrix which is calculated as $\hat{\textbf{A}} = \frac{\textbf{A}}{\lambda_{1}}$. The vector $\hat{\textbf{n}}_0$ represents the initial demographic distribution, standardized to sum to 1 and is calculated as $\hat{\textbf{n}}_0 = \frac{{\textbf{n}}_0}{||\textbf{n}_0||_1}$. 
 
 With ${||m||_1}$ representing the one-norm of a vector ${m}$ (i.e. sum of the absolute values of its entries)
 
 - _**Maximum amplification**_ : The largest population density that can be reached at any time after disturbance. This metric is calculated using:
-$$Standardized\ maximum\ amplification = \bar{P}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+$$Standardized\ maximum\ amplification = \hat{\bar{P}}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
 
 - _**Maximum attenuation**_ : The lowest population density that can be reached at any time after disturbance. This metric is calculated using: 
 
-$$standardized\ maximum\ attenuation = \underline{P}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+$$Standardized\ maximum\ attenuation = \hat{\underline{P}}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
 _Maximum amplification_ and _maximum attenuation_ can occur at any point along the projection. Some populations only have a _maximum amplification_ due to either their demographic rates or the initial vector (because they never attenuate), some only have a _maximum attenuation_ (because they never amplify), and some have both.
+
+
+As the demographic resilience metrics are calculated based on the standardized matrix and vector, to get the unstandardized values, the population is then projected and the population size is assessed at the time-step the metrics is reached (for instance at the time-step 1 for reactivity).
 
 
 # From comparative framework to applied focus on demographic resilience
 
 
-![Destandardizing resilience measures.](figures/figure1.png)
-**Figure 1.** Destandardizing resilience measures in two steps:  Destandardizing allows to (i) go back from $\hat{\textbf{n}}_0$ (population density) to ${\textbf{n}_0}$ (population abundance) (second panel) and (ii) include long term asymptotic behavior into the demographic resilience measure (third panel)
+![Destandardizing resilience measures.](figures/figure1.png) 
 
-*VIK: it would be good to add the lablels to the panels, so they can be referred to directly. Also, consider adding 'Integrating both transient and long-term dynamics' above the third panel. + this figure is too large currently, would be good to modify how it shows up, I guess you can play around for that with some arguments when inserting the figure into rmd*
+**Figure 1.** Destandardizing resilience measures in two steps:  Destandardizing allows to (i) go back from $\hat{\textbf{n}}_0$ (population density) to ${\textbf{n}_0}$ (population abundance) (second panel) and (ii) include long term asymptotic behavior into the demographic resilience measure (third panel)
 
 For conservation and management, it is often critical to:
 
@@ -115,7 +117,8 @@ For conservation and management, it is often critical to:
 
 Moreover, demographic rates in wild populations are rarely constant. Long-term studies demonstrate substantial temporal variation in demographic rates (Fig. 2). This variation is driven by a combination of environmental stochasticity and intrinsic population dynamics. Environmental stochasticity encompasses impacts of anthropogenic pressures, natural disturbances and stochastic events. Averaging demographic rates across time can therefore overlook the signals that are most relevant for management.
 
-![Representation of a theoretical time-varying deomgraphic rate, here adult survival illustrated.](figures/figure2.png)
+![Representation of a theoretical time-varying deomgraphic rate, here adult survival illustrated.](figures/figure2.png) 
+
 **Figure 2.** Example of a theoretical demographic rate, here adult survival that varies in time. 
 
 
@@ -231,36 +234,6 @@ legend("topright", legend = params, col = colors, lty = 1, pch = 1, lwd = 2, tit
 # Assess time-varying demographic resilience 
 
 The function `resilience` is made to calculate demographic resilience metrics based on a list of MPMs. It returns a `dataframe` with time-varying demographic resilience metrics with the option `time = "varying"`.
-
-*VIK: please shift this up to the very beginning - see my comment there. Especially because you here give formulas that for !!standardised!! metrics. Best would be to give the resilience metrics that are calculated with standardisation at the very begin and here to supply the formulas for !!non-standardised!! versions*
-
-The different resilience metrics that can be calculated:  
-
-- _**Convergence time**_ : Time to convergence of a population to asymptotic growth rate obtained from the model projection.         
-
-- _**Damping ratio**_ : Dimensionless measure of convergence to stable growth. Ranges from 1 to infinity. Smaller numbers represent slower convergence. _Damping ratio_ is calculated using 
-
-$$\textit{damping ratio} = {\rho} = \frac{\lambda_1}{||\lambda_2||}$$
-With $\lambda_1$ the dominant eigenvalue and $\lambda_2$ the largest subdominant eigenvalue.
-
-- _**Reactivity**_ : The population density that can be reached in the first time step after disturbance. _Reactivity_ is calculated using  
-
-$$\textit{standardized reactivity} = {P_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
-With **A** the matrix population model and $\hat{\textbf{A}}$ the standardized population matrix which is calculated as $\hat{\textbf{A}} = \frac{\textbf{A}}{\lambda_{1}}$. The vector $\hat{\textbf{n}}_0$ represents the initial demographic distribution, standardized to sum to 1 and is calculated as $\hat{\textbf{n}}_0 = \frac{{\textbf{n}}_0}{||\textbf{n}_0||_1}$. 
-
-With ${||m||_1}$ representing the one-norm of a vector ${m}$ (i.e. sum of the absolute values of its entries)
-
-- _**Maximum amplification**_ : The largest population density that can be reached at any time after disturbance. This metric is calculated using:
-$$standardized\ maximum\ amplification = \bar{P}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
-
-- _**Maximum attenuation**_ : The lowest population density that can be reached at any time after disturbance. This metric is calculated using: 
-
-$$standardized\ maximum\ attenuation = \underline{P}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
-_Maximum amplification_ and _maximum attenuation_ can occur at any point along the projection. Some populations only have a _maximum amplification_ due to either their demographic rates or the initial vector (because they never attenuate), some only have a _maximum attenuation_ (because they never amplify), and some have both.
-
-- _**Time to Target**_ : the number of timesteps in the projection necessary to reach a target population abundance.
-
-[^2]: [Stott, I., Hodgson, D. J., & Townley, S. (2012) Functional Ecology, Methods in Ecology & Evolution, 3(5).](https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/j.2041-210X.2012.00222.x)
 
 The function `resilience` can compute each of the aforementioned metrics, calculated for each matrix prepared for each time step of the study period. This function by default does not standardise neither the matrix (by dividing it by ${\lambda_{max}}$) nor does it scale the initial demographic distribution to sum up to 1. The user can apply each standardisation by setting the respective argument `return.N` to `FALSE` (see below for details). 
 
