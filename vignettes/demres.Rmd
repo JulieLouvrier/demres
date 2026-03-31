@@ -3,6 +3,8 @@ title: "demres: quantification of demographic resilience over time"
 output: 
   rmarkdown::html_vignette:
     code_folding: hide
+    toc: TRUE
+    toc_depth: 2 
 vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{demres: quantification of demographic resilience over time}
@@ -355,7 +357,7 @@ eigs_AP
 ```
 
 
-```{r, plot lambda, echo = -1, fig.width = 6, fig.height = 6}
+```{r, plot lambda, echo = TRUE, fig.width = 6, fig.height = 6}
 plot(
   eigs_AP$timestep,
   eigs_AP$lambda,
@@ -372,14 +374,14 @@ plot(
 abline(h = 1, col = "red", lty = 2)  # lty = 2 for dashed line
 ```
 
-We can see that the long term growth rate also varies in time. When it is above 1, it means that the population is growing while when it is below 1, it is declining. While it seems that for most of the years, the population would grow, we can look at the values of the long term growth rate during _year 26_ that has a value of 0.95. For this specific year, not only is the population declining but it is also attenuating, which means that is it growing even slower than its long term growth rate. 
+We can see that the long term growth rate also varies in time. When it is above 1, it means that the population is growing while when it is below 1, it is declining. While it seems that for most of the years, the population would grow, we can look at the values of the long term growth rate during _year 26_ that has a value of 0.95. For this specific year, not only is the population declining but it is also attenuating, which means that is it growing even slower than its long term growth rate. **VIK: people have not read yet / checked yet attenuation, so it is somewhat premature and may be confusing to talk about these two things here. Maybe then bring this example after you have calculated all the metrics with realised population dynamics??**
 
 
 # "Destandardized" or "realised" reactivity 
 
-We can now look at the corresponding population abundances for reactivity after the first time step, by setting `return.N = TRUE`
+Let us now compute reactivity using the realised population dynamics, i.e. \hat{{\rho}_1} that does not use any of the standardizations. We achieve this by setting the argument `return.N = TRUE`.
 
-```{r, reactivity abundance, echo = -1}
+```{r, realised reactivity}
 # simulate an initial vector
 vec <- c(15,45)
 vector_list <- lapply(1:28, function(i) vec)
@@ -399,7 +401,7 @@ AP_demres_reac <-
 AP_demres_reac
 ```
 
-Just like for the standardized reactivity, the _maximum population abundance_ for `reactivity` calculated with the provided vector was found during the _14th year_ of the study period, with a value of 86.1 individuals. But this time, the _minimum value_ (across the study) is reached during _year 7_ with 52.80 individuals. _Year 14_ was the year with the _highest fecundity_ while _year 7_ was the year with the _lowest value_ of fecundity. 
+Just like for the standardized reactivity, the _maximum population abundance_ for `reactivity` calculated with the provided vector was found during the _14th year_ of the study period, with a value of 86.1 individuals. But this time, the _minimum value_ (across the study) is reached during _year 7_ with 52.80 individuals. _Year 14_ was the year with the _highest fecundity_ while _year 7_ was the year with the _lowest value_ of fecundity.  **VIK: I think it would b ehelpful if this plot had two panels, one for the 'realised reactivity' that you have just computed and one for the classical ('standardised') reactivity you have shown above. Having both panels next to each other will faciliate comparison and help following the text. Otherwise, the reader has to scroll the html up and down...**
 
 ```{r, reac abundance plot, echo = -1, fig.width = 6, fig.height = 6}
 # Plotting demographic resilience metrics over time 
@@ -429,9 +431,11 @@ abline(h = 60, col = "red", lty = 2)
 ```
 
 ## Calculating several metrics
+**VIK: I think before we show the values of all the metrics computed on realised (or oevrall) dynamics we shall first explain them. For example, Time to target has not been defined anywhere so far. And, for all the others, I think ti may be useful to reiterate that the same formulas as specified for "hat"-versions ("standardised") are used, except that the pop matrix is not devided by lambda1 and the n0 is not scaled. So, I think it may be used to use the notation for these metrics without a hat. Or is there any other way we cna clearly refer to them (to make clear they are a distinct group)? Ella is thinking of using "realised reactivity" in her MS3 now, but we are still not 100% sure this is the best term. What are your thoughts on how to make crystall clear that these are not the original transient analyses metrics (as they compound both the long-term and the short-term dynamics, I revised the vignette repeatedly to stress this)**
+
 Now let's look at all the metrics possible with the option `metrics = "all"`
 
-```{r echo = -1}
+```{r echo = TRUE, message=FALSE, warning = FALSE}
 AP_demres <-
    resilience(
      listA = adeliepenguin,
@@ -439,7 +443,7 @@ AP_demres <-
      vector = vector_list,
      TDvector = FALSE,
      popname = "adelie penguin",
-     verbose = TRUE,
+     verbose = FALSE, # set to TRUE to see the messages saying that either attenuation or amplification cannot be computed
      return.N = TRUE,
      return.t = TRUE
    )
@@ -447,27 +451,29 @@ AP_demres <-
 AP_demres
 ```
 
-This time we have an object of class `resil` that is a dataframe with 11 columns. 
+This call returns an object of class `resil` that is a dataframe with 11 columns. 
 
-```{r echo = -1}
+```{r echo = TRUE}
 colnames(AP_demres)
 ```
 
-All 5 metrics are given and for all metrics (but damping ratio) we show the time step when the metric is reached. Showing the time step when reactivity is reached is somewhat redundant (as per definition it is the population size at time step 1 after disturbance) but we decided to display it nevertheless, for consistency. Messages were displayed due to the fact that for some combinations of specified matrices and vectors the population either does not amplify or does not attenuate. 
+All 5 metrics are given and for all metrics (but damping ratio) we show the time step when the computed value of the metric is reached. Showing the time step when reactivity is reached is somewhat redundant (as per definition it is the population size at time step 1 after disturbance) but we decided to display it nevertheless, for consistency. Messages are displayed due to the fact that for some combinations of specified matrices and vectors the population either does not amplify or does not attenuate (they are disabled for the vignette for the sake of readability, but can be activated by setting the option `verbose = TRUE`. 
 
-Given the initial demographic distribution specified in ${n_0}$, it appears
+Given the initial demographic distribution specified by ${\textbf{n}_0}$, it is clear
 that `reactivity` is equal to maxamp when the population amplifies or maxatt when the population attenuates. So the plot of `reactivity` would be enough as it encompasses both `maxamp` and `maxatt`. 
 
-#Check for extreme years 
-## Damping ratio
-First let's check when the damping ration is at its minimum value
+# Check for extreme years   
+
+## Damping ratio  
+
+First let's check when the damping ratio is at its minimum value
 ```{r, extremes}
 AP_demres[which.min(AP_demres$dr),"timestep"]
 
 AP_demres[which.max(AP_demres$dr), "timestep"]
 ```
 
-The _time step 21_ is the year for which the damping ratio reached its _minimum value_ with a value of 3.206. While the _year 7_ is the year with the highest value of damping ratio, with a value of _8.606_. This means that the population will converge the fastest during this year. 
+The _time step 21_ is the year for which the damping ratio reached its _minimum value_ of 3.206. While the _year 7_ is the year with the highest value of damping ratio, which is _8.606_. This means that the population will converge to its long-term dynamics the fastest during this year. 
 Again, fecundity reached its _lowest_ value of 0.16 in _year 7_
 
 ## Reactivity
@@ -485,7 +491,7 @@ _year 26_ is the one with the _lowest value_ of `reactivity`. The population abu
 AP_demres[26,"reac"]
 ```
 
-# Plot 
+# Visualizing the results
 The function `plot` provides a visual representation of the population trajectories obtained when starting the projection from each supplied matrix and initial vector. Let us have a look at what trajectories look like when not applying standardisation when calculating demographic resilience metrics (by scaling the matrix entry by $\lambda_{max}$ and by scaling the population vector to sum to 1).
 
 ```{r, echo = -1, fig.width = 6, fig.height = 6}
@@ -495,9 +501,9 @@ plot(AP_demres,
      timeproj = 5)
 ```
 
-So we here see both long-term and short-term dynamics confounded. We see that in some years (like _year 14 and 15_) population is projected to increase rapidly whereas in a few years the populations are projected to decline ( _year 13_ ).
+So we here see so-called overall or realised population trajectories in which both long-term and short-term dynamics are confounded. Each facet highlights the population trajectory for the year shown on the top. We see that in some years (like _year 14 and 15_) population is projected to increase rapidly whereas in a few years the populations are projected to decline ( _year 13_ ).
 
-It is possible to order them in decreasing order of the last observed population size.
+It is possible to order them in decreasing order of the population size projected at the last time step.
 
 ```{r, echo = -1, fig.width = 6, fig.height = 6}
 plot(AP_demres,
@@ -544,6 +550,7 @@ plot(AP_demres,
 ```
 
 Or with only the standardized vector by setting `standard.vec = TRUE`
+**VIK: I think this section on plotting is really nice. The only thing that is still missing is highlighting how inspecting the output that is either not standardised at all, or standardized in a specific way is useful for conservation/management. I feel it is less useful just to list the options that things can be done with no standardisation, or with one or the other standardisation. Explaining why that is useful, especially when comparing these outputs is what is valuable in this approach** 
 ```{r, echo = -1, fig.width = 6, fig.height = 6}
 plot(AP_demres,
      listA = adeliepenguin,
@@ -604,11 +611,11 @@ plot(AP_demres,
 
 
 We have been exploring so far all the functions of `demres`, which are based on a list of matrices and a list of initial vectors. 
-However, `demres`also accounts for historically informed initial vectors, i.e. directly derived from measures on the field. 
+However, `demres` also allows to use historically informed initial vectors, i.e. directly derived from observations in the field. 
 
 # Initial vectors 
 ## Historically informed
-The first advantage of `demres`is its adaptability to historically informed data from the field. If demographers have the information on the population abundance in each respective (st)age class for each time step of the study, it is possible to integrate it in the framework
+The first advantage of `demres`is its adaptability to historically informed data from the field. If researchers have the information on the abundance of each respective (st)age class for each time step of the study, it is possible to integrate it in the framework.
 
 ```{r, demographic resilience historic}
 
@@ -626,7 +633,7 @@ AP_demres_hist <-
      vector = vect_hist,
      TDvector = FALSE,
      popname = "adelie penguin",
-     verbose = TRUE,
+     verbose = FALSE,
      return.N = TRUE,
      return.t = TRUE
    )
@@ -634,7 +641,7 @@ AP_demres_hist <-
 AP_demres_hist
 ```
 
-If no empirical values are available, it is possible to simulate some and test for differen values of initial vectors. 
+If no empirical values are available, it is possible to simulate those that are reflecting possible situations of interest (e.g. reintroduction when mainly individuals of a specific age stage(s) are released) and investigate their effects on population trajectories. 
 
 ## Same repeated value
 This is the example we have been using in the beginning of this vignette 
@@ -642,7 +649,7 @@ This is the example we have been using in the beginning of this vignette
 ## Time-dependent initial vector
 It is also possible to derive a list of initial vectors starting with one vector representing the demographic distribution of the population at the first time step (option `TDvector = TRUE` for Time-Dependent vector). At the first time step, the population size is projected to the next time step using the specified MPM and the given initial population vector. This results in the number of individuals projected to be in each stage/age, which is then used as the demographic distribution for the next time step. This process continues for as many time steps as there are.      
 
-From here on we will set `verbose = FALSE` to avoid the display of all the messages.
+We again set `verbose = FALSE` to avoid the display all the messages and thus make the vignette better readable.
 
 ```{r echo = -1}
 AP_demres_TD <-
