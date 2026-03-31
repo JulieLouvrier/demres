@@ -11,8 +11,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(comment = "##  ", fig.align = "center", out.width="60%")
+```{r, include = FALSE, message=FALSE}
+knitr::opts_chunk$set(comment = "##  ", fig.align = "center", out.width="60%", message=FALSE)
 library(demres)
 options(digits = 4)
 ```
@@ -175,7 +175,7 @@ data(adeliepenguin); adeliepenguin
 
 ```
 
-The elements constituting the matrices are known as demographic rates. These represent the survival rates of a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offspring that is contributed to the population by each (st)age class), per unit of time. For Adelie penguins, the _highest_ value of fecundity (0.75) was found in _year 14_ of the study (see `adeliepenguin[[14]]`), while this demographic rate reached its _lowest_ value of 0.16 in _year 7_ of the study period (see `adeliepenguin[[7]]`). The adult survival rate varied across years with its _highest_ value (0.98) on _years 4, 9, 12 and 15_ and _lowest_ values (0.72) on the _year 22_. The probability to transition from a juvenile to an adult reached its _highest_ value (0.89) on year 21 and its _lowest_ value (0.53) on _years 10 and 28_. 
+The elements constituting the matrices are known as demographic rates. These represent the survival rates of a given (st)age class, transition probabilities from one (st)age class to another, and fecundity (i.e. per-capita number of offspring that is contributed to the population by each (st)age class), per unit of time. For Adelie penguins, the _highest_ value of fecundity (0.75) was found in _year 14_ of the study (see `adeliepenguin[[14]]`), while this demographic rate reached its _lowest_ value of 0.16 in _year 7_ of the study period (see `adeliepenguin[[7]]`). The adult survival rate varied across years with its _highest_ value (0.98) in _years 4, 9, 12 and 15_ and _lowest_ values (0.72) in the _year 22_. The probability to transition from a juvenile to an adult reached its _highest_ value (0.89) on year 21 and its _lowest_ value (0.53) on _years 10 and 28_. 
 
 ```{r, data plot, echo = -1, fig.width = 6, fig.height = 6}
 # Plotting the different demographic parameters
@@ -236,21 +236,21 @@ legend("topright", legend = params, col = colors, lty = 1, pch = 1, lwd = 2, tit
 
 # Assess time-varying demographic resilience 
 
-The function `resilience` is made to calculate demographic resilience metrics based on a list of MPMs. It returns a `dataframe` with time-varying demographic resilience metrics with the option `time = "varying"`.
+The function `resilience` is made to calculate demographic resilience metrics based on a list of MPMs. If its argument `time` is set to `"varying"` (`time = "varying"`), it returns a `dataframe` with time-varying demographic resilience metrics.
 
-The function `resilience` can compute each of the aforementioned metrics, calculated for each matrix prepared for each time step of the study period. This function by default does not standardise neither the matrix (by dividing it by ${\lambda_{max}}$) nor does it scale the initial demographic distribution to sum up to 1. The user can apply each standardisation by setting the respective argument `return.N` to `FALSE` (see below for details). 
+The function `resilience` can compute each of the aforementioned metrics, calculated for each matrix prepared for each time step of the study period. By default, this function does not standardise neither the matrix (by dividing it by ${\lambda_{max}}$) nor does it scale the initial demographic distribution to sum up to 1. The user can apply each standardisation by setting the respective argument `return.N` to `FALSE` (see below for details). 
 
-The parameters to specify are:
+The arguments are:
 
 •	`listA`: List of square, primitive, irreducible, non-negative numeric matrices of any dimension.
 
-•	`metrics`: Character string. The user can specify either one or several resilience metrics of their choice, The metrics have to be specified as either `"convt"` (for _convergence time_); `"dr"` (for _damping ratio_);`"maxamp"` (for _maximum amplification_); `"maxatt"` (for _maximum attenuation_); `"reac"` (for _reactivity_); `"tt"` (for _Time to Target_) or `"all"` to compute all of the aforementioned metrics. By default set to `"all"`.   
+•	`metrics`: Character string. The user can specify either one or several resilience metrics of their choice. The metrics have to be specified as either `"convt"` (for _convergence time_); `"dr"` (for _damping ratio_);`"maxamp"` (for _maximum amplification_); `"maxatt"` (for _maximum attenuation_); `"reac"` (for _reactivity_); `"tt"` (for _Time to Target_) or `"all"` to compute all of the aforementioned metrics. By default set to `"all"`.   
 
-•	`vector`: Numeric. Can be a numeric vector or a list of numeric vectors describing the age/stage distribution ('initial demographic distribution') used to calculate a 'case-specific' metric, i.e. based on the stage/age structure.      
+•	`vector`: a list of numeric vectors or one-column matrices describing the age/stage distribution ('initial demographic distribution') used to calculate a 'case-specific' resilience metric, i.e. based on the stage- or age-structure (as opposed to using a stage-biased vector to reflect a perturbation, a commonly used approach in transient analyses).
 
 •	`TDvector`: Boolean. Specifies whether or not the user wants to get a Time-Dependent list of initial vectors that are obtained by projecting the population trajectory in the future using the initial population vector. The result is a list of X initial vectors with X the number of matrices that are in the list. By default set to `FALSE`.        
 
-•	`popname`: Character string describing the name of the population.
+•	`popname`: Character string - the name of the population.
 
 •	`accuracy`: Numeric. This is an option taken from the function `convt` from `popdemo` to use when calculating the _convergence time_. It is a numeric value between 0  and 1 representing the  accuracy with which to determine convergence to asymptotic growth, expressed as a proportion. By default set to 0.01.      
 
@@ -258,7 +258,7 @@ The parameters to specify are:
 
 •	`verbose`: Boolean. If set to `TRUE`, it will display the messages that are produced when assessing the demographic resilience metrics. By default set to `TRUE.`   
 
-• `return.N`: Boolean. If set to `TRUE`, it will return the value of the population size at the point when the metric's value is reached. If set to `FALSE`, returns the standardized value of the metric. By default set to `TRUE`.
+• `return.N`: Boolean. If set to `TRUE`, the metrics will be returned in their 'nonstandardised' form, i.e. the realised population dynamics will be used and the metrics will be in terms of the number of individuals. If set to `FALSE`, returns the standardized value of the metric. By default set to `TRUE`.
 
 • `return.t`: Boolean. If set to `TRUE`, it will return the time at which the metric is reached. By default set to `FALSE`. 
 
@@ -266,21 +266,21 @@ The parameters to specify are:
 
 ## Calculating one standardized resilience metric : reactivty 
 
-First, let us look at `reactivity`, by setting `metrics = "reac"`. We will first set `return.N = FALSE` to get the value of reactivity relative to the asymptotic growth rate and with a standardized vector. The function is taken from the `popdemo` package and uses the same syntax. It automatically standardizes the MPM (i.e. divides it by its asymptotic growth rate ${\lambda_{max}}$) and the initial vector (i.e. divides its entries by its sum to get proportions).       
+First, let us look at `reactivity`, by setting `metrics = "reac"`. We will first set `return.N = FALSE` to get the value of reactivity that is computed relative to the asymptotic growth rate and with a standardized initial distribution vector. The function is taken from the `popdemo` package and uses the same syntax. It automatically standardizes the MPM (i.e. divides it by its asymptotic growth rate ${\lambda_{max}}$) and the initial vector (i.e. divides its entries by its sum to get proportions).       
 
-We will first create an initial vector representing the total number of inidividuals in each stage class. This is randomly generated for the sake of the example but the users can test different values of initial vectors, including supplying their own actually observed population vectors (see section : "Initial vectors")
+We will first create an initial vector representing the total number of inidividuals in each stage class. This is randomly generated for the sake of the example but the users can test different values of initial vectors, including supplying their own actually observed population vectors (see section : "Initial vectors"). **VIK: would be nice to directly have a hyperlink to that section**
 
 The initial vector should always be a list of vectors, with its length equal to the length of the list of matrices. Each vector in the list can be unique or one single vector can be repeated as many times as their matrices. 
 
-We can look at the stable age structure from the function `popdemo::eigs` and create a scenario in which the initial demographic distribution would differ from its stable structure. Here in that case we decided to have an under representation of juveniles and over representation of adults in a population of 60 individuals. 
+We can look at the stable age structure from the function `popdemo::eigs` and create a scenario in which the initial demographic distribution would differ from its stable structure. Here in that case we decided to have an under representation of juveniles and over representation of adults in a population of 60 individuals. **VIK: I do not understand what you mean by we decided to have  an underrepresentation of juveniles and overrepresentation of adults. An under- and over-representation wrt what? You mean we used the stable stage structure - that is you compute with 'ss' - but then it is not an under- or over-representation of any stage, it is the exact population vector that is observed when population growth rate is 1. So, I am confused what you want to say  and exactly do here**
 
 ```{r, stableAgeStructure, echo = -1}
 #checking the ss 
 do.call(rbind, lapply(adeliepenguin, popdemo::eigs, what = "ss"))*60
 ```
-What we obtain is the list of stable structures based on the list of matrices, and if the population were made of 60 individuals. 
+What we obtain is the list of stable structures based on the list of matrices, assuming that the population consists of 60 individuals. 
 
-Here we chose to repeat the same value of 15 juveniles and 45 adults. These numbers were chosen for the sake of illustration.
+For the sake of illustration here, let us use the initial population structure with 15 juveniles and 45 adults. To apply this initial demographic structure to a list of our population matrices, we make a list where this vector is repeated hte same number of times as we have population matrices.
 
 ```{r, reactivity standardized, echo = -1}
 # simulate an initial vector
@@ -304,11 +304,11 @@ AP_demres_reac_stand
 
 ```
 
-We can see that the standardized `reactivity` varies in time. The _maximum value_ for the standardized calculation of `reactivity`, calculated with the provided vector was found during the _14th year_ of the study period. Year 14 is the year with the _highest_ value of fecundity (0.75). 
+We can see that the standardized `reactivity` \hat{{\rho}_1} slightly varies in time. The _maximum value_ for the standardized calculation of `reactivity`, calculated with the provided initial vector was found during the _14th year_ of the study period. Year 14 is the year with the _highest_ value of fecundity (0.75). 
 
-A `reactivity` of 1.1 would mean that in the first timestep, the population grows 1.1 as fast as a population that grows at its asymptotic growth rate. It is therefore slightly amplifying. However, we can also see that the _year 14_ is the only year for which the population amplifies. The _lowest value_ of reactivity reached in the _26th year_, with a value of 0.96. 
+A `reactivity` of 1.1 would mean that in the first timestep, the population grows 1.1 as fast as a population that grows at its asymptotic growth rate. It is therefore slightly amplifying. However, we can also see that the _year 14_ is the only year for which the population amplifies. **VIK: I do not follow. There are several years with reactivity >1, so the year 14 is NOT the only year when the pop is amplifying. Or am I missing smth?** The _lowest value_ of reactivity reached in the _26th year_, with a value of 0.96. 
 
-## Plot of reactivity value for the 28 years
+## Temporal variation of reactivity over 28 years (driven by variation in population matrices only)
 
 ```{r, echo = -1, fig.width = 6, fig.height = 6}
 # Plotting reactivity over time 
@@ -344,7 +344,7 @@ abline(h = 1, col = "red", lty = 2)
 
 ```
 
-It is therefore important to keep in mind that each resilience metric in the original framework is calculated relative to the asymptotic growth rate. It is possible to compute the $\lambda_{max}$ by using the function `eigs` from the package `popdemo` 
+Thus, it is a key to keep in mind that each resilience metric in the original framework (where two types of standardization are applied) is calculated relative to the asymptotic population growth rate. In the framework we propose within `demres` we, by default, do not strip off asymptotic dynamics and thus look at the overall, realised population dynamics that combines both the short-term and the long-term population. To better understand what it means, let us compute the asymptotic population growth rate $\lambda_{max}$ using the population matrix for each year with the function `eigs` from the package `popdemo`.
 
 ```{r lambda}
 eigs_AP <- do.call(rbind, lapply(adeliepenguin, popdemo::eigs, what = "lambda"))
@@ -354,9 +354,6 @@ eigs_AP
 
 ```
 
-We can see that the long term growth rate also varies in time. When it is above 1 it means that the population is growing while below 1 it is declining. While it seems that for most of the years, the population would grow, we can look at the values of the long term growth rate during _year 26_ that has a value of 0.95. For this specific year, not only is the population declining but it is also attenuating, which means that is it growing even slower than its long term growth rate. 
-
-## Visual representation of the variation of values of lambda 
 
 ```{r, plot lambda, echo = -1, fig.width = 6, fig.height = 6}
 plot(
@@ -375,7 +372,10 @@ plot(
 abline(h = 1, col = "red", lty = 2)  # lty = 2 for dashed line
 ```
 
-# Destandardized reactivity 
+We can see that the long term growth rate also varies in time. When it is above 1, it means that the population is growing while when it is below 1, it is declining. While it seems that for most of the years, the population would grow, we can look at the values of the long term growth rate during _year 26_ that has a value of 0.95. For this specific year, not only is the population declining but it is also attenuating, which means that is it growing even slower than its long term growth rate. 
+
+
+# "Destandardized" or "realised" reactivity 
 
 We can now look at the corresponding population abundances for reactivity after the first time step, by setting `return.N = TRUE`
 
