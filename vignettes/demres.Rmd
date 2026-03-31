@@ -38,8 +38,6 @@ It is build around one dependency: [`popdemo`](https://github.com/iainmstott/pop
 `demres` is available on [GitHub](https://github.com/JulieLouvrier/demres). 
 Running vignette requires the latest version of the package. 
 
-## Package installation from Github
-
 You can install this package using `remotes` (or `devtools`):
 
 ```{r, installation, eval = FALSE}
@@ -52,13 +50,13 @@ remotes::install_github("JulieLouvrier/demres@V1.1")
 ```
 ***  
 
-# Introduction to the demres framework
+# Introduction to the original framework on demographic resilience
 
 Demographic resilience has been defined as "the ability of populations to resist and recover from perturbations that alter their demographic structure" (Capdevila et al. 2020[^1]). This framework has provided important insights into how life history and environmental stochasticity shape population responses to disturbances (Capdevila et al. 2022[^2]; Cant et al. 2023[^3]).
 
 The framework was developed to support comparative analyses across species or populations. Therefore, to allow for a fair comparison, the analyses were conducted with several standardisations that are explained in detail below.
 
-# Standardized demographic resilience for comparative studies
+## Standardized demographic resilience for comparative studies
 
 The original demographic resilience framework is based on two elements: a Matrix Population Model, denoted $\mathbf{A}$ and an initial demographic distribution, summarized in a vector, denoted ${\textbf{n}}_0$. 
 
@@ -152,8 +150,7 @@ The `demres` workflow consists of four main steps based on a list of matrix popu
 In technical terms, since maximal amplification and minimal attenuation correspond to, respectively, the maximum and minimum possible population density over the course of the projection, to be able to detect it correctly when the realised dynamics is computed (i.e. no standardisation is applied), the population is then projected and the population size is assessed at the time-step the "standardized" metrics are reached (for instance at the time-step 1 for reactivity).
 
 
-# Study example
-## Adelie penguin models
+# Study example: Adelie penguins
 
 We will use a list of matrix projection models (MPMs) of an Adelie penguin population (*Pygoscelis adeliae*) from the Copacabana colony on King George Island, Antarctica, from the study by Hinke et al. (2017): "Variable vital rates and the risk of population declines in Adelie penguins from the Antarctic Peninsula region" [^6].
 
@@ -236,7 +233,7 @@ legend("topright", legend = params, col = colors, lty = 1, pch = 1, lwd = 2, tit
 
 ```
 
-# Assess time-varying demographic resilience 
+# Demres workflow to assess time-varying demographic resilience 
 
 The function `resilience` is made to calculate demographic resilience metrics based on a list of MPMs. If its argument `time` is set to `"varying"` (`time = "varying"`), it returns a `dataframe` with time-varying demographic resilience metrics.
 
@@ -270,7 +267,7 @@ The arguments are:
 
 First, let us look at `reactivity`, by setting `metrics = "reac"`. We will first set `return.N = FALSE` to get the value of reactivity that is computed relative to the asymptotic growth rate and with a standardized initial distribution vector. The function is taken from the `popdemo` package and uses the same syntax. It automatically standardizes the MPM (i.e. divides it by its asymptotic growth rate ${\lambda_{max}}$) and the initial vector (i.e. divides its entries by its sum to get proportions).       
 
-We will first create an initial vector representing the total number of inidividuals in each stage class. This is randomly generated for the sake of the example but the users can test different values of initial vectors, including supplying their own actually observed population vectors (see section : "Initial vectors"). **VIK: would be nice to directly have a hyperlink to that section**
+We will first create an initial vector representing the total number of inidividuals in each stage class. This is randomly generated for the sake of the example but the users can test different values of initial vectors, including supplying their own actually observed population vectors (see section: [Initial vectors](#initial-vectors)). 
 
 The initial vector should always be a list of vectors, with its length equal to the length of the list of matrices. Each vector in the list can be unique or one single vector can be repeated as many times as their matrices. 
 
@@ -310,7 +307,7 @@ We can see that the standardized `reactivity` \hat{{\rho}_1} slightly varies in 
 
 A `reactivity` of 1.1 would mean that in the first timestep, the population grows 1.1 as fast as a population that grows at its asymptotic growth rate. It is therefore slightly amplifying. However, we can also see that the _year 14_ is the only year for which the population amplifies. **VIK: I do not follow. There are several years with reactivity >1, so the year 14 is NOT the only year when the pop is amplifying. Or am I missing smth?** The _lowest value_ of reactivity reached in the _26th year_, with a value of 0.96. 
 
-## Temporal variation of reactivity over 28 years (driven by variation in population matrices only)
+### Temporal variation of reactivity over 28 years
 
 ```{r, echo = -1, fig.width = 6, fig.height = 6}
 # Plotting reactivity over time 
@@ -346,7 +343,7 @@ abline(h = 1, col = "red", lty = 2)
 
 ```
 
-Thus, it is a key to keep in mind that each resilience metric in the original framework (where two types of standardization are applied) is calculated relative to the asymptotic population growth rate. In the framework we propose within `demres` we, by default, do not strip off asymptotic dynamics and thus look at the overall, realised population dynamics that combines both the short-term and the long-term population. To better understand what it means, let us compute the asymptotic population growth rate $\lambda_{max}$ using the population matrix for each year with the function `eigs` from the package `popdemo`.
+We see the variation among years in the standardised resilience values that is driven by variation in population matrices only. Thus, it is a key to keep in mind that each resilience metric in the original framework (where two types of standardization are applied) is calculated relative to the asymptotic population growth rate. In the framework we propose within `demres` we, by default, do not strip off asymptotic dynamics and thus look at the overall, realised population dynamics that combines both the short-term and the long-term population. To better understand what it means, let us compute the asymptotic population growth rate $\lambda_{max}$ using the population matrix for each year with the function `eigs` from the package `popdemo`.
 
 ```{r lambda}
 eigs_AP <- do.call(rbind, lapply(adeliepenguin, popdemo::eigs, what = "lambda"))
@@ -377,7 +374,7 @@ abline(h = 1, col = "red", lty = 2)  # lty = 2 for dashed line
 We can see that the long term growth rate also varies in time. When it is above 1, it means that the population is growing while when it is below 1, it is declining. While it seems that for most of the years, the population would grow, we can look at the values of the long term growth rate during _year 26_ that has a value of 0.95. For this specific year, not only is the population declining but it is also attenuating, which means that is it growing even slower than its long term growth rate. **VIK: people have not read yet / checked yet attenuation, so it is somewhat premature and may be confusing to talk about these two things here. Maybe then bring this example after you have calculated all the metrics with realised population dynamics??**
 
 
-# "Destandardized" or "realised" reactivity 
+## "Destandardized" or realised reactivity 
 
 Let us now compute reactivity using the realised population dynamics, i.e. \hat{{\rho}_1} that does not use any of the standardizations. We achieve this by setting the argument `return.N = TRUE`.
 
@@ -613,7 +610,7 @@ plot(AP_demres,
 We have been exploring so far all the functions of `demres`, which are based on a list of matrices and a list of initial vectors. 
 However, `demres` also allows to use historically informed initial vectors, i.e. directly derived from observations in the field. 
 
-# Initial vectors 
+# Initial vectors {#initial-vectors}
 ## Historically informed
 The first advantage of `demres`is its adaptability to historically informed data from the field. If researchers have the information on the abundance of each respective (st)age class for each time step of the study, it is possible to integrate it in the framework.
 
@@ -667,7 +664,7 @@ AP_demres_TD <-
 AP_demres_TD
 ```
 
-We can see that when using time-varying demographic vector while projecting the initial population vector forward, the population is more likely to amplify than it was when using the initial demographic distribution we previously provided. We also see that the values of all resilience metrics are increasing rapidly over time and by the the year 28 we have population sizes in thousands as opposed to population sizes being below 100 when relying on the user-supplied population vectors. 
+We can see that when using time-varying demographic vector while projecting the initial population vector forward, the population is more likely to amplify than it was when using the initial demographic distribution we previously provided (that was applied to each time step). We also see that the values of all resilience metrics are increasing rapidly over time and by the the year 28 we have population sizes in thousands as opposed to population sizes being below 100 when relying on the user-supplied population vectors. **VIK: I think it would be good in two words here to say what is the reason for this behaviour. Otherwise the reader may be confused by such a behaviour and think this is all wrong?**
 
 ## Extreme initial vectors
 Finally, it is possible to create vectors for which only one (st)age is represented. The resulting metrics therefore represent the upper and lower bounds of the possible values that the resilience metrics can take.
