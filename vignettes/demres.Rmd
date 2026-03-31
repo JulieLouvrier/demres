@@ -10,7 +10,7 @@ editor_options:
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = "##  ", collapse = TRUE, fig.align = "center", out.width="60%")
+knitr::opts_chunk$set(comment = "##  ", collapse = TRUE, fig.align = "center", out.width="60%")
 library(demres)
 options(digits = 4)
 ```
@@ -25,9 +25,7 @@ The different metrics provided are:
 - _Reactivity_   
 - _Time to target_
 
-It is build around one dependency:
-
-- [`popdemo`](https://github.com/iainmstott/popdemo)
+It is build around one dependency: [`popdemo`](https://github.com/iainmstott/popdemo).
 
 `demres` aims at being compatible with both _tidyverse_ and _base_ R dialects.
 
@@ -58,74 +56,74 @@ The framework was developed to support comparative analyses across species or po
 
 # Standardized demographic resilience for comparative studies
 
-The original demographic resilience framework is based on two elements: A Matrix population Model, denoted $A$ and an initial demographic distribution, summarized in a vector, denoted ${\textbf{n}}_0$. 
+The original demographic resilience framework is based on two elements: a Matrix Population Model, denoted $\mathbf{A}$ and an initial demographic distribution, summarized in a vector, denoted ${\textbf{n}}_0$. 
 
-The elements of $A$ (known as vital rates) define, per unit of time, survival rates in a given (st)age, transition probabilities from one (st)age to another, and fecundity (i.e. per-capita number of offspring that is contributed to the population by each (st)age). 
+The elements of $\mathbf{A}$ (known as vital rates) define, per unit of time, survival rates in a given (st)age, transition probabilities from one (st)age to another, and fecundity (i.e. per-capita number of offspring that is contributed to the population by each (st)age).
 
-	The second element required by transient analyses is the initial demographic distribution, which represents the abundance of individuals in each (st)age class by a vector ${\textbf{n}}_0$. Such demographic distributions can be specified by using: i) a known (st)age-class distribution that is representative of the studied population ; or ii) stage-biased vectors that represent the most extreme cases where only one (st)age class is represented in the population, whereas abundances of all others are set to “0”. 
-	The original demographic resilience framework standardizes matrix population models (MPMs) and initial demographic distribution in order to isolate transient dynamics and allow comparisons across populations or species (Stott et al. 2011[^4]; Capdevila et al. 2020[^1]). Standardizing consists in (i) standardizing the matrix $A$ by dividing $A$ by its long-term asymptotic growth rate ${\lambda_{max}}$ to disentangle long-term asymptotic behavior from transient behavior, and (ii) standardizing the initial demographic distribution ${\textbf{n}}_0$ by the total abundance, to compare resilience of populations that differ in their initial population sizes (Fig. 1). While essential for comparative studies, such standardization may not be needed or even misleading for applied questions.
+The second element required by transient analyses is the initial demographic distribution, which represents the abundance of individuals in each (st)age class by a vector ${\textbf{n}}_0$. Such demographic distributions can be specified by using: i) a known (st)age-class distribution that is representative of the studied population ; or ii) stage-biased vectors that represent the most extreme cases where only one (st)age class is represented in the population, whereas abundances of all others are set to “0”.
 
-  The resulting standardised matrix $A$ is then denoted $\hat{A}$ and the standardized initial vector ${\hat{\textbf{n}}_0}$. 
+The original demographic resilience framework standardizes matrix population models (MPMs) and initial demographic distribution in order to isolate transient dynamics (from long-term asymptotic dynamics) and allow comparisons across populations or species (Fig. 1, Stott et al. 2011[^4]; Capdevila et al. 2020[^1]). Standardizing consists in:
+
+ (i) standardizing the matrix  $\mathbf{A}$ by dividing  $\mathbf{A}$ by its long-term asymptotic growth rate ${\lambda_{1}}$ to disentangle long-term asymptotic dynamics from transient dynamics, and  
+ (ii) standardizing the initial demographic distribution ${\textbf{n}}_0$ by the total abundance, to enable comparison of resilience among populations that differ in their initial population sizes (Fig. 1). While essential for comparative studies, such standardizations may not be needed or even misleading for applied questions. 
+
+The resulting standardised matrix is then denoted $\hat{\mathbf{A}}$ and the standardized initial vector ${\hat{\textbf{n}}_0}$. 
   
-  To assess demographic resilience using these two elements, the population is then projected and its transient behaviour is quantified before it reaches asymptotic growth.
-  
-  Using the `popdemo` package (Stott et al. 2012 [^5]), it is then possible to assess the following demographic resilience metrics: 
-  
-  The different resilience metrics are calculated based on the standardized matrix and initial vector and they can be calculated:  
+To assess demographic resilience using these two elements, the population is then projected and its transient behaviour is quantified before it reaches asymptotic growth. This is implemented in the `popdemo` package (Stott et al. 2012 [^5]), which allows extracting the following demographic resilience metrics: 
 
-- _**Convergence time**_ : Time to convergence of a population to asymptotic growth rate obtained from the model projection. Convergence time is calculated by simulating the given model and manually determining growth when convergence to a given accuracy is reached       
+- _**Convergence time**_ : Time to convergence of a population to asymptotic growth rate obtained from the model projection. Convergence time is obtained by projecting the dynamics with the given model and determining the time point when convergence to a given accuracy is reached       
 
 - _**Damping ratio**_ : Dimensionless measure of convergence to stable growth. Ranges from 1 to infinity. Smaller numbers represent slower convergence. _Damping ratio_ is calculated using 
 
 $$\textit{Damping ratio} = {\rho} = \frac{\lambda_1}{||\lambda_2||}$$
 With $\lambda_1$ the dominant eigenvalue and $\lambda_2$ the largest subdominant eigenvalue.
 
-- _**Reactivity**_ : The population density that can be reached in the first time step after disturbance. _Reactivity_ is calculated using  
+- _**Reactivity**_ : The population density that can be reached in the first time step after disturbance. Calculated as  
 
-$$\textit{Standardized reactivity} = \hat{P_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
+$$\textit{Standardized reactivity} = \hat{{\rho}_1} = ||\hat{\textbf{A}} \hat{\textbf{n}}_0||_1$$
 
-With $A$ the matrix population model and $\hat{\textbf{A}}$ the standardized population matrix which is calculated as $\hat{\textbf{A}} = \frac{\textbf{A}}{\lambda_{1}}$. The vector $\hat{\textbf{n}}_0$ represents the initial demographic distribution, standardized to sum to 1 and is calculated as $\hat{\textbf{n}}_0 = \frac{{\textbf{n}}_0}{||\textbf{n}_0||_1}$. 
+With $\textbf{A}$ the matrix population model and $\hat{\textbf{A}}$ the standardized population matrix which is calculated as $\hat{\textbf{A}} = \frac{\textbf{A}}{\lambda_{1}}$. The vector $\hat{\textbf{n}}_0$ represents the initial demographic distribution, standardized to sum to 1 and is calculated as $\hat{\textbf{n}}_0 = \frac{{\textbf{n}}_0}{||\textbf{n}_0||_1}$. 
 
-With ${||m||_1}$ representing the one-norm of a vector ${m}$ (i.e. sum of the absolute values of its entries)
+With ${||\textbf{m}||_1}$ representing the one-norm of a vector ${\textbf{m}}$ (i.e. sum of the absolute values of its entries)
 
-- _**Maximum amplification**_ : The largest population density that can be reached at any time after disturbance. This metric is calculated using:
-$$Standardized\ maximum\ amplification = \hat{\bar{P}}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+- _**Maximal amplification**_ : The largest population density that can be reached at any time after disturbance. This metric is calculated using:
+$$Standardized\ maximal\ amplification = \hat{{\rho}}_{max} = \max_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
 
-- _**Maximum attenuation**_ : The lowest population density that can be reached at any time after disturbance. This metric is calculated using: 
+- _**Maximal attenuation**_ : The lowest population density that can be reached at any time after disturbance. Calculated as: 
 
-$$Standardized\ maximum\ attenuation = \hat{\underline{P}}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
-_Maximum amplification_ and _maximum attenuation_ can occur at any point along the projection. Some populations only have a _maximum amplification_ due to either their demographic rates or the initial vector (because they never attenuate), some only have a _maximum attenuation_ (because they never amplify), and some have both.
-
-
-As the demographic resilience metrics are calculated based on the standardized matrix and vector, to get the unstandardized values, the population is then projected and the population size is assessed at the time-step the metrics is reached (for instance at the time-step 1 for reactivity).
+$$Standardized\ maximum\ attenuation = \hat{{\rho}}_{min} = \min_{t > 0}||\hat{\textbf{A}}^t\hat{\textbf{n}}_0||_1$$
+_Maximal amplification_ and _maximal attenuation_ can occur at any point after the disturbance over the course of projection. Some populations only have a _maximal amplification_ due to either their demographic rates or the initial vector (because they never attenuate), some only have a _maximal attenuation_ (because they never amplify), and some have both.
 
 
 # From comparative framework to applied focus on demographic resilience
 
 
-![Destandardizing resilience measures.](figures/figure1.png) 
+![Figure 1: Destandardizing resilience metrics in two steps:  Destandardizing allows to (i) go back from $\hat{\textbf{n}}_0$ (population density) to ${\textbf{n}_0}$ (population abundance) (second panel) and (ii) include long term asymptotic behavior into the demographic resilience measure (third panel). Each panel shows the trajectory of two examplary populations: one in cyan and one in blue. Red crosses on panels on the very left and on the very right show the resilience metrics (for notations see formulas above) with the panel on the left showing resilience metrics computed when two types of standardization is applied, and the panel on the right shows the metrics without standardization.](figures/figure1.png){width=130%}
 
-**Figure 1.** Destandardizing resilience measures in two steps:  Destandardizing allows to (i) go back from $\hat{\textbf{n}}_0$ (population density) to ${\textbf{n}_0}$ (population abundance) (second panel) and (ii) include long term asymptotic behavior into the demographic resilience measure (third panel)
 
 For conservation and management, it is often critical to:
 
-- estimate absolute population abundance, which is directly interpretable and often linked to management goals;
+- estimate population abundance in terms of number of individuals, which is directly interpretable and often linked to management goals;
 
-- assess long-term population trends, such as persistent decline or increase;
+- assess not only transient dynamics per se (by stripping off the long-term population trend) but to look at the total dynamics (sometimes also called 'realised dynamics') that combines both the long-term and the short-term dynamics;
 
 - assess demographic resilience in response to actual, historically observed disturbances.
 
+Therefore, for conservation and management it is often more useful to compute a total (or "realised") dynamics in response to a disturbance, which means no standardization of either the population matrix or demographic distribuion is needed (Fig. 1).
+
 Moreover, demographic rates in wild populations are rarely constant. Long-term studies demonstrate substantial temporal variation in demographic rates (Fig. 2). This variation is driven by a combination of environmental stochasticity and intrinsic population dynamics. Environmental stochasticity encompasses impacts of anthropogenic pressures, natural disturbances and stochastic events. Averaging demographic rates across time can therefore overlook the signals that are most relevant for management.
 
-![Representation of a theoretical time-varying deomgraphic rate, here adult survival illustrated.](figures/figure2.png) 
-
-**Figure 2.** Example of a theoretical demographic rate, here adult survival that varies in time. 
+![Figure 2. Representation of a time-varying demographic rate, here for illustration adult survival is shown.](figures/figure2.png){width=600px}
 
 
-![Time-varying demographic resilience measures.](figures/figure3.png)
-**Figure 3.** Illustration of projections and demographic resilience measures for a population with demographic rates that are varying in time. On the left-hand side are resilience metrics based on the standardized approach while on the right-hand side the metrics based on the destandardized approach.
+![Figure 3. Illustration of population projections and demographic resilience measures for a population with demographic rates that are varying in time. On the left-hand side shown are resilience metrics based on the "classical" standardized approach, while on the right-hand side the metrics based on the destandardized approach, i.e. realisedreflecting realised population dynamics. Each panel show metrics for a specific time step (3 or 4).](figures/figure3.png){width=130%}
 
-The R package `demres` quantifies resilience at each time step, by using the demographic rates observed at these time steps. By doing so, demres provides a phenomenological approach to identifying years associated with unusually high or low resilience, which may correspond to disturbance events or favorable conditions. `demres` thus extends _transient demographic analysis_ to allow the quantification of time-varying resilience in terms of population abundance. It also allows looking at either transient or the overall dynamics (transient and long-term dynamics combined), which we hope will assist decisions for conservation and management. This vignette introduces the conceptual background of `demres` and provides a step-by-step guide to its application in conservation and management contexts.
+The R package `demres` quantifies resilience at each time step, by using the demographic rates observed at these time steps. By doing so, demres provides a phenomenological approach to identifying years associated with unusually high or low resilience, which may correspond to disturbance events or favorable conditions. `demres` thus extends _transient demographic analysis_ in two ways: 
+
+- to allow the quantification of time-varying resilience 
+- to allow quantification of realised dynamics, i.e. focusing on resilience in terms of population abundance (instead of looking at densities, when the initial demographic distribution is standardized to sum to 1).  
+
+Most importantly, `demres` also allows looking at either transient dynamics per se (when the long-term population trend is stripped off) or the overall, realised, dynamics (transient and long-term dynamics combined). We think the ability to look at these components separately and combined will assist decisions for conservation and management. This vignette introduces the conceptual background of `demres` and provides a step-by-step guide to its application in conservation and management contexts.
 
 [^1]: [Capdevila et al. 2020 Trends Ecol Evol, 35(9), 776-786.](https://pubmed.ncbi.nlm.nih.gov/32482368/)
 
@@ -147,12 +145,15 @@ The `demres` workflow consists of four main steps based on a list of matrix popu
 
 4- Vizualise and summarize temporal variation in resilience
 
-# Matrix Population Models
+In technical terms, since maximal amplification and minimal attenuation correspond to, respectively, the maximum and minimum possible population density over the course of the projection, to be able to detect it correctly when the realised dynamics is computed (i.e. no standardisation is applied), the population is then projected and the population size is assessed at the time-step the "standardized" metrics are reached (for instance at the time-step 1 for reactivity).
+
+
+# Study example
 ## Adelie penguin models
 
 We will use a list of matrix projection models (MPMs) of an Adelie penguin population (*Pygoscelis adeliae*) from the Copacabana colony on King George Island, Antarctica, from the study by Hinke et al. (2017): "Variable vital rates and the risk of population declines in Adelie penguins from the Antarctic Peninsula region" [^6].
 
-The MPMs were extracted from the COMADRE database (https://compadre-db.org/). The data is a list of 28 matrices of dimension 2 x 2. The 2 stage classes have been defined based on age and are the following:     
+The MPMs were extracted from the  [COMADRE database](https://compadre-db.org/). The data is a list of 28 matrices of dimension 2 x 2. The 2 stage classes have been defined based on age and are the following:     
 - "Juveniles" - ages 0–2      
 - "Adults" - ages 3+         
 
@@ -167,7 +168,7 @@ text(10, 10, adj = c (0, 0), col = "white",
 ```
 
 Load in the data:  
-```{r}
+```{r collapse=TRUE}
 data(adeliepenguin); adeliepenguin
 
 ```
