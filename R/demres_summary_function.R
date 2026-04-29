@@ -6,6 +6,7 @@
 #'
 #' @param table A dataframe containing all the resilience metrics calculated
 #' with the resilience function
+#' @param fn A function or a list un functions to be used to compile the summary
 #' @name demres_summary
 #'
 #' @examples
@@ -41,7 +42,7 @@
 #'
 #' AP_CV <- summary(AP_demres, fn = list(coeffvar))
 #'
-#' Or a combination
+#' # Or a combination
 #' AP_mix <- summary(AP_demres, fn = list(coeffvar, mean, sd))
 #'
 #'

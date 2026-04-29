@@ -3,3 +3,5 @@
 README\.Rmd
 README\_files
 ^LICENSE\.md$
+^doc$
+^Meta$

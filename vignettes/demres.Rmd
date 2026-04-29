@@ -271,7 +271,7 @@ We will first create an initial vector representing the total number of inidivid
 
 The initial vector should always be a list of vectors, with its length equal to the length of the list of matrices. Each vector in the list can be unique or one single vector can be repeated as many times as their matrices. 
 
-We can look at the stable age structure from the function `popdemo::eigs` and create a scenario in which the initial demographic distribution would differ from its stable structure. Here in that case we decided to have an under representation of juveniles and over representation of adults in a population of 60 individuals. **VIK: I do not understand what you mean by we decided to have  an underrepresentation of juveniles and overrepresentation of adults. An under- and over-representation wrt what? You mean we used the stable stage structure - that is you compute with 'ss' - but then it is not an under- or over-representation of any stage, it is the exact population vector that is observed when population growth rate is 1. So, I am confused what you want to say  and exactly do here**
+We can look at the stable age structure from the function `popdemo::eigs` and create an example scenario in which the initial demographic distribution would differ from its stable structure.
 
 ```{r, stableAgeStructure, echo = -1}
 #checking the ss 

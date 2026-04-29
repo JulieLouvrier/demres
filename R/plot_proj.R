@@ -75,8 +75,8 @@
 #'
 #' # Add other ggplot2 components
 #' plot_proj(single_pop, palette = "blue") +
-#'   coord_cartesian(ylim = c(0, 300)) +
-#'   labs(title = "Projected population trend")
+#'   ggplot2::coord_cartesian(ylim = c(0, 300)) +
+#'   ggplot2::labs(title = "Projected population trend")
 #'
 #' # plot asymptotic growth
 #' # extracting the stable stage distributions (aka asymptotic vectors)

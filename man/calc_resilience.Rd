@@ -81,7 +81,7 @@ penguinvec1 <- round(runif(2) * 100 )
 
 penguin1 <- adeliepenguin[[1]]
 
-all_penguin_demres <- calc_resilience(penguin1, metrics = c("all"),
+all_penguin_demres <- calc_resilience(penguin1, metrics = "all",
 vector = penguinvec1, popname = "adelie penguin", verbose = TRUE,
 return.N = TRUE, return.t = FALSE, target.N = 500)
 

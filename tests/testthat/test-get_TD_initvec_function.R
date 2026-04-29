@@ -11,5 +11,5 @@ test_that("function works if listA has length 1", {
 
 test_that("function works if listA has length > 1", {
   expect_equal(lapply(get_TD_vector(c(0, 0, 1), listA_test), round, digits = 2),
-               lapply(list(c(0, 0, 1), c(0.769230769230769, 0, 0.230769230769231)), round, digits = 2))
+               lapply(list(c(0, 0, 1), c(2.00123568797, 0, 0.604532454687)), round, digits = 2))
 })

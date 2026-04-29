@@ -9,6 +9,8 @@ demres_summary(table, fn = list(mean, sd))
 \arguments{
 \item{table}{A dataframe containing all the resilience metrics calculated
 with the resilience function}
+
+\item{fn}{A function or a list un functions to be used to compile the summary}
 }
 \value{
 A data frame with requested summary statistics (in columns) per each
@@ -52,7 +54,7 @@ CV <- sd(data, na.rm = TRUE) / mean(data, na.rm = TRUE) * 100
 
 AP_CV <- summary(AP_demres, fn = list(coeffvar))
 
-Or a combination
+# Or a combination
 AP_mix <- summary(AP_demres, fn = list(coeffvar, mean, sd))
 
 

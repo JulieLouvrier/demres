@@ -6,6 +6,9 @@
 \usage{
 \method{summary}{temp}(x, fn = fn)
 }
+\arguments{
+\item{fn}{A function or a list un functions to be used to compile the summary}
+}
 \description{
 Internal functions used by \code{\link[=demres_summary]{demres_summary()}}.
 }
